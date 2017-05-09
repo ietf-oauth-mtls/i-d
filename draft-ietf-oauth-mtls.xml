@@ -1,0 +1,576 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<?xml-stylesheet type='text/xsl' href='http://xml2rfc.tools.ietf.org/authoring/rfc2629.xslt' ?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd">
+
+<?rfc toc="yes"?>
+<?rfc tocompact="yes"?>
+<?rfc tocdepth="4"?>
+<?rfc tocindent="yes"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes"?>
+<?rfc comments="yes"?>
+<?rfc inline="yes"?>
+<?rfc compact="yes"?>
+<?rfc subcompact="no"?>
+
+<rfc category="std" docName="draft-ietf-oauth-mtls-00"
+     ipr="trust200902">
+  <front>
+    <title abbrev="MTLSPOC">Mutual TLS Profiles for OAuth Clients</title>
+
+    <author fullname="Brian Campbell" initials="B." surname="Campbell">
+      <organization>Ping Identity</organization>
+      <address><email>brian.d.campbell@gmail.com</email></address>
+    </author>
+
+    <author fullname="John Bradley" initials="J." surname="Bradley">
+      <organization abbrev="Ping Identity">Ping Identity</organization>
+      <address>
+        <email>ve7jtb@ve7jtb.com</email>
+        <uri>http://www.thread-safe.com/</uri>
+      </address>
+    </author>
+
+    <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
+      <organization>Nomura Research Institute</organization>
+      <address>
+        <email>n-sakimura@nri.co.jp</email>
+        <uri>https://nat.sakimura.org/</uri>
+      </address>
+    </author>
+
+    <author fullname="Torsten Lodderstedt" initials="T." surname="Lodderstedt">
+      <organization>YES Europe AG</organization>
+      <address>
+        <email>torsten@lodderstedt.net</email>
+      </address>
+    </author>
+
+
+    <date />
+
+    <area>Security</area>
+    <workgroup>OAuth Working Group</workgroup>
+    <keyword>OAuth</keyword>
+
+    <abstract>
+<t>
+  This document describes Transport Layer Security (TLS) mutual authentication
+  using X.509 certificates as a mechanism for both OAuth client authentication
+  to the token endpoint as well as for sender constrained access to
+  OAuth protected resources.
+</t>
+    </abstract>
+
+  </front>
+
+  <middle>
+    <section anchor="Introduction" title="Introduction">
+<t>
+  This document describes Transport Layer Security (TLS) mutual authentication
+  using X.509 certificates as a mechanism for both OAuth client authentication
+  to the token endpoint as well as for sender constrained access to
+  OAuth protected resources.
+</t>
+<t>
+  The OAuth 2.0 Authorization Framework <xref target="RFC6749"/>
+  defines a shared secret method of client authentication but also
+  allows for the definition and use of additional client authentication mechanisms
+  when interacting with the authorization server's token endpoint.
+  This document describes an additional mechanism of client authentication utilizing
+  mutual TLS <xref target="RFC5246"/> certificate-based authentication, which provides
+  better security characteristics than shared secrets.
+</t>
+
+<t>
+  Mutual TLS sender constrained access to protected resources ensures that
+  only the party in possession of the
+  private key corresponding to the certificate can utilize the access token to get
+  access to the associated resources. Such a constraint is unlike the case of the
+  basic bearer token described in <xref target="RFC6750"/>, where any party in
+  possession of the access token can use it to access the associated resources.
+  Mutual TLS sender constrained access prevents the use of stolen access tokens
+  by binding the access token to the client's certificate.
+</t>
+<t>
+  Mutual TLS sender constrained access tokens and mutual TLS client authentication
+  are distinct mechanisms that don't necessarily need to be deployed together.
+</t>
+    <section anchor="RNC" title="Requirements Notation and Conventions">
+<t>
+  The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+  "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL"
+  in this document are to be interpreted as described in
+  <xref target="RFC2119">RFC 2119</xref>.
+</t>
+    </section>
+
+    <section anchor="Terminology" title="Terminology">
+<t>
+  This specification uses the following phrases interchangeably:
+  <list style="hanging">
+    <t>Transport Layer Security (TLS) Mutual Authentication</t>
+    <t>Mutual TLS</t>
+    <t>Mutual TLS X.509 client certificate authentication</t>
+  </list>
+  These phrases all refer to the process whereby a client uses it's X.509 certificate
+  to authenticate itself with a server when negotiating a TLS session.
+
+  In <xref target="RFC5246">TLS 1.2</xref> this requires the client to send
+  Client Certificate and Certificate Verify messages during the TLS handshake and
+  for the server to verify these messages.
+</t>
+    </section>
+
+    </section>
+    <section anchor="mtlsca" title="Mutual TLS for Client Authentication">
+    <section anchor="Authentication" title="Mutual TLS Client Authentication to the Token Endpoint">
+<t>
+  The following section defines, as an extension of
+  <xref target="RFC6749">OAuth 2.0, Section 2.3</xref>, the use of mutual TLS X.509 client certificates as client credentials.
+
+  The requirement of mutual TLS for client authentications is determined by the authorization server
+  based on policy or configuration for the given client (regardless of whether the client was dynamically
+  registered or statically configured or otherwise established).
+
+  OAuth 2.0 requires that access token requests by the client
+  to the token endpoint use TLS. In order to utilize TLS for client authentication, the TLS
+  connection MUST have been established or reestablished with mutual X.509 certificate authentication
+  (i.e. the Client Certificate and Certificate Verify messages are sent during the TLS Handshake
+  <xref target="RFC5246"/>).
+</t>
+<t>
+  For all access token requests to the token endpoint, regardless of the grant type used,
+  the client MUST include the
+  <spanx style='verb'>client_id</spanx> parameter,
+  described in <xref target="RFC6749">OAuth 2.0, Section 2.2</xref>.
+  The presence of the <spanx style='verb'>client_id</spanx>
+  parameter enables the authorization server to easily identify the
+  client independently from the content of the certificate and allows for trust
+  models to vary as appropriate for a given deployment. The authorization server
+  can locate the client configuration by the client identifier and check the certificate
+  presented in the TLS Handshake against the expected credentials for that client.
+  As described in <xref target="binding"/>, the authorization server MUST enforce some
+  method of binding a certificate to a client.
+</t>
+
+    </section>
+
+	<section anchor="server_metadata" title="Authorization Server Metadata">
+     <t>
+        <spanx style="verb">tls_client_auth</spanx> is used as a new value of the
+        <spanx style="verb">token_endpoint_auth_methods_supported</spanx> metadata parameter
+        to indicate server support for mutual TLS as a client authentication method 
+        in authorization server metadata such as
+        <xref target="OpenID.Discovery"/> and <xref target="I-D.ietf-oauth-discovery"/>.
+      </t>
+	</section>
+	
+    <section anchor="client_metadata" title="Dynamic Client Registration">
+      <t>This draft adds the following values and metadata parameters 
+      to the <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration</xref>.</t>
+      <t>
+        The value <spanx style="verb">tls_client_auth</spanx> is used to indicate the client's 
+        intention to use mutual TLS as an authentication method to the
+        token endpoint for the <spanx style="verb">token_endpoint_auth_method</spanx>
+        client metadata field.
+      </t>
+ 
+      <t>
+        For authorization servers that associate certificates with clients using subject
+        information in the certificate, the following two new string metadata parameters  
+        can be used:
+        <list style="hanging">
+        <t hangText="tls_client_auth_subject_dn">
+        The expected subject distinguished name of the client certificate can be represented using
+        <spanx style="verb">tls_client_auth_subject_dn</spanx>.</t>
+        <t hangText="tls_client_auth_issuer_dn">
+        The metadata parameter <spanx style="verb">tls_client_auth_issuer_dn</spanx> can
+        optionally be used to constrain the expected distinguished name of the root issuer of
+        the client certificate.</t>
+        </list>
+      </t>
+      <t>
+        For authorization servers that use the key or
+        full certificate to associate clients with certificate, the existing
+        <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
+        metadata parameters from <xref target="RFC7591"/> shall be used.
+      </t>
+    </section>
+    </section>
+
+    <section anchor="SenderConstrainedAccess" title="Mutual TLS Sender Constrained Resources Access">
+<t>
+  When mutual TLS X.509 client certificate authentication is used at the token endpoint,
+  the authorization server is able to bind the issued access token to the client certificate.
+  Such a binding is accomplished by associating a hash of the certificate with the token in
+  a way that can be accessed by the protected resource, such as embedding the certificate
+  hash in the issued access token directly, using the syntax described in <xref target="x5t256"/>,
+  or through token introspection <xref target="RFC7662"/>.
+  The specific method for associating the certificate with the access token is determined by
+  the authorization server and the protected resource, and is beyond the scope for this
+  specification.
+</t>
+<t>
+  The client makes protected resource requests as described in <xref target="RFC6750"/>,
+  however, those requests MUST be made over a mutually authenticated TLS connection
+  using the same certificate that was used to authenticate to the token endpoint.
+</t>
+<t>
+  The protected resource MUST obtain the client certificate used for TLS authentication
+  and MUST verify that the hash of that certificate exactly matches the hash of the
+  certificate associated with the access token.  If the hash values do not match,
+  the resource access attempt MUST be rejected with an error.
+</t>
+
+
+      <section anchor="x5t256" title="X.509 Certificate SHA-256 Thumbprint Confirmation Method for JWT">
+  <t>
+    When access tokens are represented as a JSON Web Tokens (JWT)<xref target="RFC7519"/>,
+    the certificate hash information SHOULD be represented using
+    the <spanx style="verb">x5t#S256</spanx> confirmation method member defined herein.
+  </t>
+  <t>
+    To represent the hash of a certificate in a JWT,
+    this specification defines the new JWT Confirmation Method
+    <xref target="RFC7800">RFC 7800</xref>
+    member <spanx style="verb">x5t#S256</spanx> for the X.509 Certificate SHA-256 Thumbprint.
+    The value of the <spanx style="verb">x5t#S256</spanx> member is
+    a base64url-encoded SHA-256<xref target="SHS"/> hash (a.k.a. thumbprint or digest)
+    of the DER encoding of the X.509 certificate<xref target="RFC5280"/>
+    (note that certificate
+    thumbprints are also sometimes also known as certificate fingerprints).
+  </t>
+  <t>
+    The following is an example of a JWT payload containing an <spanx style="verb">x5t#S256</spanx> certificate thumbprint
+    confirmation method.
+  </t>
+
+  <figure anchor="eg_x5ts256" title="Example claims of a Certificate Thumbprint Constrained JWT.">
+    <preamble></preamble>
+    <artwork><![CDATA[
+{
+  "iss": "https://server.example.com",
+  "aud": "https://resource.example.org",
+  "sub": "ty.webb@example.com",
+  "exp": 1493726400,
+  "nbf": 1493722800,
+  "cnf":{
+    "x5t#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
+  }
+}]]>
+    </artwork>
+    <postamble></postamble>
+  </figure>
+
+      </section>
+
+    </section>
+
+    <section anchor="IANA" title="IANA Considerations">
+
+      <section anchor="cnfIANA" title="JWT Confirmation Methods Registration">
+        <t>
+          This specification requests registration of the following value
+          in the IANA "JWT Confirmation Methods" registry
+          <xref target="IANA.JWT.Claims"/>
+          for JWT <spanx style="verb">cnf</spanx> member values
+          established by <xref target="RFC7800"/>.
+        </t>
+        <section title="Registry Contents">
+          <t>
+            <?rfc subcompact="yes"?>
+            <list style='symbols'>
+              <t>Confirmation Method Value: <spanx style="verb">x5t#S256</spanx></t>
+              <t>Confirmation Method Description: X.509 Certificate SHA-256 Thumbprint</t>
+              <t>Change Controller: IESG</t>
+              <t>Specification Document(s): <xref target="x5t256"/> of [[ this specification ]]</t>
+            </list>
+            <?rfc subcompact="no"?>
+          </t>
+        </section>
+      </section>  
+
+      <section anchor="tls_client_authIANA" title="Token Endpoint Authentication Method Registration">
+      <t>
+        This specification requests registration of the following value
+        in the IANA "OAuth Token Endpoint Authentication Methods" registry
+        <xref target="IANA.OAuth.Parameters"/> established by <xref target="RFC7591"/>.
+      </t>
+        <section title="Registry Contents">
+          <t>
+            <?rfc subcompact="yes"?>
+            <list style='symbols'>
+              <t>Token Endpoint Authentication Method Name: <spanx style="verb">tls_client_auth</spanx></t>
+              <t>Change Controller: IESG</t>
+              <t>Specification Document(s): <xref target="server_metadata"/> of [[ this specification ]]</t>
+            </list>
+            <?rfc subcompact="no"?>
+          </t>
+        </section>
+      </section>
+
+      <section anchor="DynRegReg" title="OAuth Dynamic Client Registration Metadata Registration">
+        <t>
+          This specification requests registration of the following client metadata definitions
+          in the IANA "OAuth Dynamic Client Registration Metadata" registry
+          <xref target="IANA.OAuth.Parameters"/>
+          established by <xref target="RFC7591"/>:
+        </t>
+
+        <section anchor="DynRegContents" title="Registry Contents">
+          <t>
+            <?rfc subcompact="yes"?>
+            <list style="symbols">
+              <t>
+                Client Metadata Name: <spanx style="verb">tls_client_auth_subject_dn</spanx>
+              </t>
+              <t>
+                Client Metadata Description:
+                String value specifying the expected subject distinguished name of the 
+                client certificate.
+              </t>
+              <t>
+                Change Controller: IESG
+              </t>
+              <t>
+                Specification Document(s): <xref target="client_metadata"/> of [[ this specification ]]
+              </t>
+            </list>
+          </t>
+          <t>
+            <list style="symbols">
+              <t>
+                Client Metadata Name: <spanx style="verb">tls_client_auth_issuer_dn</spanx>
+              </t>
+              <t>
+                Client Metadata Description:
+                String value specifying the expected distinguished name of the root 
+                issuer of the client certificate
+              </t>
+              <t>
+                Change Controller: IESG
+              </t>
+              <t>
+                Specification Document(s): <xref target="client_metadata"/> of [[ this specification ]]
+              </t>
+            </list>
+          </t>
+
+        </section>
+      </section>
+    </section>
+
+    <section anchor="Security" title="Security Considerations">
+      <section anchor="TLSV" title="TLS Versions and Best Practices">
+        <t>
+          <xref target="RFC5246">TLS 1.2</xref> is cited in this document because,
+          at the time of writing, it is latest version that is widely deployed.
+          However, this document is applicable with other TLS versions supporting
+          certificate-based client authentication.
+          Implementation security considerations for TLS, including version recommendations,
+          can be found in
+          <xref target="BCP195">Recommendations for Secure Use of Transport Layer Security (TLS)
+            and Datagram Transport Layer Security (DTLS)</xref>.
+        </t>
+      </section>
+      <section anchor="binding" title="Client Identity Binding">
+        <t>
+          No specific method of binding a certificate to a client identifier 
+		  at the token endoint is prescribed by
+          this document. However, some method MUST be employed so that, in addition to
+          proving possession of the private key corresponding to the certificate, the client
+          identity is also bound to the certificate. One such binding would be to configure for the
+          client a value that the certificate must contain in the subject field
+          or the subjectAltName extension and possibly a restricted set of trust anchors.
+          An alternative method would be to configure a public key for the client directly that
+          would have to match the subject public key info of the certificate.
+        </t>
+      </section>
+    </section>
+
+  </middle>
+
+  <back>
+    <references title="Normative References">
+      <?rfc include='reference.RFC.2119'?>
+      <?rfc include='reference.RFC.5246'?>
+      <?rfc include='reference.RFC.5280'?>
+      <?rfc include='reference.RFC.6749'?>
+      <?rfc include='reference.RFC.6750'?>
+      <?rfc include='reference.RFC.7800'?>
+      <reference anchor="BCP195" target="http://www.rfc-editor.org/info/bcp195">
+        <front>
+          <title>Recommendations for Secure Use of Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS)</title>
+          <author initials="Y." surname="Sheffer" fullname="Y. Sheffer">
+            <organization/>
+          </author>
+          <author initials="R." surname="Holz" fullname="R. Holz">
+            <organization/>
+          </author>
+          <author initials="P." surname="Saint-Andre" fullname="P. Saint-Andre">
+            <organization/>
+          </author>
+          <date year="2015" month="May"/>
+          <abstract>
+            <t>Transport Layer Security (TLS) and Datagram Transport Layer Security (DTLS) are widely used to protect data exchanged over application protocols such as HTTP, SMTP, IMAP, POP, SIP, and XMPP. Over the last
+              few years, several serious attacks on TLS have emerged, including attacks on its most commonly used cipher suites and their modes of operation. This document provides recommendations for improving the
+              security of deployed services that use TLS and DTLS. The recommendations are applicable to the majority of use cases.
+            </t>
+          </abstract>
+        </front>
+        <seriesInfo name="BCP" value="195"/>
+        <seriesInfo name="RFC" value="7525"/>
+        <seriesInfo name="DOI" value="10.17487/RFC7525"/>
+      </reference>
+
+      <reference anchor="SHS" target="http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf">
+        <front>
+          <title>Secure Hash Standard (SHS)</title>
+
+          <author>
+            <organization>National Institute of Standards and
+              Technology</organization>
+          </author>
+
+          <date month="March" year="2012" />
+        </front>
+        <seriesInfo name="FIPS" value="PUB 180-4" />
+        <format target="http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf" type="PDF" />
+      </reference>
+    </references>
+
+    <references title="Informative References">
+      <reference anchor="IANA.OAuth.Parameters" target="http://www.iana.org/assignments/oauth-parameters">
+        <front>
+          <title>OAuth Parameters</title>
+          <author>
+            <organization>IANA</organization>
+          </author>
+          <date/>
+        </front>
+      </reference>
+      <reference anchor="IANA.JWT.Claims" target="http://www.iana.org/assignments/jwt">
+        <front>
+          <title>JSON Web Token Claims</title>
+          <author>
+            <organization>IANA</organization>
+          </author>
+          <date/>
+        </front>
+      </reference>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-04.xml'?>
+
+      <?rfc include='reference.RFC.7519'?>
+      <?rfc include='reference.RFC.7591'?>
+      <?rfc include='reference.RFC.7662'?>
+
+
+      <reference anchor="OpenID.Discovery">
+        <front>
+          <title>OpenID Connect Discovery 1.0</title>
+          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
+            <organization abbrev="NRI">Nomura Research Institute, Ltd.</organization>
+          </author>
+          <author fullname="John Bradley" initials="J." surname="Bradley">
+            <organization abbrev="Ping Identity">Ping Identity</organization>
+          </author>
+          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
+            <organization abbrev="Microsoft">Microsoft</organization>
+          </author>
+          <author fullname="Edmund Jay" initials="E." surname="Jay">
+            <organization abbrev="Illumila">Illumila</organization>
+          </author>
+          <date day="25" month="February" year="2014"/>
+        </front>
+        <format target="http://openid.net/specs/openid-connect-discovery-1_0.html" type="HTML" />
+      </reference>
+
+    </references>
+
+
+    <section anchor="Acknowledgements" title="Acknowledgements">
+      <t>
+        Scott "not Tomlinson" Tomilson and Matt Peterson were involved in the
+        original design and development work on a mutual TLS client authentication
+        implementation that informed some of the content of this document.
+      </t>
+
+      <t>
+        Additionally, the authors would like to thank the following people for
+        their input and contributions to the specification:
+        Sergey Beryozkin,
+        Vladimir Dzhuvinov,
+        Samuel Erdtman,
+        Phil Hunt,
+        Sean Leonard,
+        Kepeng Li,
+        James Manger,
+        Jim Manico,
+        Nov Matake,
+        Sascha Preibisch,
+        Justin Richer,
+        Dave Tonge,
+        and
+        Hannes Tschofenig.
+      </t>
+    </section>
+
+
+    <section anchor="History" title="Document(s) History">
+      <?rfc subcompact="yes"?>
+      <t>
+	[[ to be removed by the RFC Editor before publication as an RFC ]]
+      </t>
+      <t>
+        draft-ietf-oauth-mtls-00
+        <list style='symbols'>
+          <t>Created the initial working group version from draft-campbell-oauth-mtls</t>
+        </list>
+      </t>
+      <t>
+      draft-campbell-oauth-mtls-01
+      <list style='symbols'>
+        <t>Fix some typos.</t>
+        <t>Add to the acknowledgements list.</t>
+      </list>
+      </t>
+      <t>
+        draft-campbell-oauth-mtls-00
+        <list style='symbols'>
+          <t>
+            Add a Mutual TLS sender constrained protected resource access method
+            and a x5t#S256 cnf method for JWT access tokens
+            (concepts taken in part from draft-sakimura-oauth-jpop-04).
+          </t>
+          <t>
+            Fixed "token_endpoint_auth_methods_supported" to "token_endpoint_auth_method" for client metadata.
+          </t>
+          <t>
+            Add "tls_client_auth_subject_dn" and "tls_client_auth_issuer_dn" client metadata parameters and
+            mention using "jwks_uri" or "jwks".
+          </t>
+          <t>
+            Say that the authentication method is determined by client policy regardless of whether the client
+            was dynamically registered or statically configured.
+          </t>
+          <t>Expand acknowledgements to those that participated in discussions around
+            draft-campbell-oauth-tls-client-auth-00</t>
+          <t>
+            Add Nat Sakimura and Torsten Lodderstedt to the author list.
+          </t>
+        </list>
+      </t>
+      <t>
+        draft-campbell-oauth-tls-client-auth-00
+        <list style='symbols'>
+          <t>
+            Initial draft.
+	        </t>
+        </list>
+      </t>
+      <?rfc subcompact="no"?>
+    </section>     
+
+  </back>
+</rfc>
