@@ -13,7 +13,7 @@
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
 
-<rfc category="std" docName="draft-ietf-oauth-mtls-00"
+<rfc category="std" docName="draft-ietf-oauth-mtls-01"
      ipr="trust200902">
   <front>
     <title abbrev="MTLSPOC">Mutual TLS Profiles for OAuth Clients</title>
