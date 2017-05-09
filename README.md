@@ -5,7 +5,7 @@ This is the working area for the IETF OAUTH WG's Mutual TLS Profiles for OAuth C
 Be aware that all contributions to the specification fall under the "NOTE WELL"
 terms outlined below.
 
-This [link yields an HTML rendering of the editors' draft](https://xml2rfc.tools.ietf.org/cgi-bin/xml2rfc.cgi?input=&url=https%3A%2F%2Fraw.githubusercontent.com%2Fietf-oauth-mtls%2Fi-d%2Fmaster%2Fdraft-ietf-oauth-mtls.xml&modeAsFormat=html%2Fascii&type=ascii&Submit=Submit) from the latest xml source (or [text rendering](https://xml2rfc.tools.ietf.org/cgi-bin/xml2rfc.cgi?input=&url=https%3A%2F%2Fraw.githubusercontent.com%2ietf-oauth-mtls%2Fi-d%2Fmaster%2Fdraft-ietf-oauth-mtls.xml&modeAsFormat=txt%2Fascii&type=ascii&Submit=Submit), if you prefer). Additional Working Group links follow.
+This [link yields an HTML rendering of the editors' draft](https://xml2rfc.tools.ietf.org/cgi-bin/xml2rfc.cgi?input=&url=https%3A%2F%2Fraw.githubusercontent.com%2Fietf-oauth-mtls%2Fi-d%2Fmaster%2Fdraft-ietf-oauth-mtls.xml&modeAsFormat=html%2Fascii&type=ascii&Submit=Submit) from the latest xml source (or [text rendering](https://xml2rfc.tools.ietf.org/cgi-bin/xml2rfc.cgi?input=&url=https%3A%2F%2Fraw.githubusercontent.com%2Fietf-oauth-mtls%2Fi-d%2Fmaster%2Fdraft-ietf-oauth-mtls.xml&modeAsFormat=txt%2Fascii&type=ascii&Submit=Submit), if you prefer). Additional Working Group links follow.
 
 * [Working Group Draft] (https://tools.ietf.org/html/draft-ietf-oauth-mtls)
 * [Working Group] (https://datatracker.ietf.org/wg/oauth)
