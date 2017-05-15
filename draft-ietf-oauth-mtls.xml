@@ -203,7 +203,7 @@
 <t>
   When mutual TLS X.509 client certificate authentication is used at the token endpoint,
   the authorization server is able to bind the issued access token to the client certificate.
-  Such a binding is accomplished by associating a hash of the certificate with the token in
+  Such a binding is accomplished by associating the certificate with the token in
   a way that can be accessed by the protected resource, such as embedding the certificate
   hash in the issued access token directly, using the syntax described in <xref target="x5t256"/>,
   or through token introspection <xref target="RFC7662"/>.
@@ -218,8 +218,8 @@
 </t>
 <t>
   The protected resource MUST obtain the client certificate used for TLS authentication
-  and MUST verify that the hash of that certificate exactly matches the hash of the
-  certificate associated with the access token.  If the hash values do not match,
+  and MUST verify that the that certificate matches the
+  certificate associated with the access token.  If they do not match,
   the resource access attempt MUST be rejected with an error.
 </t>
 
