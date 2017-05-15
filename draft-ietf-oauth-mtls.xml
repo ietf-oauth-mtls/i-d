@@ -523,6 +523,13 @@
 	[[ to be removed by the RFC Editor before publication as an RFC ]]
       </t>
       <t>
+        draft-ietf-oauth-mtls-01
+        <list style='symbols'>
+          <t>Changed the text in the <xref target="SenderConstrainedAccess"/> to not be specific about using a hash of the cert.</t>
+          <t>Changed the abbreviated title to 'OAuth Mutual TLS' (previously was the acronym MTLSPOC).</t>
+        </list>
+      </t>
+      <t>
         draft-ietf-oauth-mtls-00
         <list style='symbols'>
           <t>Created the initial working group version from draft-campbell-oauth-mtls</t>
