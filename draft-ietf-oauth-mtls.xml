@@ -111,7 +111,6 @@
   <list style="hanging">
     <t>Transport Layer Security (TLS) Mutual Authentication</t>
     <t>Mutual TLS</t>
-    <t>Mutual TLS X.509 client certificate authentication</t>
   </list>
   These phrases all refer to the process whereby a client uses it's X.509 certificate
   to authenticate itself with a server when negotiating a TLS session.
@@ -201,15 +200,15 @@
 
     <section anchor="SenderConstrainedAccess" title="Mutual TLS Sender Constrained Resources Access">
 <t>
-  When mutual TLS X.509 client certificate authentication is used at the token endpoint,
+  When mutual TLS is used at the token endpoint,
   the authorization server is able to bind the issued access token to the client certificate.
   Such a binding is accomplished by associating the certificate with the token in
   a way that can be accessed by the protected resource, such as embedding the certificate
   hash in the issued access token directly, using the syntax described in <xref target="x5t256"/>,
-  or through token introspection <xref target="RFC7662"/>.
-  The specific method for associating the certificate with the access token is determined by
-  the authorization server and the protected resource, and is beyond the scope for this
-  specification.
+  or through token introspection as described in <xref target="introspect"/>.
+  Other methods of associating a certificate with an access token are possible,
+  per agreement by the authorization server and the protected resource, but are
+  beyond the scope of this specification.
 </t>
 <t>
   The client makes protected resource requests as described in <xref target="RFC6750"/>,
@@ -217,7 +216,8 @@
   using the same certificate that was used to authenticate to the token endpoint.
 </t>
 <t>
-  The protected resource MUST obtain the client certificate used for TLS authentication
+  The protected resource MUST obtain the client certificate
+  used for mutual TLS authentication
   and MUST verify that the that certificate matches the
   certificate associated with the access token.  If they do not match,
   the resource access attempt MUST be rejected with an error.
@@ -246,24 +246,87 @@
     confirmation method.
   </t>
 
-  <figure anchor="eg_x5ts256" title="Example claims of a Certificate Thumbprint Constrained JWT.">
-    <preamble></preamble>
+  <figure anchor="eg_x5ts256jwt" title="Example claims of a Certificate Thumbprint Constrained JWT">
     <artwork><![CDATA[
-{
-  "iss": "https://server.example.com",
-  "aud": "https://resource.example.org",
-  "sub": "ty.webb@example.com",
-  "exp": 1493726400,
-  "nbf": 1493722800,
-  "cnf":{
-    "x5t#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
-  }
-}]]>
+  {
+    "iss": "https://server.example.com",
+    "sub": "ty.webb@example.com",
+    "exp": 1493726400,
+    "nbf": 1493722800,
+    "cnf":{
+      "x5t#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
+    }
+  }]]>
     </artwork>
-    <postamble></postamble>
   </figure>
 
+
       </section>
+
+      <section anchor="introspect" title="Confirmation Method for Token Introspection">
+        <t>
+          <xref target="RFC7662">OAuth 2.0 Token Introspection</xref> defines a
+          method for a protected resource to query
+          an authorization server about the active state of an
+          access token and to determine meta-information about the token.
+        </t>
+        <t>
+          For a mutual TLS sender constrained access token, the hash of the
+          certificate to which the token is bound
+          is conveyed to the protected resource as meta-information
+          in a token introspection response. The hash is conveyed using same structure as the
+          certificate SHA-256 thumbprint confirmation method, described in
+          <xref target="x5t256"/>, as a top-level member of the introspection response JSON.
+          The protected resource compares
+          that certificate hash to a hash of the client certificate used for
+          mutual TLS authentication
+          and rejects the request, if they do not match.
+        </t>
+        <t>
+          <xref target="RFC7800">Proof-of-Possession Key Semantics for JSON Web Tokens</xref> defined the
+          <spanx style="verb">cnf</spanx> (confirmation) claim, which enables
+          confirmation key information to be carried in a JWT.
+          However, the same proof-of-possession semantics are also useful for introspected access tokens
+          whereby the protected resource obtains the confirmation key data as meta-information
+          of a token introspection response and uses that information in verifying proof-of-possession.
+          Therefore this specification defines and registers proof-of-possession semantics for
+          <xref target="RFC7662">OAuth 2.0 Token Introspection</xref> using the <spanx style="verb">cnf</spanx>
+          structure.
+          When included as a top-level member of an OAuth token introspection response, <spanx style="verb">cnf</spanx>
+          has the same semantics and format as the the claim of the same name defined in <xref target="RFC7800"/>.
+          While this specification only explicitly uses the <spanx style="verb">x5t#S256</spanx>
+          confirmation method member, it needed to define and register the higher level <spanx style="verb">cnf</spanx>
+          structure as an introspection response member in order to define and use its more specific
+          <spanx style="verb">x5t#S256</spanx> confirmation method.
+        </t>
+
+        <t>
+          The following is an example of an introspection response for an active token with
+          an <spanx style="verb">x5t#S256</spanx> certificate thumbprint
+          confirmation method.
+        </t>
+
+        <figure anchor="eg_x5ts256intro" title="Example Introspection Response for a Certificate Constrained Access Token">
+          <artwork><![CDATA[
+
+  HTTP/1.1 200 OK
+  Content-Type: application/json
+
+  {
+    "active": true,
+    "iss": "https://server.example.com",
+    "sub": "ty.webb@example.com",
+    "exp": 1493726400,
+    "nbf": 1493722800,
+    "cnf":{
+      "x5t#S256": "bwcK0esc3ACC3DB2Y5_lESsXE8o9ltc05O89jdN-dg2"
+    }
+  }]]>
+          </artwork>
+        </figure>
+
+      </section>
+
 
     </section>
 
@@ -309,6 +372,30 @@
           </t>
         </section>
       </section>
+
+      <section anchor="intorspectIANA" title="OAuth Token Introspection Response Registration">
+
+        <t>
+          This specification requests registration of the following value
+          in the IANA "OAuth Token Introspection Response" registry
+          <xref target="IANA.OAuth.Parameters"/>
+          established by <xref target="RFC7662"/>.
+        </t>
+
+        <section anchor='IntrospectionContents' title='Registry Contents'>
+          <t>
+            <?rfc subcompact="yes"?>
+            <list style='symbols'>
+              <t>Claim Name: <spanx style="verb">cnf</spanx></t>
+              <t>Claim Description: Confirmation</t>
+              <t>Change Controller: IESG</t>
+              <t>Specification Document(s): <xref target="introspect"/> of [[ this specification ]]</t>
+            </list>
+          </t>
+          <?rfc subcompact="no"?>
+        </section>
+      </section>
+
 
       <section anchor="DynRegReg" title="OAuth Dynamic Client Registration Metadata Registration">
         <t>
@@ -491,8 +578,8 @@
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>
-        Scott "not Tomlinson" Tomilson and Matt Peterson were involved in the
-        original design and development work on a mutual TLS client authentication
+        Scott "not Tomlinson" Tomilson and Matt Peterson were involved in
+        design and development work on a mutual TLS OAuth client authentication
         implementation that informed some of the content of this document.
       </t>
 
@@ -525,6 +612,8 @@
       <t>
         draft-ietf-oauth-mtls-01
         <list style='symbols'>
+          <t>Added more explicit details of using RFC 7662 token introspection with mutual TLS sender constrained access tokens.</t>
+          <t>Added an IANA OAuth Token Introspection Response Registration request for "cnf".</t>
           <t>Changed the text in the <xref target="SenderConstrainedAccess"/> to not be specific about using a hash of the cert.</t>
           <t>Changed the abbreviated title to 'OAuth Mutual TLS' (previously was the acronym MTLSPOC).</t>
         </list>
