@@ -167,7 +167,7 @@
 	
     <section anchor="client_metadata" title="Dynamic Client Registration">
       <t>This draft adds the following values and metadata parameters 
-      to the <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration</xref>.</t>
+      to <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration</xref>.</t>
       <t>
         The value <spanx style="verb">tls_client_auth</spanx> is used to indicate the client's 
         intention to use mutual TLS as an authentication method to the
@@ -177,23 +177,25 @@
  
       <t>
         For authorization servers that associate certificates with clients using subject
-        information in the certificate, the following two new string metadata parameters  
+        information in the certificate, the following two new metadata parameters
         can be used:
         <list style="hanging">
-        <t hangText="tls_client_auth_subject_dn">
-        The expected subject distinguished name of the client certificate can be represented using
-        <spanx style="verb">tls_client_auth_subject_dn</spanx>.</t>
-        <t hangText="tls_client_auth_issuer_dn">
-        The metadata parameter <spanx style="verb">tls_client_auth_issuer_dn</spanx> can
-        optionally be used to constrain the expected distinguished name of the root issuer of
-        the client certificate.</t>
+        <t hangText="tls_client_auth_subject_dn"><vspace/>
+          An <xref target="RFC4514"/> string representation of the expected subject distinguished
+          name of the certificate the OAuth client will use in mutual TLS authentication.
+        </t>
+        <t hangText="tls_client_auth_root_dn"><vspace/>
+          An <xref target="RFC4514"/> string representation of a distinguished name that can
+          optionally be used to constrain, for the given client, the expected distinguished name
+          of the root issuer of the client certificate.
+        </t>
         </list>
       </t>
       <t>
         For authorization servers that use the key or
-        full certificate to associate clients with certificate, the existing
+        full certificate to associate clients with certificates, the existing
         <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
-        metadata parameters from <xref target="RFC7591"/> shall be used.
+        metadata parameters from <xref target="RFC7591"/> should be used.
       </t>
     </section>
     </section>
@@ -428,7 +430,7 @@
           <t>
             <list style="symbols">
               <t>
-                Client Metadata Name: <spanx style="verb">tls_client_auth_issuer_dn</spanx>
+                Client Metadata Name: <spanx style="verb">tls_client_auth_root_dn</spanx>
               </t>
               <t>
                 Client Metadata Description:
@@ -481,6 +483,7 @@
   <back>
     <references title="Normative References">
       <?rfc include='reference.RFC.2119'?>
+      <?rfc include='reference.RFC.4514'?>
       <?rfc include='reference.RFC.5246'?>
       <?rfc include='reference.RFC.5280'?>
       <?rfc include='reference.RFC.6749'?>
@@ -614,6 +617,8 @@
         <list style='symbols'>
           <t>Added more explicit details of using RFC 7662 token introspection with mutual TLS sender constrained access tokens.</t>
           <t>Added an IANA OAuth Token Introspection Response Registration request for "cnf".</t>
+          <t>Specify that tls_client_auth_subject_dn and tls_client_auth_root_dn are RFC 4514 String Representation of Distinguished Names.</t>
+          <t>Changed tls_client_auth_issuer_dn to tls_client_auth_root_dn.</t>
           <t>Changed the text in the <xref target="SenderConstrainedAccess"/> to not be specific about using a hash of the cert.</t>
           <t>Changed the abbreviated title to 'OAuth Mutual TLS' (previously was the acronym MTLSPOC).</t>
         </list>
