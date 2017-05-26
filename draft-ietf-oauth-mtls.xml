@@ -89,8 +89,9 @@
   access to the associated resources. Such a constraint is unlike the case of the
   basic bearer token described in <xref target="RFC6750"/>, where any party in
   possession of the access token can use it to access the associated resources.
-  Mutual TLS sender constrained access prevents the use of stolen access tokens
-  by binding the access token to the client's certificate.
+  Mutual TLS sender constrained access binds the access token to the client's certificate
+  thus preventing the use of stolen access tokens or replay of access tokens
+  by unauthorised parties.
 </t>
 <t>
   Mutual TLS sender constrained access tokens and mutual TLS client authentication
@@ -215,7 +216,7 @@
 <t>
   The client makes protected resource requests as described in <xref target="RFC6750"/>,
   however, those requests MUST be made over a mutually authenticated TLS connection
-  using the same certificate that was used to authenticate to the token endpoint.
+  using the same certificate that was used for mutual TLS at the token endpoint.
 </t>
 <t>
   The protected resource MUST obtain the client certificate
@@ -270,7 +271,7 @@
           <xref target="RFC7662">OAuth 2.0 Token Introspection</xref> defines a
           method for a protected resource to query
           an authorization server about the active state of an
-          access token and to determine meta-information about the token.
+          access token as well as to determine meta-information about the token.
         </t>
         <t>
           For a mutual TLS sender constrained access token, the hash of the
@@ -463,7 +464,7 @@
             and Datagram Transport Layer Security (DTLS)</xref>.
         </t>
       </section>
-      <section anchor="binding" title="Client Identity Binding">
+      <section anchor="binding" title="Client Identity Binding by the Authorization Server">
         <t>
           No specific method of binding a certificate to a client identifier 
 		  at the token endoint is prescribed by
@@ -471,7 +472,7 @@
           proving possession of the private key corresponding to the certificate, the client
           identity is also bound to the certificate. One such binding would be to configure for the
           client a value that the certificate must contain in the subject field
-          or the subjectAltName extension and possibly a restricted set of trust anchors.
+          and possibly the expected trust anchor.
           An alternative method would be to configure a public key for the client directly that
           would have to match the subject public key info of the certificate.
         </t>
