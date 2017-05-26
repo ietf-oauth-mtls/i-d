@@ -467,7 +467,7 @@
       <section anchor="binding" title="Client Identity Binding by the Authorization Server">
         <t>
           No specific method of binding a certificate to a client identifier 
-		  at the token endoint is prescribed by
+		      at the token endpoint is prescribed by
           this document. However, some method MUST be employed so that, in addition to
           proving possession of the private key corresponding to the certificate, the client
           identity is also bound to the certificate. One such binding would be to configure for the
