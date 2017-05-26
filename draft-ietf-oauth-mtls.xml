@@ -91,7 +91,7 @@
   possession of the access token can use it to access the associated resources.
   Mutual TLS sender constrained access binds the access token to the client's certificate
   thus preventing the use of stolen access tokens or replay of access tokens
-  by unauthorised parties.
+  by unauthorized parties.
 </t>
 <t>
   Mutual TLS sender constrained access tokens and mutual TLS client authentication
