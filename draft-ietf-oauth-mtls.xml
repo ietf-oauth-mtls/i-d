@@ -221,7 +221,7 @@
 <t>
   The protected resource MUST obtain the client certificate
   used for mutual TLS authentication
-  and MUST verify that the that certificate matches the
+  and MUST verify that the certificate matches the
   certificate associated with the access token.  If they do not match,
   the resource access attempt MUST be rejected with an error.
 </t>
@@ -594,6 +594,7 @@
         Vladimir Dzhuvinov,
         Samuel Erdtman,
         Phil Hunt,
+        Takahiko Kawasaki,
         Sean Leonard,
         Kepeng Li,
         James Manger,
@@ -612,6 +613,12 @@
       <?rfc subcompact="yes"?>
       <t>
 	[[ to be removed by the RFC Editor before publication as an RFC ]]
+      </t>
+      <t>
+        draft-ietf-oauth-mtls-02
+        <list style='symbols'>
+          <t>Fixed editorial issue https://mailarchive.ietf.org/arch/msg/oauth/U46UMEh8XIOQnvXY9pHFq1MKPns</t>
+        </list>
       </t>
       <t>
         draft-ietf-oauth-mtls-01
