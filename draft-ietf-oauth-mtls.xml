@@ -296,7 +296,7 @@
           <xref target="RFC7662">OAuth 2.0 Token Introspection</xref> using the <spanx style="verb">cnf</spanx>
           structure.
           When included as a top-level member of an OAuth token introspection response, <spanx style="verb">cnf</spanx>
-          has the same semantics and format as the the claim of the same name defined in <xref target="RFC7800"/>.
+          has the same semantics and format as the claim of the same name defined in <xref target="RFC7800"/>.
           While this specification only explicitly uses the <spanx style="verb">x5t#S256</spanx>
           confirmation method member, it needed to define and register the higher level <spanx style="verb">cnf</spanx>
           structure as an introspection response member in order to define and use its more specific
