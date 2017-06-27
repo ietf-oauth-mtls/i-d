@@ -16,7 +16,7 @@
 <rfc category="std" docName="draft-ietf-oauth-mtls-02"
      ipr="trust200902">
   <front>
-    <title abbrev="OAuth Mutual TLS">Mutual TLS Profiles for OAuth Clients</title>
+    <title abbrev="OAuth Mutual TLS">Mutual TLS Profile for OAuth 2.0</title>
 
     <author fullname="Brian Campbell" initials="B." surname="Campbell">
       <organization>Ping Identity</organization>
@@ -617,6 +617,7 @@
         draft-ietf-oauth-mtls-02
         <list style='symbols'>
           <t>Fixed editorial issue https://mailarchive.ietf.org/arch/msg/oauth/U46UMEh8XIOQnvXY9pHFq1MKPns</t>
+          <t>Changed the title (hopefully "Mutual TLS Profile for OAuth 2.0" is better than "Mutual TLS Profiles for OAuth Clients").</t>
         </list>
       </t>
       <t>
