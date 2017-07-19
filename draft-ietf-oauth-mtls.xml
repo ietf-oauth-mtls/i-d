@@ -95,7 +95,12 @@
 </t>
 <t>
   Mutual TLS sender constrained access tokens and mutual TLS client authentication
-  are distinct mechanisms that don't necessarily need to be deployed together.
+  are distinct mechanisms that don't necessarily need to be deployed together. This 
+  draft allows to use client authentication only or client authentication in 
+  combination with sender constraint access tokens. Use of mutual TLS sender 
+  constrained access tokens without client authentication (e.g. to support 
+  binding access tokens to a TLS certificate for public clients) is possible 
+  from a technical standpoint but out of scope of this draft.
 </t>
     <section anchor="RNC" title="Requirements Notation and Conventions">
 <t>
@@ -164,6 +169,11 @@
         in authorization server metadata such as
         <xref target="OpenID.Discovery"/> and <xref target="I-D.ietf-oauth-discovery"/>.
       </t>
+      <t>
+      <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx> is a new
+      metadata value used to indicate server support for
+      mutual TLS sender constrained access tokens.
+      </t>
 	</section>
 	
     <section anchor="client_metadata" title="Dynamic Client Registration">
@@ -174,6 +184,11 @@
         intention to use mutual TLS as an authentication method to the
         token endpoint for the <spanx style="verb">token_endpoint_auth_method</spanx>
         client metadata field.
+      </t>
+      <t>
+        The value <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx> 
+        is used to indicate the client's intention to use mutual TLS sender constrained 
+        access tokens.
       </t>
  
       <t>
@@ -355,7 +370,26 @@
             <?rfc subcompact="no"?>
           </t>
         </section>
-      </section>  
+      </section>      
+      
+      <section anchor="ietf-oauth-discoveryIANA" title=" OAuth Authorization Server Metadata Registration">
+      <t>
+        This specification requests registration of the following value
+        in the IANA " OAuth Authorization Server Metadata" registry
+        <xref target="IANA.OAuth.Parameters"/> established by <xref target="I-D.ietf-oauth-discovery"/>.
+      </t>
+        <section title="Registry Contents">
+          <t>
+            <list style='symbols'>
+              <t>Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx></t>
+              <t>Metadata Description: String value indicating server support for mutual TLS sender constraint
+                access tokens.</t>
+              <t>Change Controller: IESG</t>
+              <t>Specification Document(s): <xref target="server_metadata"/> of [[ this specification ]]</t>             
+            </list>
+          </t>
+        </section>
+      </section>     
 
       <section anchor="tls_client_authIANA" title="Token Endpoint Authentication Method Registration">
       <t>
@@ -410,7 +444,24 @@
 
         <section anchor="DynRegContents" title="Registry Contents">
           <t>
-            <?rfc subcompact="yes"?>
+            <list style="symbols">
+              <t>
+                Client Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx>
+              </t>
+              <t>
+                Client Metadata Description:
+                String value indicating the client's intension to use mutual TLS sender constraint
+                access tokens.
+              </t>
+              <t>
+                Change Controller: IESG
+              </t>
+              <t>
+                Specification Document(s): <xref target="client_metadata"/> of [[ this specification ]]
+              </t>
+            </list>
+          </t>
+          <t>
             <list style="symbols">
               <t>
                 Client Metadata Name: <spanx style="verb">tls_client_auth_subject_dn</spanx>
