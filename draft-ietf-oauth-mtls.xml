@@ -450,7 +450,7 @@
               </t>
               <t>
                 Client Metadata Description:
-                String value indicating the client's intension to use mutual TLS sender constraint
+                String value indicating the client's intention to use mutual TLS sender constraint
                 access tokens.
               </t>
               <t>
