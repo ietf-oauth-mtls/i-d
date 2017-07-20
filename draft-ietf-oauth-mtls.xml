@@ -398,7 +398,7 @@
     <t>The authorization server needs to setup its TLS configuration appropriately 
     for the binding methods it supports.</t>
     <t>If the authorization server wants to support mutual TLS client authentication 
-    and other authentication methods in parallel, it should make client authentication
+    and other client authentication methods in parallel, it should make mutual TLS
     optional on the token endpoint. </t>
     <t>If the authorization server supports the Public Key method, it 
     should configure the TLS stack in a way that it does not verify whether the 
