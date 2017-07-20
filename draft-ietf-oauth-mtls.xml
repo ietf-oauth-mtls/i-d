@@ -251,12 +251,8 @@
         For authorization servers that support the Publik Key method, the existing
         <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
         metadata parameters from <xref target="RFC7591"/> SHOULD be used, where the X.509
-        certificates are represented using the parameters <spanx style="verb">x5c</spanx>
-        from <xref target="RFC7517" />. 
-        Additionally, the value of the <spanx style="verb">kid</spanx> parameter as defined
-        in <xref target="RFC7517" /> might be 
-        set to the fingerprint of the public key to allow the authorization server
-        to easily identify the respective key.
+        certificates are represented using the <spanx style="verb">x5c</spanx> parameter
+        from <xref target="RFC7517"/>.
       </t>
     </section>
     </section>
