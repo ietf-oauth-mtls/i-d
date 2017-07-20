@@ -453,6 +453,7 @@
       </t>
         <section title="Registry Contents">
           <t>
+            <?rfc subcompact="yes"?>
             <list style='symbols'>
               <t>Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx></t>
               <t>Metadata Description: Indicates server support for mutual TLS sender constraint
@@ -460,6 +461,7 @@
               <t>Change Controller: IESG</t>
               <t>Specification Document(s): <xref target="server_metadata"/> of [[ this specification ]]</t>             
             </list>
+            <?rfc subcompact="no"?>
           </t>
         </section>
       </section>     
@@ -517,6 +519,8 @@
 
         <section anchor="DynRegContents" title="Registry Contents">
           <t>
+            <?rfc subcompact="yes"?>
+
             <list style="symbols">
               <t>
                 Client Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx>
@@ -569,6 +573,7 @@
                 Specification Document(s): <xref target="client_metadata"/> of [[ this specification ]]
               </t>
             </list>
+            <?rfc subcompact="no"?>
           </t>
 
         </section>
