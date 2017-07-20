@@ -155,9 +155,44 @@
   models to vary as appropriate for a given deployment. The authorization server
   can locate the client configuration by the client identifier and check the certificate
   presented in the TLS Handshake against the expected credentials for that client.
-  As described in <xref target="binding"/>, the authorization server MUST enforce some
-  method of binding a certificate to a client.
+  The authorization server MUST enforce some method of binding a certificate to a client.
+  This draft defines the following two binding methods:
 </t>
+<t> 
+        <list style="hanging">
+        <t hangText="PKI">The PKI method uses a distinguished name (client DN) to identify
+        the client. The TLS handshake is utilized to validate the client's possession 
+        of the private key corresponding to the public key in the certificate and to 
+        validate the corresponding certificate chain. The client is sucessfully authenticated
+        if the subject information in the certificate matches the configured DN. The 
+        client may prescribe the DN of the issuer of its certificates. The authorization
+        server will enforce this restriction after the TLS handshake took place. Setting 
+        the issuer to a certain CA securely scopes the DN of the client to this CA and
+        shall prevent an attacker from impersonating a client by using a certificate 
+        for the client's DN obtained from a different CA.
+        The PKI method facilitates the way X.509 certificates are traditionally being used
+        for authentication. It also allows the client to rotate its X.509 certificates 
+        without the need to modify its respective authentication data at the authorization 
+        server.
+        </t>
+        <t hangText="Public Key">The Public Key method uses public keys to identify clients.
+        As pre-requisite, the client registers a X.509 certificate or a trusted source 
+        for its X.509 certificates (jwks uri as defined in <xref target="RFC7591"/>) with 
+        the authorization server. During authentication, 
+        TLS is utilized to validate the client's possession of the private key 
+        corresponding to the public key presented in the respective TLS handshake. In 
+        contrast to the PKI method, the certificate chain is not validated in this case.
+        The client is successfully authenticated, if the subject public key info of the 
+        validated certificate matches the subject public key info of one the certificates 
+        configured for that particular client.
+        The Public Key method allows to use mutual TLS to authenticate clients without
+        the need to maintain a PKI. When used in conjunction with a trusted X.509 certificate
+        source, it also allows the client to rotate its X.509 certificates without the
+        need to change its respective authentication data at the authorization server.
+        </t>
+        </list>
+</t>
+
 
     </section>
 
@@ -169,11 +204,16 @@
         in authorization server metadata such as
         <xref target="OpenID.Discovery"/> and <xref target="I-D.ietf-oauth-discovery"/>.
       </t>
-      <t>
-      <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx> is a new
-      metadata value used to indicate server support for
-      mutual TLS sender constrained access tokens.
-      </t>
+      <t>This draft also introduces a new meta data parameter:
+ 
+    <list style="hanging">
+        <t hangText="mutual_tls_sender_constrained_access_tokens"><vspace/>
+          OPTIONAL.  Boolean value indicating server support for
+      mutual TLS sender constrained access tokens. If omitted, the
+      default value is "false".
+        </t>
+    </list>
+      </t>       
 	</section>
 	
     <section anchor="client_metadata" title="Dynamic Client Registration">
@@ -193,25 +233,30 @@
  
       <t>
         For authorization servers that associate certificates with clients using subject
-        information in the certificate, the following two new metadata parameters
-        can be used:
+        information in the certificate (PKI method), the following two new metadata 
+        parameters are introduced:
         <list style="hanging">
         <t hangText="tls_client_auth_subject_dn"><vspace/>
           An <xref target="RFC4514"/> string representation of the expected subject distinguished
           name of the certificate the OAuth client will use in mutual TLS authentication.
         </t>
         <t hangText="tls_client_auth_root_dn"><vspace/>
-          An <xref target="RFC4514"/> string representation of a distinguished name that can
+          OPTIONAL.  An <xref target="RFC4514"/> string representation of a distinguished name that can
           optionally be used to constrain, for the given client, the expected distinguished name
           of the root issuer of the client certificate.
         </t>
         </list>
       </t>
       <t>
-        For authorization servers that use the key or
-        full certificate to associate clients with certificates, the existing
+        For authorization servers that support the Publik Key method, the existing
         <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
-        metadata parameters from <xref target="RFC7591"/> should be used.
+        metadata parameters from <xref target="RFC7591"/> SHOULD be used, where the X.509
+        certificates are represented using the parameters <spanx style="verb">x5c</spanx>
+        from <xref target="RFC7517" />. 
+        Additionally, the value of the <spanx style="verb">kid</spanx> parameter as defined
+        in <xref target="RFC7517" /> might be 
+        set to the fingerprint of the public key to allow the authorization server
+        to easily identify the respective key.
       </t>
     </section>
     </section>
@@ -346,6 +391,34 @@
       </section>
 
 
+    </section>
+    
+    <section anchor="Impl" title="Implementation Considerations">
+    <section anchor="ImplAS" title="Authorization Server">
+    <t>The authorization server needs to setup its TLS configuration appropriately 
+    for the binding methods it supports.</t>
+    <t>If the authorization server wants to support mutual TLS client authentication 
+    and other authentication methods in parallel, it should make client authentication
+    optional on the token endpoint. </t>
+    <t>If the authorization server supports the Public Key method, it 
+    should configure the TLS stack in a way that it does not verify whether the 
+    certificate presented by the client during the handshake is signed by a trusted CA 
+    certificate.</t>
+    <t>Please note: the Public Key method is intended to support client authentication 
+    using self-signed certificates.</t>
+    <t>The authorization server may also consider to host the token endpoint on
+    a separat host name in order to prevent unintended impact on the TLS behavior of
+    its other endpoints, e.g. authorization or registration.</t>
+    </section>
+    <section anchor="ImplRS" title="Resource Server">
+    <t>From the perspective of the resource server, TLS client authentication is 
+    used as a proof of possession method only. For the purpose of client authentication,
+    the resource server may completely rely on the authorization server. So there is 
+    no need to validate the trust chain of the client's certificate in any of the methods
+    defined in this draft. The resource server should therefore configure the TLS stack 
+    in a way that it does not verify whether the certificate presented by the client 
+    during the handshake is signed by a trusted CA certificate.</t>
+    </section>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -515,18 +588,17 @@
             and Datagram Transport Layer Security (DTLS)</xref>.
         </t>
       </section>
-      <section anchor="binding" title="Client Identity Binding by the Authorization Server">
-        <t>
-          No specific method of binding a certificate to a client identifier 
-		      at the token endpoint is prescribed by
-          this document. However, some method MUST be employed so that, in addition to
-          proving possession of the private key corresponding to the certificate, the client
-          identity is also bound to the certificate. One such binding would be to configure for the
-          client a value that the certificate must contain in the subject field
-          and possibly the expected trust anchor.
-          An alternative method would be to configure a public key for the client directly that
-          would have to match the subject public key info of the certificate.
-        </t>
+      <section anchor="certspoofing" title="X.509 Certificate Spoofing">
+      <t>If the PKI method is used, an attacker could try to impersonate a client using 
+      a certificate for the same DN issued by another CA, which the authorization server 
+      trusts.</t>
+      <t>There are two ways to cope with that threat: the authorization server may decide 
+      to only accept a limited number of CAs whose certificate issuance policy meets its
+      security requirements. Alternatively or in addition, the client may want to 
+      explicitly prescribe the CA it will use for obtaining its certificates. The latter 
+      is supported by this draft by the client registration parameter 
+      <spanx style="verb">tls_client_auth_root_dn</spanx>.
+      </t>      
       </section>
     </section>
 
@@ -603,6 +675,7 @@
       </reference>
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-04.xml'?>
 
+	  <?rfc include='reference.RFC.7517'?>
       <?rfc include='reference.RFC.7519'?>
       <?rfc include='reference.RFC.7591'?>
       <?rfc include='reference.RFC.7662'?>
@@ -663,6 +736,17 @@
       <?rfc subcompact="yes"?>
       <t>
 	[[ to be removed by the RFC Editor before publication as an RFC ]]
+      </t>
+      <t>
+        draft-ietf-oauth-mtls-03
+        <list style='symbols'>
+          <t>introduced meta data and client registration claim to publish and request 
+          support for mutual TLS sender constrained access tokens</t>
+          <t>Added description of two binding methods, PKI and Public Key.</t>
+          <t>Added implementation considerations, mainly regarding TLS stack configuration
+          and trust chain validation</t>
+          <t>Added new section to security considerations on cert spoofing</t>
+        </list>
       </t>
       <t>
         draft-ietf-oauth-mtls-02
