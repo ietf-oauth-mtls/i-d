@@ -158,6 +158,36 @@
   As described in <xref target="binding"/>, the authorization server MUST enforce some
   method of binding a certificate to a client.
 </t>
+<t> This draft supports two different ways to use X.509 certificates to authenticate clients:
+        <list style="hanging">
+        <t hangText="PKI mode">In this mode, the client is identified by its distinguished 
+        name (client DN). The TLS handshake validates whether the client is in possession 
+        of the private key corresponding to the public key in the certificate and afterwards
+        validates the complete certificate chain up to the respective's CA certificate. The 
+        client may also determine the DN of the issuer of its certificates. The authorization
+        server will enforce this restriction after the TLS handshake took place. Setting 
+        the issuer to a certain CA securely scopes the DN of the client to this CA and
+        that way prevents an attacker from impersonating a client by using a certificate 
+        for the client's DN obtained from a different CA.
+        The PKI mode allows the client to rotate its X.509 certificates without the need to
+        modify its respective authentication data at the authorization server and 
+        is inline with the way X.509 certificates are typically used nowadays.
+        </t>
+        <t hangText="Public Key mode">In this mode, the client registers a X.509 
+        certificate or a trusted source for its X.509 certificates, which then are
+        used to authenticate the client. In this process, the TLS handshake is utilized 
+        to only validate whether the client is in possession of the private key corresponding
+        to the or one of the public key certificates registered for that particular client.
+        The authenticated certificate is than directly compared to the certificates 
+        configured for the particular client.
+        This mode allows use of TLS mutual authentication to authenticate clients without
+        the need to maintain a PKI. When used in conjunction with a trusted X.509 certificate
+        source, it also allows the client to rotate its X.509 certificates without the
+        need to change its respective authentication data at the authorization server.
+        </t>
+        </list>
+</t>
+
 
     </section>
 
