@@ -210,7 +210,7 @@
         <t hangText="mutual_tls_sender_constrained_access_tokens"><vspace/>
           OPTIONAL.  Boolean value indicating server support for
       mutual TLS sender constrained access tokens. If omitted, the
-      default value is "false".
+      default value is <spanx style="verb">false</spanx>.
         </t>
     </list>
       </t>       
@@ -223,12 +223,12 @@
         The value <spanx style="verb">tls_client_auth</spanx> is used to indicate the client's 
         intention to use mutual TLS as an authentication method to the
         token endpoint for the <spanx style="verb">token_endpoint_auth_method</spanx>
-        client metadata field.
+        client metadata parameter.
       </t>
       <t>
-        The value <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx> 
-        is used to indicate the client's intention to use mutual TLS sender constrained 
-        access tokens.
+        The client metadata parameter <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx>
+        is a Boolean value used to indicate the client's intention to use mutual TLS sender constrained
+        access tokens. If omitted, the default value is <spanx style="verb">false</spanx>.
       </t>
  
       <t>
@@ -455,7 +455,7 @@
           <t>
             <list style='symbols'>
               <t>Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx></t>
-              <t>Metadata Description: String value indicating server support for mutual TLS sender constraint
+              <t>Metadata Description: Indicates server support for mutual TLS sender constraint
                 access tokens.</t>
               <t>Change Controller: IESG</t>
               <t>Specification Document(s): <xref target="server_metadata"/> of [[ this specification ]]</t>             
@@ -523,7 +523,7 @@
               </t>
               <t>
                 Client Metadata Description:
-                String value indicating the client's intention to use mutual TLS sender constraint
+                Indicates the client's intention to use mutual TLS sender constraint
                 access tokens.
               </t>
               <t>
@@ -740,7 +740,7 @@
       <t>
         draft-ietf-oauth-mtls-03
         <list style='symbols'>
-          <t>introduced meta data and client registration claim to publish and request 
+          <t>introduced meta data and client registration parameter to publish and request
           support for mutual TLS sender constrained access tokens</t>
           <t>Added description of two binding methods, PKI and Public Key.</t>
           <t>Added implementation considerations, mainly regarding TLS stack configuration
