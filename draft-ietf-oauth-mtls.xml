@@ -177,11 +177,12 @@
         </t>
         <t hangText="Public Key">The Public Key method uses public keys to identify clients.
         As pre-requisite, the client registers a X.509 certificate or a trusted source 
-        for its X.509 certificates (jwks uri as defined in abc) with the authorization 
-        server. During authentication, 
+        for its X.509 certificates (jwks uri as defined in <xref target="RFC7591"/>) with 
+        the authorization server. During authentication, 
         TLS is utilized to validate the client's possession of the private key 
-        corresponding to the public key presented in the respective TLS handshake. 
-        The client is sucessfully authenticated, if the subject public key info of the 
+        corresponding to the public key presented in the respective TLS handshake. In 
+        contrast to the PKI method, the certificate chain is not validated in this case.
+        The client is successfully authenticated, if the subject public key info of the 
         validated certificate matches the subject public key info of one the certificates 
         configured for that particular client.
         The Public Key method allows to use mutual TLS to authenticate clients without
@@ -245,8 +246,10 @@
         For authorization servers that support the Publik Key method, the existing
         <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
         metadata parameters from <xref target="RFC7591"/> SHOULD be used, where the X.509
-        certificates are represented using the claim <spanx style="verb">x5c</spanx>. 
-        Additionally, the value of the <spanx style="verb">kid</spanx> claim might be 
+        certificates are represented using the parameters <spanx style="verb">x5c</spanx>
+        from <xref target="RFC7517" />. 
+        Additionally, the value of the <spanx style="verb">kid</spanx> parameter as defined
+        in <xref target="RFC7517" /> might be 
         set to the fingerprint of the public key to allow the authorization server
         to easily identify the respective key.
       </t>
@@ -667,6 +670,7 @@
       </reference>
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-04.xml'?>
 
+	  <?rfc include='reference.RFC.7517'?>
       <?rfc include='reference.RFC.7519'?>
       <?rfc include='reference.RFC.7591'?>
       <?rfc include='reference.RFC.7662'?>
