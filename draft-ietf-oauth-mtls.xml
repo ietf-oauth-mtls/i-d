@@ -204,11 +204,16 @@
         in authorization server metadata such as
         <xref target="OpenID.Discovery"/> and <xref target="I-D.ietf-oauth-discovery"/>.
       </t>
-      <t>
-      <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx> is a new
-      metadata value used to indicate server support for
-      mutual TLS sender constrained access tokens.
-      </t>
+      <t>This draft also introduces a new meta data parameter:
+ 
+    <list style="hanging">
+        <t hangText="mutual_tls_sender_constrained_access_tokens"><vspace/>
+          OPTIONAL.  Boolean value indicating server support for
+      mutual TLS sender constrained access tokens. If omitted, the
+      default value is "false".
+        </t>
+    </list>
+      </t>       
 	</section>
 	
     <section anchor="client_metadata" title="Dynamic Client Registration">
@@ -236,7 +241,7 @@
           name of the certificate the OAuth client will use in mutual TLS authentication.
         </t>
         <t hangText="tls_client_auth_root_dn"><vspace/>
-          An <xref target="RFC4514"/> string representation of a distinguished name that can
+          OPTIONAL.  An <xref target="RFC4514"/> string representation of a distinguished name that can
           optionally be used to constrain, for the given client, the expected distinguished name
           of the root issuer of the client certificate.
         </t>
