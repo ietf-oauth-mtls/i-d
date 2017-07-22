@@ -319,7 +319,17 @@
     </artwork>
   </figure>
 
-
+   <t>
+     If, in the future, certificate thumbprints need to be computed using
+     hash functions other than SHA-256, it is suggested that additional
+     related JWT confirmation methods members be defined for that purpose.
+     For example, a new <spanx style="verb">x5t#S512</spanx> (X.509 Certificate Thumbprint
+     using SHA-512) confirmation method member could be defined by registering it in
+     the the IANA "JWT Confirmation Methods" registry
+     <xref target="IANA.JWT.Claims"/>
+     for JWT <spanx style="verb">cnf</spanx> member values
+     established by <xref target="RFC7800"/>.
+   </t>
       </section>
 
       <section anchor="introspect" title="Confirmation Method for Token Introspection">
