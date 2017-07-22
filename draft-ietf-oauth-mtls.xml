@@ -751,12 +751,14 @@
       <t>
         draft-ietf-oauth-mtls-03
         <list style='symbols'>
-          <t>introduced meta data and client registration parameter to publish and request
+          <t>Introduced meta data and client registration parameter to publish and request
           support for mutual TLS sender constrained access tokens</t>
           <t>Added description of two binding methods, PKI and Public Key.</t>
           <t>Added implementation considerations, mainly regarding TLS stack configuration
           and trust chain validation</t>
           <t>Added new section to security considerations on cert spoofing</t>
+          <t>Add text suggesting that a new cnf member be defined in the future,
+            if hash function(s) other than SHA-256 need to be used for certificate thumbprints</t>
         </list>
       </t>
       <t>
