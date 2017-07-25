@@ -753,7 +753,7 @@
         <list style='symbols'>
           <t>Introduced meta data and client registration parameter to publish and request
           support for mutual TLS sender constrained access tokens</t>
-          <t>Added description of two binding methods, PKI and Public Key.</t>
+          <t>Added description of two methods of binding the cert and client, PKI and Public Key.</t>
           <t>Added implementation considerations, mainly regarding TLS stack configuration
           and trust chain validation</t>
           <t>Added new section to security considerations on cert spoofing</t>
