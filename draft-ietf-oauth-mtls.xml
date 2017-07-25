@@ -95,12 +95,7 @@
 </t>
 <t>
   Mutual TLS sender constrained access tokens and mutual TLS client authentication
-  are distinct mechanisms that don't necessarily need to be deployed together. This 
-  draft allows to use client authentication only or client authentication in 
-  combination with sender constraint access tokens. Use of mutual TLS sender 
-  constrained access tokens without client authentication (e.g. to support 
-  binding access tokens to a TLS certificate for public clients) is possible 
-  from a technical standpoint but out of scope of this draft.
+  are distinct mechanisms that don't necessarily need to be deployed together.
 </t>
     <section anchor="RNC" title="Requirements Notation and Conventions">
 <t>
@@ -424,6 +419,23 @@
     defined in this draft. The resource server should therefore configure the TLS stack 
     in a way that it does not verify whether the certificate presented by the client 
     during the handshake is signed by a trusted CA certificate.</t>
+    </section>
+    <section anchor="ImplPubClient" title="Sender Constrained Access Tokens Without Client Authentication">
+    <t>
+    This draft allows for the use of client authentication only or client authentication in
+    combination with sender constraint access tokens. Use of mutual TLS sender
+    constrained access tokens without client authentication (e.g. to support
+    binding access tokens to a TLS client certificate for public clients) is also possible.
+    The authorization server would configure the TLS stack in the same manor as for the Public Key method
+    such that it does not verify that the certificate presented by the client during the handshake is
+    signed by a trusted CA. Individual instances of a public client would then create a self-signed
+    certificate for mutual TLS with the authorization server and resource server. The authorization
+    server would not authenticate the client at the OAuth layer but would bind issued access tokens
+    to the certificate, which the client has proven possession of the corresponding private key.
+    The access token is then mutual TLS sender constrained and can only be used by the client
+    possessing the certificate and private key and utilizing them to negotiate mutual TLS on
+    connections to the resource server.
+    </t>
     </section>
     </section>
 
@@ -755,7 +767,8 @@
           support for mutual TLS sender constrained access tokens</t>
           <t>Added description of two methods of binding the cert and client, PKI and Public Key.</t>
           <t>Added implementation considerations, mainly regarding TLS stack configuration
-          and trust chain validation</t>
+          and trust chain validation as well as how to to do binding of access tokens to a TLS client
+          certificate for public clients</t>
           <t>Added new section to security considerations on cert spoofing</t>
           <t>Add text suggesting that a new cnf member be defined in the future,
             if hash function(s) other than SHA-256 need to be used for certificate thumbprints</t>
