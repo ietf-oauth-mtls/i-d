@@ -67,7 +67,7 @@
     <section anchor="Introduction" title="Introduction">
 <t>
   This document describes Transport Layer Security (TLS) mutual authentication
-  using X.509 certificates as a mechanism for both OAuth client authentication
+  using X.509 certificates as a mechanism for OAuth client authentication
   to the token endpoint as well as for sender constrained access to
   OAuth protected resources.
 </t>
