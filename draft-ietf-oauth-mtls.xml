@@ -158,7 +158,7 @@
         <t hangText="PKI">The PKI method uses a distinguished name (DN) to identify
         the client. The TLS handshake is utilized to validate the client's possession 
         of the private key corresponding to the public key in the certificate and to 
-        validate the corresponding certificate chain. The client is sucessfully authenticated
+        validate the corresponding certificate chain. The client is successfully authenticated
         if the subject information in the certificate matches the configured DN. The 
         client may prescribe the DN of the issuer of its certificates. The authorization
         server will enforce this restriction after the TLS handshake took place. Setting 
