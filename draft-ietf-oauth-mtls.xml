@@ -417,7 +417,7 @@
     certificate.</t>
     <t>Please note: the Public Key method is intended to support client authentication 
     using self-signed certificates.</t>
-    <t>The authorization server may also consider to host the token endpoint on
+    <t>The authorization server may also consider hosting the token endpoint on
     a separate host name in order to prevent unintended impact on the TLS behavior of
     its other endpoints, e.g. authorization or registration.</t>
     </section>
