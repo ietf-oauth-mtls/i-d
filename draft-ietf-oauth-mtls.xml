@@ -436,7 +436,7 @@
     combination with sender constraint access tokens. Use of mutual TLS sender
     constrained access tokens without client authentication (e.g. to support
     binding access tokens to a TLS client certificate for public clients) is also possible.
-    The authorization server would configure the TLS stack in the same manor as for the Public Key method
+    The authorization server would configure the TLS stack in the same manner as for the Public Key method
     such that it does not verify that the certificate presented by the client during the handshake is
     signed by a trusted CA. Individual instances of a public client would then create a self-signed
     certificate for mutual TLS with the authorization server and resource server. The authorization
