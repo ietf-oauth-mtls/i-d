@@ -698,33 +698,14 @@
           <date/>
         </front>
       </reference>
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-04.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-07.xml'?>
 
 	  <?rfc include='reference.RFC.7517'?>
       <?rfc include='reference.RFC.7519'?>
       <?rfc include='reference.RFC.7591'?>
       <?rfc include='reference.RFC.7662'?>
 
-
-      <reference anchor="OpenID.Discovery">
-        <front>
-          <title>OpenID Connect Discovery 1.0</title>
-          <author fullname="Nat Sakimura" initials="N." surname="Sakimura">
-            <organization abbrev="NRI">Nomura Research Institute, Ltd.</organization>
-          </author>
-          <author fullname="John Bradley" initials="J." surname="Bradley">
-            <organization abbrev="Ping Identity">Ping Identity</organization>
-          </author>
-          <author fullname="Michael B. Jones" initials="M.B." surname="Jones">
-            <organization abbrev="Microsoft">Microsoft</organization>
-          </author>
-          <author fullname="Edmund Jay" initials="E." surname="Jay">
-            <organization abbrev="Illumila">Illumila</organization>
-          </author>
-          <date day="25" month="February" year="2014"/>
-        </front>
-        <format target="http://openid.net/specs/openid-connect-discovery-1_0.html" type="HTML" />
-      </reference>
+      <?rfc include='http://openid.net/bibxml/reference.OpenID.Discovery.xml'?>
 
     </references>
 
@@ -766,6 +747,7 @@
         draft-ietf-oauth-mtls-04
         <list style='symbols'>
           <t>Removed the "tls_client_auth_root_dn" client metadata field as discussed https://mailarchive.ietf.org/arch/msg/oauth/swDV2y0be6o8czGKQi1eJV-g8qc</t>
+          <t>Update draft-ietf-oauth-discovery reference to -07</t>
         </list>
       </t>
       <t>
