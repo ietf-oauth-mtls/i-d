@@ -638,11 +638,11 @@
   <back>
     <references title="Normative References">
       <?rfc include='reference.RFC.2119'?>
-      <?rfc include='reference.RFC.4514'?>
-      <?rfc include='reference.RFC.5246'?>
-      <?rfc include='reference.RFC.5280'?>
-      <?rfc include='reference.RFC.6749'?>
-      <?rfc include='reference.RFC.6750'?>
+      <?rfc include='reference.RFC.4514'?> <!-- LDAP: String Representation of Distinguished Names -->
+      <?rfc include='reference.RFC.5246'?> <!-- TLS 1.2 -->
+      <?rfc include='reference.RFC.5280'?> <!-- X.509 Public Key Infrastructure Certificate ... -->
+      <?rfc include='reference.RFC.6749'?> <!-- OAuth 2.0 Authorization Framework -->
+      <?rfc include='reference.RFC.6750'?> <!-- OAuth 2.0 Authorization Framework: Bearer Token Usage -->
 
       <?rfc include='reference.RFC.7800'?>
       <reference anchor="BCP195" target="http://www.rfc-editor.org/info/bcp195">
@@ -708,9 +708,9 @@
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-07.xml'?>
 
       <?rfc include='reference.RFC.7009'?> <!-- revocation -->
-      <?rfc include='reference.RFC.7517'?>
-      <?rfc include='reference.RFC.7519'?>
-      <?rfc include='reference.RFC.7591'?>
+      <?rfc include='reference.RFC.7517'?> <!-- JWK -->
+      <?rfc include='reference.RFC.7519'?> <!-- JWT -->
+      <?rfc include='reference.RFC.7591'?> <!-- Dynamic Client Registration -->
       <?rfc include='reference.RFC.7662'?> <!-- introspection -->
 
       <?rfc include='http://openid.net/bibxml/reference.OpenID.Discovery.xml'?>
