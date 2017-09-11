@@ -57,7 +57,7 @@
 <t>
   This document describes Transport Layer Security (TLS) mutual authentication
   using X.509 certificates as a mechanism for OAuth client authentication
-  to the token endpoint as well as for certificate bound sender constrained access tokens.
+  to the authorization sever as well as for certificate bound sender constrained access tokens.
 </t>
     </abstract>
 
@@ -68,17 +68,21 @@
 <t>
   This document describes Transport Layer Security (TLS) mutual authentication
   using X.509 certificates as a mechanism for OAuth client authentication
-  to the token endpoint as well as for sender constrained access to
+  to the authorization sever as well as for sender constrained access to
   OAuth protected resources.
 </t>
 <t>
   The OAuth 2.0 Authorization Framework <xref target="RFC6749"/>
   defines a shared secret method of client authentication but also
   allows for the definition and use of additional client authentication mechanisms
-  when interacting with the authorization server's token endpoint.
+  when interacting directly with the authorization server.
   This document describes an additional mechanism of client authentication utilizing
   mutual TLS <xref target="RFC5246"/> certificate-based authentication, which provides
   better security characteristics than shared secrets.
+  While <xref target="RFC6749"/> documents client authentication for requests to the token endpoint,
+  extensions to OAuth 2.0 (such as <xref target="RFC7662">Introspection</xref> and
+  <xref target="RFC7009">Revocation</xref>) define endpoints that also utilize client authentication
+  and the mutual TLS method defined herein is applicable to those endpoints as well.
 </t>
 
 <t>
@@ -123,7 +127,7 @@
 
     </section>
     <section anchor="mtlsca" title="Mutual TLS for Client Authentication">
-    <section anchor="Authentication" title="Mutual TLS Client Authentication to the Token Endpoint">
+    <section anchor="Authentication" title="Mutual TLS Client Authentication">
 <t>
   The following section defines, as an extension of
   <xref target="RFC6749">OAuth 2.0, Section 2.3</xref>, the use of mutual TLS X.509 client certificates as client credentials.
@@ -132,16 +136,15 @@
   based on policy or configuration for the given client (regardless of whether the client was dynamically
   registered or statically configured or otherwise established).
 
-  OAuth 2.0 requires that access token requests by the client
-  to the token endpoint use TLS. In order to utilize TLS for client authentication, the TLS
-  connection MUST have been established or reestablished with mutual X.509 certificate authentication
+  In order to utilize TLS for client authentication, the TLS
+  connection between the client and the authorization server MUST have been established or reestablished
+  with mutual X.509 certificate authentication
   (i.e. the Client Certificate and Certificate Verify messages are sent during the TLS Handshake
   <xref target="RFC5246"/>).
 </t>
 <t>
-  For all access token requests to the token endpoint, regardless of the grant type used,
-  the client MUST include the
-  <spanx style='verb'>client_id</spanx> parameter,
+  For all requests to the authorization server utilizing mutual TLS client authentication,
+  the client MUST include the <spanx style='verb'>client_id</spanx> parameter,
   described in <xref target="RFC6749">OAuth 2.0, Section 2.2</xref>.
   The presence of the <spanx style='verb'>client_id</spanx>
   parameter enables the authorization server to easily identify the
@@ -196,7 +199,7 @@
       <xref target="OpenID.Discovery"/> and <xref target="I-D.ietf-oauth-discovery"/>,
       the
       <spanx style="verb">token_endpoint_auth_methods_supported</spanx> parameter
-      indicates client authentication methods to the token endpoint supported by
+      indicates client authentication methods supported by
       the authorization server.
       This document introduces the value <spanx style="verb">tls_client_auth</spanx> for use in
       <spanx style="verb">token_endpoint_auth_methods_supported</spanx> to indicate server
@@ -229,7 +232,7 @@
         For the PKI method of binding a certificate to a client,
         the value <spanx style="verb">tls_client_auth</spanx> is used to indicate the client's
         intention to use mutual TLS as an authentication method to the
-        token endpoint for the <spanx style="verb">token_endpoint_auth_method</spanx>
+        authorization server for the <spanx style="verb">token_endpoint_auth_method</spanx>
         client metadata parameter.
         And the following metadata
          parameter is introduced in support of the PKI method of binding a certificate to a client:
@@ -407,14 +410,15 @@
     for the binding methods it supports.</t>
     <t>If the authorization server wants to support mutual TLS client authentication 
     and other client authentication methods in parallel, it should make mutual TLS
-    optional on the token endpoint. </t>
+    optional.</t>
     <t>If the authorization server supports the Public Key method, it 
     should configure the TLS stack in a way that it does not verify whether the 
     certificate presented by the client during the handshake is signed by a trusted CA 
     certificate.</t>
     <t>Please note: the Public Key method is intended to support client authentication 
     using self-signed certificates.</t>
-    <t>The authorization server may also consider hosting the token endpoint on
+    <t>The authorization server may also consider hosting the token endpoint,
+    and other endpoints requiring client authentication, on
     a separate host name in order to prevent unintended impact on the TLS behavior of
     its other endpoints, e.g. authorization or registration.</t>
     </section>
@@ -639,6 +643,7 @@
       <?rfc include='reference.RFC.5280'?>
       <?rfc include='reference.RFC.6749'?>
       <?rfc include='reference.RFC.6750'?>
+
       <?rfc include='reference.RFC.7800'?>
       <reference anchor="BCP195" target="http://www.rfc-editor.org/info/bcp195">
         <front>
@@ -702,10 +707,11 @@
       </reference>
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-07.xml'?>
 
+      <?rfc include='reference.RFC.7009'?> <!-- revocation -->
       <?rfc include='reference.RFC.7517'?>
       <?rfc include='reference.RFC.7519'?>
       <?rfc include='reference.RFC.7591'?>
-      <?rfc include='reference.RFC.7662'?>
+      <?rfc include='reference.RFC.7662'?> <!-- introspection -->
 
       <?rfc include='http://openid.net/bibxml/reference.OpenID.Discovery.xml'?>
 
@@ -748,8 +754,13 @@
       <t>
         draft-ietf-oauth-mtls-04
         <list style='symbols'>
-          <t>Removed the "tls_client_auth_root_dn" client metadata field as discussed https://mailarchive.ietf.org/arch/msg/oauth/swDV2y0be6o8czGKQi1eJV-g8qc</t>
+          <t>Removed the "tls_client_auth_root_dn" client metadata field as discussed in
+            https://mailarchive.ietf.org/arch/msg/oauth/swDV2y0be6o8czGKQi1eJV-g8qc</t>
           <t>Update draft-ietf-oauth-discovery reference to -07</t>
+          <t>Clarify that MTLS client authentication isn't exclusive to the token endpoint
+            and can be used with other endpoints, e.g. RFC 7009 revocation and 7662 introspection,
+            that utilize client authentication as discussed in
+            https://mailarchive.ietf.org/arch/msg/oauth/bZ6mft0G7D3ccebhOxnEYUv4puI</t>
           <t>Editorial fixes and clarifications</t>
         </list>
       </t>
