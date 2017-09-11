@@ -171,7 +171,7 @@
         </t>
         <t hangText="Public Key">The Public Key method uses public keys to identify clients.
         As pre-requisite, the client registers a X.509 certificate or a trusted source 
-        for its X.509 certificates (jwks uri as defined in <xref target="RFC7591"/>) with 
+        for its X.509 certificates (such as the jwks_uri as defined in <xref target="RFC7591"/>) with
         the authorization server. During authentication, 
         TLS is utilized to validate the client's possession of the private key 
         corresponding to the public key presented in the respective TLS handshake. In 
@@ -180,9 +180,9 @@
         validated certificate matches the subject public key info of one the certificates 
         configured for that particular client.
         The Public Key method allows to use mutual TLS to authenticate clients without
-        the need to maintain a PKI. When used in conjunction with a trusted X.509 certificate
-        source, it also allows the client to rotate its X.509 certificates without the
-        need to change its respective authentication data at the authorization server.
+        the need to maintain a PKI. When used in conjunction with a jwks_uri for the
+        client, it also allows the client to rotate its X.509 certificates without the
+        need to change its respective authentication data directly with at the authorization server.
         </t>
         </list>
 </t>
@@ -748,6 +748,7 @@
         <list style='symbols'>
           <t>Removed the "tls_client_auth_root_dn" client metadata field as discussed https://mailarchive.ietf.org/arch/msg/oauth/swDV2y0be6o8czGKQi1eJV-g8qc</t>
           <t>Update draft-ietf-oauth-discovery reference to -07</t>
+          <t>Editorial fixes and clarifications</t>
         </list>
       </t>
       <t>
