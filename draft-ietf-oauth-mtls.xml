@@ -231,17 +231,12 @@
         intention to use mutual TLS as an authentication method to the
         token endpoint for the <spanx style="verb">token_endpoint_auth_method</spanx>
         client metadata parameter.
-        And the following two metadata
-         parameters are introduced in support of the PKI method of binding a certificate to a client:
+        And the following metadata
+         parameter is introduced in support of the PKI method of binding a certificate to a client:
         <list style="hanging">
         <t hangText="tls_client_auth_subject_dn"><vspace/>
           An <xref target="RFC4514"/> string representation of the expected subject distinguished
           name of the certificate the OAuth client will use in mutual TLS authentication.
-        </t>
-        <t hangText="tls_client_auth_root_dn"><vspace/>
-          OPTIONAL.  An <xref target="RFC4514"/> string representation of a distinguished name that can
-          optionally be used to constrain, for the given client, the expected distinguished name
-          of the root issuer of the client certificate.
         </t>
         </list>
       </t>
@@ -603,27 +598,8 @@
                 Specification Document(s): <xref target="client_metadata"/> of [[ this specification ]]
               </t>
             </list>
-          </t>
-          <t>
-            <list style="symbols">
-              <t>
-                Client Metadata Name: <spanx style="verb">tls_client_auth_root_dn</spanx>
-              </t>
-              <t>
-                Client Metadata Description:
-                String value specifying the expected distinguished name of the root 
-                issuer of the client certificate
-              </t>
-              <t>
-                Change Controller: IESG
-              </t>
-              <t>
-                Specification Document(s): <xref target="client_metadata"/> of [[ this specification ]]
-              </t>
-            </list>
             <?rfc subcompact="no"?>
           </t>
-
         </section>
       </section>
     </section>
@@ -644,13 +620,9 @@
       <section anchor="certspoofing" title="X.509 Certificate Spoofing">
       <t>If the PKI method is used, an attacker could try to impersonate a client using 
       a certificate for the same DN issued by another CA, which the authorization server 
-      trusts.</t>
-      <t>There are two ways to cope with that threat: the authorization server may decide 
+      trusts. To cope with that threat, the authorization server may decide
       to only accept a limited number of CAs whose certificate issuance policy meets its
-      security requirements. Alternatively or in addition, the client may want to 
-      explicitly prescribe the CA it will use for obtaining its certificates. The latter 
-      is supported by this document with the client registration parameter
-      <spanx style="verb">tls_client_auth_root_dn</spanx>.
+      security requirements.
       </t>      
       </section>
     </section>
@@ -793,7 +765,7 @@
       <t>
         draft-ietf-oauth-mtls-04
         <list style='symbols'>
-          <t></t>
+          <t>Removed the "tls_client_auth_root_dn" client metadata field as discussed https://mailarchive.ietf.org/arch/msg/oauth/swDV2y0be6o8czGKQi1eJV-g8qc</t>
         </list>
       </t>
       <t>
