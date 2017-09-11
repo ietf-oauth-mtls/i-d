@@ -250,8 +250,10 @@
         <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
         metadata parameters from <xref target="RFC7591"/> are used to convey client's public keys,
         where the X.509
-        certificates are represented using the <spanx style="verb">x5c</spanx> parameter
-        from <xref target="RFC7517"/>.
+        certificates are represented using the <xref target="RFC7517">JSON Web Key (JWK)</xref>
+        <spanx style="verb">x5c</spanx> parameter (note that Sec 4.7 of RFC 7517
+        requires that the key in the first certificate of the <spanx style="verb">x5c</spanx> parameter
+        must match the public key represented by other members of the JWK).
       </t>
     </section>
     </section>
@@ -700,7 +702,7 @@
       </reference>
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-07.xml'?>
 
-	  <?rfc include='reference.RFC.7517'?>
+      <?rfc include='reference.RFC.7517'?>
       <?rfc include='reference.RFC.7519'?>
       <?rfc include='reference.RFC.7591'?>
       <?rfc include='reference.RFC.7662'?>
