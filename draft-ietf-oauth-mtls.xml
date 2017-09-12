@@ -98,7 +98,7 @@
 </t>
 <t>
   Mutual TLS sender constrained access tokens and mutual TLS client authentication
-  are distinct mechanisms that don't necessarily need to be deployed together.
+  are distinct mechanisms, which are complementary but don't necessarily need to be deployed together.
 </t>
     <section anchor="RNC" title="Requirements Notation and Conventions">
 <t>
@@ -208,26 +208,11 @@
       the value <spanx style="verb">pub_key_tls_client_auth</spanx> is used in
       <spanx style="verb">token_endpoint_auth_methods_supported</spanx>.
     </t>
-      <t>This document also introduces a new authorization server metadata parameter:
- 
-    <list style="hanging">
-        <t hangText="mutual_tls_sender_constrained_access_tokens"><vspace/>
-          OPTIONAL.  Boolean value indicating server support for
-      mutual TLS sender constrained access tokens. If omitted, the
-      default value is <spanx style="verb">false</spanx>.
-        </t>
-    </list>
-      </t>       
 	</section>
 	
     <section anchor="client_metadata" title="Dynamic Client Registration">
       <t>This document adds the following values and metadata parameters
       to <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration</xref>.</t>
-      <t>
-        The client metadata parameter <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx>
-        is a Boolean value used to indicate the client's intention to use mutual TLS sender constrained
-        access tokens. If omitted, the default value is <spanx style="verb">false</spanx>.
-      </t>
       <t>
         For the PKI method of binding a certificate to a client,
         the value <spanx style="verb">tls_client_auth</spanx> is used to indicate the client's
@@ -286,7 +271,10 @@
   the resource access attempt MUST be rejected with an error per <xref target="RFC6750"/>
   using an HTTP 401 status code and the <spanx style="verb">invalid_token</spanx> error code.
 </t>
-
+<t>
+  Metadata to convey server and client capabilities for mutual TLS sender constrained access tokens
+  is defined in <xref target="server_metadata_at"/> and <xref target="client_metadata_at"/> respectively.
+</t>
 
       <section anchor="x5t256" title="X.509 Certificate SHA-256 Thumbprint Confirmation Method for JWT">
   <t>
@@ -401,8 +389,39 @@
 
       </section>
 
+      <section anchor="server_metadata_at" title="Authorization Server Metadata">
+          <t>This document introduces the following new authorization server
+            metadata parameter to signal the server's capability to issue certificate
+            bound access tokens:
 
-    </section>
+            <list style="hanging">
+              <t hangText="mutual_tls_sender_constrained_access_tokens"><vspace/>
+                OPTIONAL.  Boolean value indicating server support for
+                mutual TLS sender constrained access tokens. If omitted, the
+                default value is <spanx style="verb">false</spanx>.
+              </t>
+            </list>
+          </t>
+        </section>
+
+      <section anchor="client_metadata_at" title="Client Metadata and Registration">
+        <t>The following new client
+          metadata parameter is introduced to convey the client's intention to use certificate
+          bound access tokens:
+
+          <list style="hanging">
+            <t hangText="mutual_tls_sender_constrained_access_tokens"><vspace/>
+              OPTIONAL. Boolean value used to indicate the client's intention
+              to use mutual TLS sender constrained access tokens.
+              If omitted, the default value is <spanx style="verb">false</spanx>.
+            </t>
+          </list>
+        </t>
+        </section>
+
+      </section>
+
+
     
     <section anchor="Impl" title="Implementation Considerations">
     <section anchor="ImplAS" title="Authorization Server">
@@ -496,10 +515,10 @@
             <?rfc subcompact="yes"?>
             <list style='symbols'>
               <t>Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx></t>
-              <t>Metadata Description: Indicates server support for mutual TLS sender constraint
+              <t>Metadata Description: Indicates authorization server support for mutual TLS sender constrained
                 access tokens.</t>
               <t>Change Controller: IESG</t>
-              <t>Specification Document(s): <xref target="server_metadata"/> of [[ this specification ]]</t>             
+              <t>Specification Document(s): <xref target="server_metadata_at"/> of [[ this specification ]]</t>
             </list>
             <?rfc subcompact="no"?>
           </t>
@@ -576,14 +595,14 @@
               </t>
               <t>
                 Client Metadata Description:
-                Indicates the client's intention to use mutual TLS sender constraint
+                Indicates the client's intention to use mutual TLS sender constrained
                 access tokens.
               </t>
               <t>
                 Change Controller: IESG
               </t>
               <t>
-                Specification Document(s): <xref target="client_metadata"/> of [[ this specification ]]
+                Specification Document(s): <xref target="client_metadata_at"/> of [[ this specification ]]
               </t>
             </list>
           </t>
