@@ -82,7 +82,7 @@
   While <xref target="RFC6749"/> documents client authentication for requests to the token endpoint,
   extensions to OAuth 2.0 (such as <xref target="RFC7662">Introspection</xref> and
   <xref target="RFC7009">Revocation</xref>) define endpoints that also utilize client authentication
-  and the mutual TLS method defined herein is applicable to those endpoints as well.
+  and the mutual TLS methods defined herein are applicable to those endpoints as well.
 </t>
 
 <t>
@@ -116,8 +116,8 @@
     <t>Transport Layer Security (TLS) Mutual Authentication</t>
     <t>Mutual TLS</t>
   </list>
-  These phrases all refer to the process whereby a client uses it's X.509 certificate
-  to authenticate itself with a server when negotiating a TLS session.
+  These phrases all refer to the process whereby a client presents its X.509 certificate
+  and proves possession of the corresponding private key to a server when negotiating a TLS session.
 
   In <xref target="RFC5246">TLS 1.2</xref> this requires the client to send
   Client Certificate and Certificate Verify messages during the TLS handshake and
@@ -126,17 +126,18 @@
     </section>
 
     </section>
-    <section anchor="mtlsca" title="Mutual TLS for Client Authentication">
-    <section anchor="Authentication" title="Mutual TLS Client Authentication">
+    <section anchor="mtlsca" title="Mutual TLS for OAuth Client Authentication">
 <t>
-  The following section defines, as an extension of
-  <xref target="RFC6749">OAuth 2.0, Section 2.3</xref>, the use of mutual TLS X.509 client certificates as client credentials.
+  This section defines, as an extension of
+  <xref target="RFC6749">OAuth 2.0, Section 2.3</xref>, two distinct methods of using
+  mutual TLS X.509 client certificates as client credentials.
 
   The requirement of mutual TLS for client authentications is determined by the authorization server
   based on policy or configuration for the given client (regardless of whether the client was dynamically
   registered or statically configured or otherwise established).
-
-  In order to utilize TLS for client authentication, the TLS
+</t>
+<t>
+  In order to utilize TLS for OAuth client authentication, the TLS
   connection between the client and the authorization server MUST have been established or reestablished
   with mutual X.509 certificate authentication
   (i.e. the Client Certificate and Certificate Verify messages are sent during the TLS Handshake
@@ -148,102 +149,130 @@
   described in <xref target="RFC6749">OAuth 2.0, Section 2.2</xref>.
   The presence of the <spanx style='verb'>client_id</spanx>
   parameter enables the authorization server to easily identify the
-  client independently from the content of the certificate and allows for trust
-  models to vary as appropriate for a given deployment. The authorization server
-  can locate the client configuration by the client identifier and check the certificate
+  client independently from the content of the certificate. The authorization server
+  can locate the client configuration using the client identifier and check the certificate
   presented in the TLS Handshake against the expected credentials for that client.
   The authorization server MUST enforce some method of binding a certificate to a client.
-  The following two binding methods are defined:
+  Sections <xref target="pki_method"/> and <xref target="pub_key_method"/> below define two ways
+  of binding a certificate to a client as two distinct client authentication methods.
 </t>
-<t> 
-        <list style="hanging">
-        <t hangText="PKI">The PKI method uses a distinguished name (DN) to identify
-        the client. The TLS handshake is utilized to validate the client's possession 
-        of the private key corresponding to the public key in the certificate and to 
+
+    <section anchor="pki_method" title="PKI Mutual TLS OAuth Client Authentication Method">
+      <t>
+        The PKI (public key infrastructure) method of mutual TLS OAuth client authentication uses
+        a subject distinguished name (DN) and validated certificate chain to identify
+        the client. The TLS handshake is utilized to validate the client's possession
+        of the private key corresponding to the public key in the certificate and to
         validate the corresponding certificate chain. The client is successfully authenticated
-        if the subject information in the certificate matches the configured DN. The 
-        client may prescribe the DN of the issuer of its certificates. The authorization
-        server will enforce this restriction after the TLS handshake took place. Setting 
-        the issuer to a certain CA securely scopes the DN of the client to this CA and
-        shall prevent an attacker from impersonating a client by using a certificate 
-        for the client's DN obtained from a different CA.
+        if the subject information in the certificate matches the expected DN configured or
+        registered for that particular client.
         The PKI method facilitates the way X.509 certificates are traditionally being used
-        for authentication. It also allows the client to rotate its X.509 certificates 
-        without the need to modify its respective authentication data at the authorization 
-        server.
+        for authentication. It also allows the client to rotate its X.509 certificates
+        without the need to modify its respective authentication data at the authorization
+        server by obtaining a new certificate with the same DN from a trusted certificate authority (CA).
+      </t>
+
+      <section anchor="metadata_auth_value_pki" title="PKI Authentication Method Metadata Value">
+        <t>
+          The "OAuth Token Endpoint Authentication Methods" registry
+          <xref target="IANA.OAuth.Parameters"/> contains values, each of which specify a
+          method of authenticating a client to the authorization server.  The values are
+          used to indicated supported and utilized client authentication methods
+          in authorization server metadata, such as
+          <xref target="OpenID.Discovery">OpenID Connect Discovery</xref> and
+          <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>,
+          and in the
+          <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref>.
+          For the PKI method of mutual TLS client authentication, this specification
+          defines and registers the following authentication method metadata value.
         </t>
-        <t hangText="Public Key">The Public Key method uses public keys to identify clients.
-        As pre-requisite, the client registers a X.509 certificate or a trusted source 
-        for its X.509 certificates (such as the jwks_uri as defined in <xref target="RFC7591"/>) with
-        the authorization server. During authentication, 
-        TLS is utilized to validate the client's possession of the private key 
-        corresponding to the public key presented in the respective TLS handshake. In 
+        <t>
+          <list style="hanging">
+            <t hangText="tls_client_auth">
+              <vspace/>
+              Indicates that client authentication to the authorization server will occur with
+              mutual TLS utilizing the PKI method of associating a certificate to a client.
+            </t>
+          </list>
+        </t>
+      </section>
+
+      <section anchor="client_metadata_pki" title="Client Registration Metadata">
+        <t>
+          The following metadata
+          parameter is introduced for the
+          <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref> in support of
+          the PKI method of binding a certificate to a client:
+          <list style="hanging">
+            <t hangText="tls_client_auth_subject_dn"><vspace/>
+              An <xref target="RFC4514"/> string representation of the expected subject distinguished
+              name of the certificate the OAuth client will use in mutual TLS authentication.
+            </t>
+          </list>
+        </t>
+      </section>
+
+    </section>
+
+    <section anchor="pub_key_method" title="Public Key Mutual TLS OAuth Client Authentication Method">
+      <t>
+        The Public Key method of mutual TLS OAuth client authentication uses public keys to identify clients.
+        As pre-requisite, the client registers a X.509 certificate or a trusted source
+        for its X.509 certificates (such as the <spanx style="verb">jwks_uri</spanx> as defined in <xref target="RFC7591"/>) with
+        the authorization server. During authentication,
+        TLS is utilized to validate the client's possession of the private key
+        corresponding to the public key presented in the respective TLS handshake. In
         contrast to the PKI method, the certificate chain is not validated in this case.
-        The client is successfully authenticated, if the subject public key info of the 
-        validated certificate matches the subject public key info of one the certificates 
-        configured for that particular client.
+        The client is successfully authenticated, if the subject public key info of the
+        certificate matches the subject public key info of one the certificates
+        configured or registered for that particular client.
         The Public Key method allows to use mutual TLS to authenticate clients without
-        the need to maintain a PKI. When used in conjunction with a jwks_uri for the
+        the need to maintain a PKI. When used in conjunction with a <spanx style="verb">jwks_uri</spanx> for the
         client, it also allows the client to rotate its X.509 certificates without the
         need to change its respective authentication data directly with at the authorization server.
+      </t>
+      <section anchor="metadata_auth_value_pub_key" title="Public Key Authentication Method Metadata Value">
+
+        <t>
+          The "OAuth Token Endpoint Authentication Methods" registry
+          <xref target="IANA.OAuth.Parameters"/> contains values, each of which specify a
+          method of authenticating a client to the authorization server.  The values are
+          used to indicated supported and utilized client authentication methods
+          in authorization server metadata, such as
+          <xref target="OpenID.Discovery">OpenID Connect Discovery</xref> and
+          <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>,
+          and in the
+          <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref>.
+          For the Public Key method of binding a certificate to a client using mutual
+          TLS client authentication, this specification
+          defines and registers the following authentication method metadata value.
         </t>
-        </list>
-</t>
+        <t>
+          <list style="hanging">
+            <t hangText="pub_key_tls_client_auth">
+              <vspace/>
+              Indicates that client authentication to the authorization server will occur using
+              mutual TLS with the client utilizing a self-signed certificate.
+            </t>
+          </list>
+        </t>
+      </section>
 
-
+      <section anchor="client_metadata_pub_key" title="Client Registration Metadata">
+        <t>
+          For the Public Key method of binding a certificate to a client using mutual
+          TLS client authentication, the existing
+          <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
+          metadata parameters from <xref target="RFC7591"/> are used to convey client's
+          public keys and certificates, where the X.509
+          certificates are represented using the <xref target="RFC7517">JSON Web Key (JWK)</xref>
+          <spanx style="verb">x5c</spanx> parameter (note that Sec 4.7 of RFC 7517
+          requires that the key in the first certificate of the <spanx style="verb">x5c</spanx> parameter
+          must match the public key represented by other members of the JWK).
+        </t>
+      </section>
     </section>
 
-	<section anchor="server_metadata" title="Authorization Server Metadata">
-    <t>
-      In authorization server metadata, such as
-      <xref target="OpenID.Discovery"/> and <xref target="I-D.ietf-oauth-discovery"/>,
-      the
-      <spanx style="verb">token_endpoint_auth_methods_supported</spanx> parameter
-      indicates client authentication methods supported by
-      the authorization server.
-      This document introduces the value <spanx style="verb">tls_client_auth</spanx> for use in
-      <spanx style="verb">token_endpoint_auth_methods_supported</spanx> to indicate server
-      support for mutual TLS client authentication utilizing the PKI method.
-      And for the support of mutual TLS client authentication utilizing the Public Key method,
-      the value <spanx style="verb">pub_key_tls_client_auth</spanx> is used in
-      <spanx style="verb">token_endpoint_auth_methods_supported</spanx>.
-    </t>
-	</section>
-	
-    <section anchor="client_metadata" title="Dynamic Client Registration">
-      <t>This document adds the following values and metadata parameters
-      to <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration</xref>.</t>
-      <t>
-        For the PKI method of binding a certificate to a client,
-        the value <spanx style="verb">tls_client_auth</spanx> is used to indicate the client's
-        intention to use mutual TLS as an authentication method to the
-        authorization server for the <spanx style="verb">token_endpoint_auth_method</spanx>
-        client metadata parameter.
-        And the following metadata
-         parameter is introduced in support of the PKI method of binding a certificate to a client:
-        <list style="hanging">
-        <t hangText="tls_client_auth_subject_dn"><vspace/>
-          An <xref target="RFC4514"/> string representation of the expected subject distinguished
-          name of the certificate the OAuth client will use in mutual TLS authentication.
-        </t>
-        </list>
-      </t>
-      <t>
-        With the Public Key method of binding a certificate to a client,
-        the value <spanx style="verb">pub_key_tls_client_auth</spanx> is used for the
-        <spanx style="verb">token_endpoint_auth_method</spanx> client metadata parameter
-        to indicate the client's intention to use mutual TLS with a
-        self-signed certificate as an authentication method.
-        For the Public Key method, the existing
-        <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
-        metadata parameters from <xref target="RFC7591"/> are used to convey client's public keys,
-        where the X.509
-        certificates are represented using the <xref target="RFC7517">JSON Web Key (JWK)</xref>
-        <spanx style="verb">x5c</spanx> parameter (note that Sec 4.7 of RFC 7517
-        requires that the key in the first certificate of the <spanx style="verb">x5c</spanx> parameter
-        must match the public key represented by other members of the JWK).
-      </t>
-    </section>
     </section>
 
     <section anchor="SenderConstrainedAccess" title="Mutual TLS Sender Constrained Resources Access">
@@ -276,7 +305,7 @@
   is defined in <xref target="server_metadata_at"/> and <xref target="client_metadata_at"/> respectively.
 </t>
 
-      <section anchor="x5t256" title="X.509 Certificate SHA-256 Thumbprint Confirmation Method for JWT">
+      <section anchor="x5t256" title="X.509 Certificate Thumbprint Confirmation Method for JWT">
   <t>
     When access tokens are represented as a JSON Web Tokens (JWT)<xref target="RFC7519"/>,
     the certificate hash information SHOULD be represented using
@@ -404,7 +433,7 @@
           </t>
         </section>
 
-      <section anchor="client_metadata_at" title="Client Metadata and Registration">
+      <section anchor="client_metadata_at" title="Client Registration Metadata">
         <t>The following new client
           metadata parameter is introduced to convey the client's intention to use certificate
           bound access tokens:
@@ -537,7 +566,7 @@
           <list style='symbols'>
             <t>Token Endpoint Authentication Method Name: <spanx style="verb">tls_client_auth</spanx></t>
             <t>Change Controller: IESG</t>
-            <t>Specification Document(s): <xref target="server_metadata"/> of [[ this specification ]]</t>
+            <t>Specification Document(s): <xref target="metadata_auth_value_pki"/> of [[ this specification ]]</t>
           </list>
           <?rfc subcompact="no"?>
         </t>
@@ -546,7 +575,7 @@
           <list style='symbols'>
             <t>Token Endpoint Authentication Method Name: <spanx style="verb">pub_key_tls_client_auth</spanx></t>
             <t>Change Controller: IESG</t>
-            <t>Specification Document(s): <xref target="server_metadata"/> of [[ this specification ]]</t>
+            <t>Specification Document(s): <xref target="metadata_auth_value_pub_key"/> of [[ this specification ]]</t>
           </list>
           <?rfc subcompact="no"?>
         </t>
@@ -620,7 +649,7 @@
                 Change Controller: IESG
               </t>
               <t>
-                Specification Document(s): <xref target="client_metadata"/> of [[ this specification ]]
+                Specification Document(s): <xref target="client_metadata_pki"/> of [[ this specification ]]
               </t>
             </list>
             <?rfc subcompact="no"?>
@@ -780,6 +809,9 @@
             and can be used with other endpoints, e.g. RFC 7009 revocation and 7662 introspection,
             that utilize client authentication as discussed in
             https://mailarchive.ietf.org/arch/msg/oauth/bZ6mft0G7D3ccebhOxnEYUv4puI</t>
+          <t>Reorganize the document somewhat in an attempt to more clearly make a distinction between
+            mTLS client authentication and certificate bound access tokens as well as a more clear
+            delineation between the two (PKI/Public key) methods for client authentication</t>
           <t>Editorial fixes and clarifications</t>
         </list>
       </t>
