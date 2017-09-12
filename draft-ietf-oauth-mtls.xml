@@ -519,49 +519,44 @@
           for JWT <spanx style="verb">cnf</spanx> member values
           established by <xref target="RFC7800"/>.
         </t>
-        <section title="Registry Contents">
-          <t>
-            <?rfc subcompact="yes"?>
-            <list style='symbols'>
-              <t>Confirmation Method Value: <spanx style="verb">x5t#S256</spanx></t>
-              <t>Confirmation Method Description: X.509 Certificate SHA-256 Thumbprint</t>
-              <t>Change Controller: IESG</t>
-              <t>Specification Document(s): <xref target="x5t256"/> of [[ this specification ]]</t>
-            </list>
-            <?rfc subcompact="no"?>
-          </t>
-        </section>
-      </section>      
+        <t>
+          <?rfc subcompact="yes"?>
+          <list style='symbols'>
+            <t>Confirmation Method Value: <spanx style="verb">x5t#S256</spanx></t>
+            <t>Confirmation Method Description: X.509 Certificate SHA-256 Thumbprint</t>
+            <t>Change Controller: IESG</t>
+            <t>Specification Document(s): <xref target="x5t256"/> of [[ this specification ]]</t>
+          </list>
+          <?rfc subcompact="no"?>
+        </t>
+      </section>
       
       <section anchor="ietf-oauth-discoveryIANA" title="OAuth Authorization Server Metadata Registration">
-      <t>
-        This specification requests registration of the following value
-        in the IANA "OAuth Authorization Server Metadata" registry
-        <xref target="IANA.OAuth.Parameters"/> established by <xref target="I-D.ietf-oauth-discovery"/>.
-      </t>
-        <section title="Registry Contents">
-          <t>
-            <?rfc subcompact="yes"?>
-            <list style='symbols'>
-              <t>Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx></t>
-              <t>Metadata Description: Indicates authorization server support for mutual TLS sender constrained
-                access tokens.</t>
-              <t>Change Controller: IESG</t>
-              <t>Specification Document(s): <xref target="server_metadata_at"/> of [[ this specification ]]</t>
-            </list>
-            <?rfc subcompact="no"?>
-          </t>
-        </section>
-      </section>     
+        <t>
+          This specification requests registration of the following value
+          in the IANA "OAuth Authorization Server Metadata" registry
+          <xref target="IANA.OAuth.Parameters"/> established by <xref target="I-D.ietf-oauth-discovery"/>.
+        </t>
+        <t>
+          <?rfc subcompact="yes"?>
+          <list style='symbols'>
+            <t>Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx></t>
+            <t>Metadata Description: Indicates authorization server support for mutual TLS sender constrained
+              access tokens.</t>
+            <t>Change Controller: IESG</t>
+            <t>Specification Document(s): <xref target="server_metadata_at"/> of [[ this specification ]]</t>
+          </list>
+          <?rfc subcompact="no"?>
+        </t>
+      </section>
 
       <section anchor="tls_client_authIANA" title="Token Endpoint Authentication Method Registration">
-      <t>
-        This specification requests registration of the following value
-        in the IANA "OAuth Token Endpoint Authentication Methods" registry
-        <xref target="IANA.OAuth.Parameters"/> established by <xref target="RFC7591"/>.
-      </t>
-        <section title="Registry Contents">
-          <t>
+        <t>
+          This specification requests registration of the following value
+          in the IANA "OAuth Token Endpoint Authentication Methods" registry
+          <xref target="IANA.OAuth.Parameters"/> established by <xref target="RFC7591"/>.
+        </t>
+        <t>
           <?rfc subcompact="yes"?>
           <list style='symbols'>
             <t>Token Endpoint Authentication Method Name: <spanx style="verb">tls_client_auth</spanx></t>
@@ -579,7 +574,6 @@
           </list>
           <?rfc subcompact="no"?>
         </t>
-        </section>
       </section>
 
       <section anchor="intorspectIANA" title="OAuth Token Introspection Response Registration">
@@ -590,19 +584,16 @@
           <xref target="IANA.OAuth.Parameters"/>
           established by <xref target="RFC7662"/>.
         </t>
-
-        <section anchor='IntrospectionContents' title='Registry Contents'>
-          <t>
-            <?rfc subcompact="yes"?>
-            <list style='symbols'>
-              <t>Claim Name: <spanx style="verb">cnf</spanx></t>
-              <t>Claim Description: Confirmation</t>
-              <t>Change Controller: IESG</t>
-              <t>Specification Document(s): <xref target="introspect"/> of [[ this specification ]]</t>
-            </list>
-          </t>
+        <t>
+          <?rfc subcompact="yes"?>
+          <list style='symbols'>
+            <t>Claim Name: <spanx style="verb">cnf</spanx></t>
+            <t>Claim Description: Confirmation</t>
+            <t>Change Controller: IESG</t>
+            <t>Specification Document(s): <xref target="introspect"/> of [[ this specification ]]</t>
+          </list>
           <?rfc subcompact="no"?>
-        </section>
+        </t>
       </section>
 
 
@@ -613,48 +604,44 @@
           <xref target="IANA.OAuth.Parameters"/>
           established by <xref target="RFC7591"/>:
         </t>
-
-        <section anchor="DynRegContents" title="Registry Contents">
-          <t>
-            <?rfc subcompact="yes"?>
-
-            <list style="symbols">
-              <t>
-                Client Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx>
-              </t>
-              <t>
-                Client Metadata Description:
-                Indicates the client's intention to use mutual TLS sender constrained
-                access tokens.
-              </t>
-              <t>
-                Change Controller: IESG
-              </t>
-              <t>
-                Specification Document(s): <xref target="client_metadata_at"/> of [[ this specification ]]
-              </t>
-            </list>
-          </t>
-          <t>
-            <list style="symbols">
-              <t>
-                Client Metadata Name: <spanx style="verb">tls_client_auth_subject_dn</spanx>
-              </t>
-              <t>
-                Client Metadata Description:
-                String value specifying the expected subject distinguished name of the 
-                client certificate.
-              </t>
-              <t>
-                Change Controller: IESG
-              </t>
-              <t>
-                Specification Document(s): <xref target="client_metadata_pki"/> of [[ this specification ]]
-              </t>
-            </list>
-            <?rfc subcompact="no"?>
-          </t>
-        </section>
+        <t>
+          <?rfc subcompact="yes"?>
+          <list style="symbols">
+            <t>
+              Client Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx>
+            </t>
+            <t>
+              Client Metadata Description:
+              Indicates the client's intention to use mutual TLS sender constrained
+              access tokens.
+            </t>
+            <t>
+              Change Controller: IESG
+            </t>
+            <t>
+              Specification Document(s): <xref target="client_metadata_at"/> of [[ this specification ]]
+            </t>
+          </list>
+        </t>
+        <t>
+          <list style="symbols">
+            <t>
+              Client Metadata Name: <spanx style="verb">tls_client_auth_subject_dn</spanx>
+            </t>
+            <t>
+              Client Metadata Description:
+              String value specifying the expected subject distinguished name of the
+              client certificate.
+            </t>
+            <t>
+              Change Controller: IESG
+            </t>
+            <t>
+              Specification Document(s): <xref target="client_metadata_pki"/> of [[ this specification ]]
+            </t>
+          </list>
+          <?rfc subcompact="no"?>
+        </t>
       </section>
     </section>
 
