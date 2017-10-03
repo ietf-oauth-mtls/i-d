@@ -153,7 +153,7 @@
   can locate the client configuration using the client identifier and check the certificate
   presented in the TLS Handshake against the expected credentials for that client.
   The authorization server MUST enforce some method of binding a certificate to a client.
-  Sections <xref target="pki_method"/> and <xref target="pub_key_method"/> below define two ways
+  Sections <xref target="pki_method"/> and <xref target="self_signed_method"/> below define two ways
   of binding a certificate to a client as two distinct client authentication methods.
 </t>
 
@@ -214,24 +214,25 @@
 
     </section>
 
-    <section anchor="pub_key_method" title="Public Key Mutual TLS OAuth Client Authentication Method">
+    <section anchor="self_signed_method" title="Self-Signed Certificate Mutual TLS OAuth Client Authentication Method">
       <t>
-        The Public Key method of mutual TLS OAuth client authentication uses public keys to identify clients.
+        This method of mutual TLS OAuth client authentication
+        is intended to support client authentication using self-signed certificates.
         As pre-requisite, the client registers a X.509 certificate or a trusted source
         for its X.509 certificates (such as the <spanx style="verb">jwks_uri</spanx> as defined in <xref target="RFC7591"/>) with
         the authorization server. During authentication,
         TLS is utilized to validate the client's possession of the private key
-        corresponding to the public key presented in the respective TLS handshake. In
+        corresponding to the public key presented within the certificate in the respective TLS handshake. In
         contrast to the PKI method, the certificate chain is not validated in this case.
         The client is successfully authenticated, if the subject public key info of the
         certificate matches the subject public key info of one the certificates
         configured or registered for that particular client.
-        The Public Key method allows to use mutual TLS to authenticate clients without
+        The Self-Signed Certificate method allows to use mutual TLS to authenticate clients without
         the need to maintain a PKI. When used in conjunction with a <spanx style="verb">jwks_uri</spanx> for the
         client, it also allows the client to rotate its X.509 certificates without the
         need to change its respective authentication data directly with at the authorization server.
       </t>
-      <section anchor="metadata_auth_value_pub_key" title="Public Key Authentication Method Metadata Value">
+      <section anchor="metadata_auth_value_self_signed" title="Self-Signed Certificate Authentication Method Metadata Value">
 
         <t>
           The "OAuth Token Endpoint Authentication Methods" registry
@@ -243,13 +244,13 @@
           <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>,
           and in the
           <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref>.
-          For the Public Key method of binding a certificate to a client using mutual
+          For the Self-Signed Certificate method of binding a certificate to a client using mutual
           TLS client authentication, this specification
           defines and registers the following authentication method metadata value.
         </t>
         <t>
           <list style="hanging">
-            <t hangText="pub_key_tls_client_auth">
+            <t hangText="self_signed_tls_client_auth">
               <vspace/>
               Indicates that client authentication to the authorization server will occur using
               mutual TLS with the client utilizing a self-signed certificate.
@@ -258,13 +259,13 @@
         </t>
       </section>
 
-      <section anchor="client_metadata_pub_key" title="Client Registration Metadata">
+      <section anchor="client_metadata_self_signed" title="Client Registration Metadata">
         <t>
-          For the Public Key method of binding a certificate to a client using mutual
+          For the Self-Signed Certificate method of binding a certificate to a client using mutual
           TLS client authentication, the existing
           <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
           metadata parameters from <xref target="RFC7591"/> are used to convey client's
-          public keys and certificates, where the X.509
+          certificates and public keys, where the X.509
           certificates are represented using the <xref target="RFC7517">JSON Web Key (JWK)</xref>
           <spanx style="verb">x5c</spanx> parameter (note that Sec 4.7 of RFC 7517
           requires that the key in the first certificate of the <spanx style="verb">x5c</spanx> parameter
@@ -459,12 +460,10 @@
     <t>If the authorization server wants to support mutual TLS client authentication 
     and other client authentication methods in parallel, it should make mutual TLS
     optional.</t>
-    <t>If the authorization server supports the Public Key method, it 
+    <t>If the authorization server supports the Self-Signed Certificate method, it
     should configure the TLS stack in a way that it does not verify whether the 
     certificate presented by the client during the handshake is signed by a trusted CA 
     certificate.</t>
-    <t>Please note: the Public Key method is intended to support client authentication 
-    using self-signed certificates.</t>
     <t>The authorization server may also consider hosting the token endpoint,
     and other endpoints requiring client authentication, on
     a separate host name in order to prevent unintended impact on the TLS behavior of
@@ -485,7 +484,7 @@
     combination with sender constraint access tokens. Use of mutual TLS sender
     constrained access tokens without client authentication (e.g. to support
     binding access tokens to a TLS client certificate for public clients) is also possible.
-    The authorization server would configure the TLS stack in the same manner as for the Public Key method
+    The authorization server would configure the TLS stack in the same manner as for the Self-Signed Certificate method
     such that it does not verify that the certificate presented by the client during the handshake is
     signed by a trusted CA. Individual instances of a public client would then create a self-signed
     certificate for mutual TLS with the authorization server and resource server. The authorization
@@ -568,9 +567,9 @@
         <t>
           <?rfc subcompact="yes"?>
           <list style='symbols'>
-            <t>Token Endpoint Authentication Method Name: <spanx style="verb">pub_key_tls_client_auth</spanx></t>
+            <t>Token Endpoint Authentication Method Name: <spanx style="verb">self_signed_tls_client_auth</spanx></t>
             <t>Change Controller: IESG</t>
-            <t>Specification Document(s): <xref target="metadata_auth_value_pub_key"/> of [[ this specification ]]</t>
+            <t>Specification Document(s): <xref target="metadata_auth_value_self_signed"/> of [[ this specification ]]</t>
           </list>
           <?rfc subcompact="no"?>
         </t>
@@ -789,6 +788,8 @@
       <t>
         draft-ietf-oauth-mtls-04
         <list style='symbols'>
+          <t>Change the name of the 'Public Key method' to the more accurate 'Self-Signed Certificate method' and
+            also change the associated authentication method metadata value to "self_signed_tls_client_auth".</t>
           <t>Removed the "tls_client_auth_root_dn" client metadata field as discussed in
             https://mailarchive.ietf.org/arch/msg/oauth/swDV2y0be6o8czGKQi1eJV-g8qc</t>
           <t>Update draft-ietf-oauth-discovery reference to -07</t>
