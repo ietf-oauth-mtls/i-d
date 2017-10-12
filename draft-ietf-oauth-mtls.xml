@@ -112,10 +112,14 @@
     <section anchor="Terminology" title="Terminology">
 <t>
   This specification uses the following phrases interchangeably:
+</t>
+<t>
   <list style="hanging">
     <t>Transport Layer Security (TLS) Mutual Authentication</t>
     <t>Mutual TLS</t>
   </list>
+</t>
+<t>
   These phrases all refer to the process whereby a client presents its X.509 certificate
   and proves possession of the corresponding private key to a server when negotiating a TLS session.
 
