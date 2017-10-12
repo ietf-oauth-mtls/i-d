@@ -370,7 +370,7 @@
           For a mutual TLS sender constrained access token, the hash of the
           certificate to which the token is bound
           is conveyed to the protected resource as meta-information
-          in a token introspection response. The hash is conveyed using same structure as the
+          in a token introspection response. The hash is conveyed using the same structure as the
           certificate SHA-256 thumbprint confirmation method, described in
           <xref target="x5t256"/>, as a top-level member of the introspection response JSON.
           The protected resource compares
