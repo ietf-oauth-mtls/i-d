@@ -173,7 +173,7 @@
         The PKI method facilitates the way X.509 certificates are traditionally being used
         for authentication. It also allows the client to rotate its X.509 certificates
         without the need to modify its respective authentication data at the authorization
-        server by obtaining a new certificate with the same DN from a trusted certificate authority (CA).
+        server by obtaining a new certificate with the same subject DN from a trusted certificate authority (CA).
       </t>
 
       <section anchor="metadata_auth_value_pki" title="PKI Authentication Method Metadata Value">
