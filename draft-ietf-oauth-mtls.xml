@@ -136,7 +136,7 @@
   <xref target="RFC6749">OAuth 2.0, Section 2.3</xref>, two distinct methods of using
   mutual TLS X.509 client certificates as client credentials.
 
-  The requirement of mutual TLS for client authentications is determined by the authorization server
+  The requirement of mutual TLS for client authentication is determined by the authorization server
   based on policy or configuration for the given client (regardless of whether the client was dynamically
   registered or statically configured or otherwise established).
 </t>
@@ -181,7 +181,7 @@
           The "OAuth Token Endpoint Authentication Methods" registry
           <xref target="IANA.OAuth.Parameters"/> contains values, each of which specify a
           method of authenticating a client to the authorization server.  The values are
-          used to indicated supported and utilized client authentication methods
+          used to indicate supported and utilized client authentication methods
           in authorization server metadata, such as
           <xref target="OpenID.Discovery">OpenID Connect Discovery</xref> and
           <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>,
@@ -222,19 +222,19 @@
       <t>
         This method of mutual TLS OAuth client authentication
         is intended to support client authentication using self-signed certificates.
-        As pre-requisite, the client registers a X.509 certificate or a trusted source
+        As pre-requisite, the client registers an X.509 certificate or a trusted source
         for its X.509 certificates (such as the <spanx style="verb">jwks_uri</spanx> as defined in <xref target="RFC7591"/>) with
         the authorization server. During authentication,
         TLS is utilized to validate the client's possession of the private key
         corresponding to the public key presented within the certificate in the respective TLS handshake. In
         contrast to the PKI method, the certificate chain is not validated in this case.
         The client is successfully authenticated, if the subject public key info of the
-        certificate matches the subject public key info of one the certificates
+        certificate matches the subject public key info of one of the certificates
         configured or registered for that particular client.
         The Self-Signed Certificate method allows to use mutual TLS to authenticate clients without
         the need to maintain a PKI. When used in conjunction with a <spanx style="verb">jwks_uri</spanx> for the
         client, it also allows the client to rotate its X.509 certificates without the
-        need to change its respective authentication data directly with at the authorization server.
+        need to change its respective authentication data directly with the authorization server.
       </t>
       <section anchor="metadata_auth_value_self_signed" title="Self-Signed Certificate Authentication Method Metadata Value">
 
@@ -242,7 +242,7 @@
           The "OAuth Token Endpoint Authentication Methods" registry
           <xref target="IANA.OAuth.Parameters"/> contains values, each of which specify a
           method of authenticating a client to the authorization server.  The values are
-          used to indicated supported and utilized client authentication methods
+          used to indicate supported and utilized client authentication methods
           in authorization server metadata, such as
           <xref target="OpenID.Discovery">OpenID Connect Discovery</xref> and
           <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>,
@@ -312,7 +312,7 @@
 
       <section anchor="x5t256" title="X.509 Certificate Thumbprint Confirmation Method for JWT">
   <t>
-    When access tokens are represented as a JSON Web Tokens (JWT)<xref target="RFC7519"/>,
+    When access tokens are represented as JSON Web Tokens (JWT)<xref target="RFC7519"/>,
     the certificate hash information SHOULD be represented using
     the <spanx style="verb">x5t#S256</spanx> confirmation method member defined herein.
   </t>
@@ -325,7 +325,7 @@
     a base64url-encoded SHA-256<xref target="SHS"/> hash (a.k.a. thumbprint or digest)
     of the DER encoding of the X.509 certificate<xref target="RFC5280"/>
     (note that certificate
-    thumbprints are also sometimes also known as certificate fingerprints).
+    thumbprints are also sometimes known as certificate fingerprints).
   </t>
   <t>
     The following is an example of a JWT payload containing an <spanx style="verb">x5t#S256</spanx> certificate thumbprint
@@ -484,7 +484,7 @@
     </section>
     <section anchor="ImplPubClient" title="Sender Constrained Access Tokens Without Client Authentication">
     <t>
-    This document allows for the use of client authentication only or client authentication in
+    This document allows use of client authentication only or client authentication in
     combination with sender constraint access tokens. Use of mutual TLS sender
     constrained access tokens without client authentication (e.g. to support
     binding access tokens to a TLS client certificate for public clients) is also possible.
@@ -652,7 +652,7 @@
       <section anchor="TLSV" title="TLS Versions and Best Practices">
         <t>
           <xref target="RFC5246">TLS 1.2</xref> is cited in this document because,
-          at the time of writing, it is latest version that is widely deployed.
+          at the time of writing, it is the latest version that is widely deployed.
           However, this document is applicable with other TLS versions supporting
           certificate-based client authentication.
           Implementation security considerations for TLS, including version recommendations,
@@ -792,7 +792,7 @@
       <t>
         draft-ietf-oauth-mtls-05
         <list style='symbols'>
-          <t></t>
+          <t>Editorial fixes</t>
         </list>
       </t>
       <t>
