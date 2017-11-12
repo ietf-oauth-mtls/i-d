@@ -13,7 +13,7 @@
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
 
-<rfc category="std" docName="draft-ietf-oauth-mtls-05"
+<rfc category="std" docName="draft-ietf-oauth-mtls-06"
      ipr="trust200902">
   <front>
     <title abbrev="OAuth Mutual TLS">Mutual TLS Profile for OAuth 2.0</title>
@@ -789,6 +789,12 @@
       <?rfc subcompact="yes"?>
       <t>
 	[[ to be removed by the RFC Editor before publication as an RFC ]]
+      </t>
+      <t>
+        draft-ietf-oauth-mtls-06
+        <list style='symbols'>
+          <t></t>
+        </list>
       </t>
       <t>
         draft-ietf-oauth-mtls-05
