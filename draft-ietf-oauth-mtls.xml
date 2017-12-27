@@ -57,7 +57,9 @@
 <t>
   This document describes Transport Layer Security (TLS) mutual authentication
   using X.509 certificates as a mechanism for OAuth client authentication
-  to the authorization sever as well as for certificate bound sender constrained access tokens.
+  to the authorization sever as well as for certificate bound sender constrained access tokens as a
+  method for a protected resource to ensure that an access token presented to it by a given
+  client was issued to that client by the authorization server.
 </t>
     </abstract>
 
@@ -800,6 +802,7 @@
         draft-ietf-oauth-mtls-06
         <list style='symbols'>
           <t>Add/incorporate text to the Security Considerations on Certificate Spoofing as suggested https://mailarchive.ietf.org/arch/msg/oauth/V26070X-6OtbVSeUz_7W2k94vCo.</t>
+          <t>Elaborated on certificate bound access tokens a bit more in the Abstract</t>
           <t>Update draft-ietf-oauth-discovery reference to -08</t>
         </list>
       </t>
