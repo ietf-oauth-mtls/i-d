@@ -284,7 +284,7 @@
 
     <section anchor="SenderConstrainedAccess" title="Mutual TLS Sender Constrained Resources Access">
 <t>
-  When mutual TLS is used at the token endpoint,
+  When mutual TLS is used by the client on the connection to the token endpoint,
   the authorization server is able to bind the issued access token to the client certificate.
   Such a binding is accomplished by associating the certificate with the token in
   a way that can be accessed by the protected resource, such as embedding the certificate
@@ -511,6 +511,22 @@
         requests a new access token (typically with a refresh token) and retries the protected resource
         request.
       </t>
+    </section>
+    <section anchor="ImplImplicit" title="Implicit Grant Unsupported">
+    <t>
+      This document describes binding an access token to the
+      client certificate presented on the TLS connection from the client to the
+      authorization server's token endpoint,
+      however, certificate binding of access tokens issued directly from the authorization
+      endpoint via the implicit grant flow is explicitly out of scope.
+      End users interact directly with the authorization endpoint using a web browser
+      and the use of client certificates in user's browsers bring operational and
+      usability issues, which make it undesirable to support certificate bound access
+      tokens issued in the implicit grant flow. Implementations wanting to employ
+      certificate bound sender constrained access tokens should utilize grant types
+      that involve the client making an access token request directly to the token endpoint
+      (e.g. the authorization code and refresh token grant types).
+    </t>
     </section>
     </section>
 
@@ -801,7 +817,11 @@
       <t>
         draft-ietf-oauth-mtls-06
         <list style='symbols'>
-          <t>Add/incorporate text to the Security Considerations on Certificate Spoofing as suggested https://mailarchive.ietf.org/arch/msg/oauth/V26070X-6OtbVSeUz_7W2k94vCo.</t>
+          <t>Add an explicit note that the implicit flow is not supported for obtaining certificate
+            bound access tokens as discussed at the Singapore meeting
+            https://datatracker.ietf.org/doc/minutes-100-oauth/</t>
+          <t>Add/incorporate text to the Security Considerations on Certificate Spoofing as
+            suggested https://mailarchive.ietf.org/arch/msg/oauth/V26070X-6OtbVSeUz_7W2k94vCo</t>
           <t>Elaborated on certificate bound access tokens a bit more in the Abstract</t>
           <t>Update draft-ietf-oauth-discovery reference to -08</t>
         </list>
