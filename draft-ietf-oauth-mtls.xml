@@ -662,11 +662,16 @@
         </t>
       </section>
       <section anchor="certspoofing" title="X.509 Certificate Spoofing">
-      <t>If the PKI method is used, an attacker could try to impersonate a client using 
-      a certificate for the same DN issued by another CA, which the authorization server 
-      trusts. To cope with that threat, the authorization server may decide
-      to only accept a limited number of CAs whose certificate issuance policy meets its
-      security requirements.
+      <t>
+        If the PKI method of client authentication is used, an attacker could try to impersonate a client using
+        a certificate with the same subject DN but issued by a different CA, which the authorization server trusts.
+        To cope with that threat, the authorization server should only accept as trust anchors
+        a limited number of CAs whose certificate issuance policy meets its security requirements.
+        There is an assumption then that the client and server agree on the set
+        of trust anchors that the server uses to create and validate the
+        certificate chain. Without this assumption the use of a Subject DN
+        to identify the client certificate would open the server up to
+        certificate spoofing attacks.
       </t>      
       </section>
     </section>
@@ -769,6 +774,7 @@
         Sergey Beryozkin,
         Vladimir Dzhuvinov,
         Samuel Erdtman,
+        Leif Johansson,
         Phil Hunt,
         Takahiko Kawasaki
         Sean Leonard,
@@ -793,7 +799,7 @@
       <t>
         draft-ietf-oauth-mtls-06
         <list style='symbols'>
-          <t></t>
+          <t>Add/incorporate text to the Security Considerations on Certificate Spoofing as suggested https://mailarchive.ietf.org/arch/msg/oauth/V26070X-6OtbVSeUz_7W2k94vCo.</t>
         </list>
       </t>
       <t>
