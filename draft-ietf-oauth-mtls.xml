@@ -748,7 +748,7 @@
           <date/>
         </front>
       </reference>
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-07.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-08.xml'?>
 
       <?rfc include='reference.RFC.7009'?> <!-- revocation -->
       <?rfc include='reference.RFC.7517'?> <!-- JWK -->
@@ -800,6 +800,7 @@
         draft-ietf-oauth-mtls-06
         <list style='symbols'>
           <t>Add/incorporate text to the Security Considerations on Certificate Spoofing as suggested https://mailarchive.ietf.org/arch/msg/oauth/V26070X-6OtbVSeUz_7W2k94vCo.</t>
+          <t>Update draft-ietf-oauth-discovery reference to -08</t>
         </list>
       </t>
       <t>
