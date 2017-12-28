@@ -16,7 +16,7 @@
 <rfc category="std" docName="draft-ietf-oauth-mtls-06"
      ipr="trust200902">
   <front>
-    <title abbrev="OAuth Mutual TLS">Mutual TLS Profile for OAuth 2.0</title>
+    <title abbrev="OAuth Mutual TLS">Mutual TLS for OAuth 2.0</title>
 
     <author fullname="Brian Campbell" initials="B." surname="Campbell">
       <organization>Ping Identity</organization>
@@ -859,6 +859,7 @@
             https://datatracker.ietf.org/doc/minutes-100-oauth/</t>
           <t>Add/incorporate text to the Security Considerations on Certificate Spoofing as
             suggested https://mailarchive.ietf.org/arch/msg/oauth/V26070X-6OtbVSeUz_7W2k94vCo</t>
+          <t>Shorten the title to just "Mutual TLS for OAuth 2.0"</t>
           <t>Elaborated on certificate bound access tokens a bit more in the Abstract</t>
           <t>Update draft-ietf-oauth-discovery reference to -08</t>
         </list>
