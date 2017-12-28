@@ -776,8 +776,42 @@
 
       <?rfc include='http://openid.net/bibxml/reference.OpenID.Discovery.xml'?>
 
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-token-binding-05.xml'?>
+
     </references>
 
+    <section anchor="relation" title="Relationship to Token Binding">
+      <t>
+        <xref target="I-D.ietf-oauth-token-binding">OAuth 2.0 Token Binding</xref>
+        enables the application of Token Binding to the various artifacts and tokens employed throughout OAuth.
+        That includes binding of an access token to a Token Binding key, which bears some similarities in motivation
+        and design to the mutual TLS sender constrained resources access defined in this document.
+        Both documents define what is often called a proof-of-possession security mechanism
+        for access tokens, whereby a client must demonstrate possession of cryptographic keying
+        material when accessing a protected resource. The details differ somewhat between the two documents but both
+        have the authorization server bind the access token it issues to an asymmetric key pair
+        on the client. The client then proves possession of the private key from that pair
+        on the TLS connection over which the protected resource is accessed.
+      </t>
+      <t>
+        The two documents then are effectively competing specifications, at least with respect to the
+        binding of access tokens.
+        Token Binding uses bare keys that are generated on the client,
+        which avoids many of the difficulties of creating, distributing, and managing certificates
+        and has the potential to see wider scale adoption and deployment. However, at the time of
+        writing, Token Binding is fairly new and there is relatively little support for it in available
+        application development platforms and tooling. Until better support for the underlying
+        core Token Binding specifications exists, practical implementations of OAuth 2.0 Token Binding
+        are infeasible. Despite its name, Token Binding doesn't have a monopoly on the binding of tokens.
+        Mutual TLS, on the other hand, has been around for some time and enjoys
+        widespread support in web servers and development platforms. Mutual TLS for OAuth 2.0 can be
+        built and deployed now using existing platforms and tools.
+        There are emerging and immediate scenarios, such as OAuth enabled financial transactions motivated by
+        regulatory requirements in some cases, which demand the additional security protections
+        of proof-of-possession access tokens.  This document aspires to provide standardized and expeditious solution
+        for those scenarios.
+      </t>
+    </section>
 
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>
@@ -817,6 +851,9 @@
       <t>
         draft-ietf-oauth-mtls-06
         <list style='symbols'>
+          <t>Add an appendix section describing the relationship of this document to OAuth Token Binding as
+            requested during the the Singapore meeting
+            https://datatracker.ietf.org/doc/minutes-100-oauth/</t>
           <t>Add an explicit note that the implicit flow is not supported for obtaining certificate
             bound access tokens as discussed at the Singapore meeting
             https://datatracker.ietf.org/doc/minutes-100-oauth/</t>
