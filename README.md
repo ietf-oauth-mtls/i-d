@@ -1,6 +1,6 @@
 # Mutual TLS for OAuth 2.0
 
-This is the working area for the IETF OAUTH WG's draft Mutual TLS for OAuth 2.0
+This is the working area for the IETF OAUTH WG's draft OAuth 2.0 Mutual TLS Client Authentication and Certificate Bound Access Tokens
 
 Be aware that all contributions to the specification fall under the "NOTE WELL"
 terms outlined below.
