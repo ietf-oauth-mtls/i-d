@@ -282,7 +282,7 @@
           For the Self-Signed Certificate method of binding a certificate to a client using mutual
           TLS client authentication, the existing
           <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
-          metadata parameters from <xref target="RFC7591"/> are used to convey client's
+          metadata parameters from <xref target="RFC7591"/> are used to convey the client's
           certificates and public keys, where the X.509
           certificates are represented using the <xref target="RFC7517">JSON Web Key (JWK)</xref>
           <spanx style="verb">x5c</spanx> parameter (note that Sec 4.7 of RFC 7517
