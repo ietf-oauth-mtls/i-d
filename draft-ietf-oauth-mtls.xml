@@ -301,6 +301,10 @@
   a way that can be accessed by the protected resource, such as embedding the certificate
   hash in the issued access token directly, using the syntax described in <xref target="x5t256"/>,
   or through token introspection as described in <xref target="introspect"/>.
+  Binding the access token to the client certificate in that fashion has the benefit of
+  decoupling that binding from the client's authentication with the
+  authorization server, which enables mutual TLS during protected resource access to
+  serve purely as a proof-of-possession mechanism.
   Other methods of associating a certificate with an access token are possible,
   per agreement by the authorization server and the protected resource, but are
   beyond the scope of this specification.
