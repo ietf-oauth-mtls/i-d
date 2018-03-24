@@ -486,13 +486,17 @@
     its other endpoints, e.g. authorization or registration.</t>
     </section>
     <section anchor="ImplRS" title="Resource Server">
-    <t>From the perspective of the resource server, TLS client authentication is 
-    used as a proof of possession method only. For the purpose of client authentication,
-    the resource server may completely rely on the authorization server. So there is 
-    no need to validate the trust chain of the client's certificate in any of the methods
-    defined in this document. The resource server should therefore configure the TLS stack
-    in a way that it does not verify whether the certificate presented by the client 
-    during the handshake is signed by a trusted CA certificate.</t>
+    <t>
+      Since the resource server relies on the authorization server to
+      perform client authentication, there is no need for the resource server to validate
+      the trust chain of the client's certificate in any of the methods
+      defined in this document.
+      Mutual TLS is used only as a proof-of-possession mechanism during protected
+      resource access.
+      The resource server should therefore configure the TLS stack
+      in a way that it does not verify whether the certificate presented by the client
+      during the handshake is signed by a trusted CA certificate.
+    </t>
     </section>
     <section anchor="ImplPubClient" title="Sender Constrained Access Tokens Without Client Authentication">
     <t>
