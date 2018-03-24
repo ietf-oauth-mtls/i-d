@@ -823,7 +823,8 @@
         core Token Binding specifications exists, practical implementations of OAuth 2.0 Token Binding
         are infeasible. Despite its name, Token Binding doesn't have a monopoly on the binding of tokens.
         Mutual TLS, on the other hand, has been around for some time and enjoys
-        widespread support in web servers and development platforms. Mutual TLS for OAuth 2.0 can be
+        widespread support in web servers and development platforms. OAuth 2.0 Mutual TLS
+        Client Authentication and Certificate Bound Access Tokens can be
         built and deployed now using existing platforms and tools.
         There are emerging and immediate scenarios, such as OAuth enabled financial transactions motivated by
         regulatory requirements in some cases, which demand the additional security protections
