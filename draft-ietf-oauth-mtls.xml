@@ -471,7 +471,7 @@
     
     <section anchor="Impl" title="Implementation Considerations">
     <section anchor="ImplAS" title="Authorization Server">
-    <t>The authorization server needs to setup its TLS configuration appropriately 
+    <t>The authorization server needs to set up its TLS configuration appropriately
     for the binding methods it supports.</t>
     <t>If the authorization server wants to support mutual TLS client authentication 
     and other client authentication methods in parallel, it should make mutual TLS
