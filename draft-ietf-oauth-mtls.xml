@@ -68,7 +68,7 @@
     <abstract>
 <t>
   This document describes OAuth client authentication and sender-constrained tokens using
-  Transport Layer Security (TLS) mutual authentication with X.509 certificates.
+  mutual Transport Layer Security (TLS) authentication with X.509 certificates.
   OAuth clients are provided a mechanism for authentication to the authorization
   sever using mutual TLS, based on either single certificates or public key infrastructure (PKI).
   OAuth authorization servers are provided a mechanism for binding access tokens to a client's
@@ -82,7 +82,7 @@
   <middle>
     <section anchor="Introduction" title="Introduction">
 <t>
-  This document describes Transport Layer Security (TLS) mutual authentication
+  This document describes mutual Transport Layer Security (TLS) authentication
   using X.509 certificates as a mechanism for OAuth client authentication
   to the authorization sever as well as for sender constrained access to
   OAuth protected resources.
@@ -128,16 +128,7 @@
 
     <section anchor="Terminology" title="Terminology">
 <t>
-  This specification uses the following phrases interchangeably:
-</t>
-<t>
-  <list style="hanging">
-    <t>Transport Layer Security (TLS) Mutual Authentication</t>
-    <t>Mutual TLS</t>
-  </list>
-</t>
-<t>
-  These phrases all refer to the process whereby a client presents its X.509 certificate
+  Mutual TLS refers to the process whereby a client presents its X.509 certificate
   and proves possession of the corresponding private key to a server when negotiating a TLS session.
 
   In <xref target="RFC5246">TLS 1.2</xref> this requires the client to send
@@ -160,7 +151,7 @@
 <t>
   In order to utilize TLS for OAuth client authentication, the TLS
   connection between the client and the authorization server MUST have been established or reestablished
-  with mutual X.509 certificate authentication
+  with mutual TLS X.509 certificate authentication
   (i.e. the Client Certificate and Certificate Verify messages are sent during the TLS Handshake
   <xref target="RFC5246"/>).
 </t>
