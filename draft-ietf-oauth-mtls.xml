@@ -783,7 +783,7 @@
           <date/>
         </front>
       </reference>
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-08.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-10.xml'?>
 
       <?rfc include='reference.RFC.4517'?>
       <?rfc include='reference.RFC.7009'?> <!-- revocation -->
@@ -795,7 +795,7 @@
 
       <?rfc include='http://openid.net/bibxml/reference.OpenID.Discovery.xml'?>
 
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-token-binding-05.xml'?>
+      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-token-binding-06.xml'?>
 
     </references>
 
@@ -870,7 +870,9 @@
       <t>
         draft-ietf-oauth-mtls-08
         <list style='symbols'>
-          <t>Incorporate clarifications and editorial improvements from Justin Richer?s WGLC review</t>
+          <t>Incorporate clarifications and editorial improvements from Justin Richer's WGLC review</t>
+          <t>Update draft-ietf-oauth-discovery reference to -10</t>
+          <t>Update draft-ietf-oauth-token-binding reference to -06</t>
         </list>
       </t>
       <t>
