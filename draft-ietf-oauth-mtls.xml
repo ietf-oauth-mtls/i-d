@@ -241,7 +241,7 @@
         TLS is utilized to validate the client's possession of the private key
         corresponding to the public key presented within the certificate in the respective TLS handshake. In
         contrast to the PKI method, the client's certificate chain is not validated by the server in this case.
-        The client is successfully authenticated, if the subject public key info of the
+        The client is successfully authenticated if the subject public key info of the
         certificate matches the subject public key info of one of the certificates
         configured or registered for that particular client.
         The Self-Signed Certificate method allows to use mutual TLS to authenticate clients without
