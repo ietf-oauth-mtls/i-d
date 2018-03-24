@@ -164,9 +164,9 @@
   client independently from the content of the certificate. The authorization server
   can locate the client configuration using the client identifier and check the certificate
   presented in the TLS Handshake against the expected credentials for that client.
-  The authorization server MUST enforce some method of binding a certificate to a client.
-  Sections <xref target="pki_method"/> and <xref target="self_signed_method"/> below define two ways
-  of binding a certificate to a client as two distinct client authentication methods.
+  The authorization server MUST enforce the
+  binding of a certificate to a specific client as described in either <xref target="pki_method"/> or
+  <xref target="self_signed_method"/> below.
 </t>
 
     <section anchor="pki_method" title="PKI Mutual TLS OAuth Client Authentication Method">
