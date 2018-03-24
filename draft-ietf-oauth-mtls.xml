@@ -234,7 +234,9 @@
         This method of mutual TLS OAuth client authentication
         is intended to support client authentication using self-signed certificates.
         As pre-requisite, the client registers an X.509 certificate or a trusted source
-        for its X.509 certificates (such as the <spanx style="verb">jwks_uri</spanx> as defined in <xref target="RFC7591"/>) with
+        for its X.509 certificates (such as the <spanx style="verb">jwks_uri</spanx> defined in <xref target="RFC7591"/>
+        that references a <xref target="RFC7517">JSON Web Key</xref> Set
+        containing the client's certificates and public keys) with
         the authorization server. During authentication,
         TLS is utilized to validate the client's possession of the private key
         corresponding to the public key presented within the certificate in the respective TLS handshake. In
