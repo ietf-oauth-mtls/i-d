@@ -146,7 +146,7 @@
 
   The requirement of mutual TLS for client authentication is determined by the authorization server
   based on policy or configuration for the given client (regardless of whether the client was dynamically
-  registered or statically configured or otherwise established).
+  registered, statically configured, or otherwise established).
 </t>
 <t>
   In order to utilize TLS for OAuth client authentication, the TLS
