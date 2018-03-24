@@ -482,7 +482,7 @@
     certificate.</t>
     <t>The authorization server may also consider hosting the token endpoint,
     and other endpoints requiring client authentication, on
-    a separate host name in order to prevent unintended impact on the TLS behavior of
+    a separate host name or port in order to prevent unintended impact on the TLS behavior of
     its other endpoints, e.g. authorization or registration.</t>
     </section>
     <section anchor="ImplRS" title="Resource Server">
