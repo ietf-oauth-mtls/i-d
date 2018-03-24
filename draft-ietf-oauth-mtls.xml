@@ -67,11 +67,13 @@
 
     <abstract>
 <t>
-  This document describes Transport Layer Security (TLS) mutual authentication
-  using X.509 certificates as a mechanism for OAuth client authentication
-  to the authorization sever as well as for certificate bound sender constrained access tokens as a
-  method for a protected resource to ensure that an access token presented to it by a given
-  client was issued to that client by the authorization server.
+  This document describes OAuth client authentication and sender-constrained tokens using
+  Transport Layer Security (TLS) mutual authentication with X.509 certificates.
+  OAuth clients are provided a mechanism for authentication to the authorization
+  sever using mutual TLS, based on either single certificates or public key infrastructure (PKI).
+  OAuth authorization servers are provided a mechanism for binding access tokens to a client's
+  mutual TLS certificate, and OAuth protected resources are provided a method for ensuring
+  that such an access token presented to it was issued to the client presenting the token.
 </t>
     </abstract>
 
