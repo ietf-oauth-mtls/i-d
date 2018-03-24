@@ -810,11 +810,11 @@
         material when accessing a protected resource. The details differ somewhat between the two documents but both
         have the authorization server bind the access token it issues to an asymmetric key pair
         on the client. The client then proves possession of the private key from that pair
-        on the TLS connection over which the protected resource is accessed.
+        with respect to the TLS connection over which the protected resource is accessed.
       </t>
       <t>
         The two documents then are effectively competing specifications, at least with respect to the
-        binding of access tokens.
+        binding of access tokens (although an authorization server may simultaneously support both for different clients).
         Token Binding uses bare keys that are generated on the client,
         which avoids many of the difficulties of creating, distributing, and managing certificates
         and has the potential to see wider scale adoption and deployment. However, at the time of
