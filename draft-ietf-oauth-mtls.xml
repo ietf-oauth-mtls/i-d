@@ -177,7 +177,10 @@
         of the private key corresponding to the public key in the certificate and to
         validate the corresponding certificate chain. The client is successfully authenticated
         if the subject information in the certificate matches the expected DN configured or
-        registered for that particular client.
+        registered for that particular client
+        (note that a predictable treatment of DN values, such as the distinguishedNameMatch
+        rule from <xref target="RFC4517"/>, is needed in comparing the
+        certificate's subject DN to the client's registered DN).
         The PKI method facilitates the way X.509 certificates are traditionally being used
         for authentication. It also allows the client to rotate its X.509 certificates
         without the need to modify its respective authentication data at the authorization
@@ -774,6 +777,7 @@
       </reference>
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-08.xml'?>
 
+      <?rfc include='reference.RFC.4517'?>
       <?rfc include='reference.RFC.7009'?> <!-- revocation -->
       <?rfc include='reference.RFC.7517'?> <!-- JWK -->
       <?rfc include='reference.RFC.7519'?> <!-- JWT -->
