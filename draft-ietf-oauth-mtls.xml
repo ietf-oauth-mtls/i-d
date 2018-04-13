@@ -794,28 +794,26 @@
         Both documents define what is often called a proof-of-possession security mechanism
         for access tokens, whereby a client must demonstrate possession of cryptographic keying
         material when accessing a protected resource. The details differ somewhat between the two documents but both
-        have the authorization server bind the access token it issues to an asymmetric key pair
-        on the client. The client then proves possession of the private key from that pair
+        have the authorization server bind the access token that it issues to an asymmetric key pair
+        held by the client. The client then proves possession of the private key from that pair
         with respect to the TLS connection over which the protected resource is accessed.
       </t>
       <t>
-        The two documents then are effectively competing specifications, at least with respect to the
-        binding of access tokens (although an authorization server may simultaneously support both for different clients).
         Token Binding uses bare keys that are generated on the client,
         which avoids many of the difficulties of creating, distributing, and managing certificates
-        and has the potential to see wider scale adoption and deployment. However, at the time of
+        used in this specification. However, at the time of
         writing, Token Binding is fairly new and there is relatively little support for it in available
         application development platforms and tooling. Until better support for the underlying
         core Token Binding specifications exists, practical implementations of OAuth 2.0 Token Binding
-        are infeasible. Despite its name, Token Binding doesn't have a monopoly on the binding of tokens.
+        are infeasible. 
         Mutual TLS, on the other hand, has been around for some time and enjoys
-        widespread support in web servers and development platforms. OAuth 2.0 Mutual TLS
+        widespread support in web servers and development platforms.  As a consequence, OAuth 2.0 Mutual TLS
         Client Authentication and Certificate Bound Access Tokens can be
         built and deployed now using existing platforms and tools.
-        There are emerging and immediate scenarios, such as OAuth enabled financial transactions motivated by
-        regulatory requirements in some cases, which demand the additional security protections
-        of proof-of-possession access tokens.  This document aspires to provide standardized and expeditious solution
-        for those scenarios.
+        In the future, the two specifications are likely to be
+        deployed in parallel for solving similar problems in different environments.
+        Authorization servers may even support both specifications simultaneously using different
+        proof-of-possession mechanisms for tokens issued to different clients.
       </t>
     </section>
 
