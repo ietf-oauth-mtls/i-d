@@ -189,17 +189,10 @@
 
       <section anchor="metadata_auth_value_pki" title="PKI Authentication Method Metadata Value">
         <t>
-          The "OAuth Token Endpoint Authentication Methods" registry
-          <xref target="IANA.OAuth.Parameters"/> contains values, each of which specify a
-          method of authenticating a client to the authorization server.  The values are
-          used to indicate supported and utilized client authentication methods
-          in authorization server metadata, such as
-          <xref target="OpenID.Discovery">OpenID Connect Discovery</xref> and
-          <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>,
-          and in the
-          <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref>.
           For the PKI method of mutual TLS client authentication, this specification
-          defines and registers the following authentication method metadata value.
+          defines and registers the following authentication method metadata
+          value into the "OAuth Token Endpoint Authentication Methods" registry
+          <xref target="IANA.OAuth.Parameters"/>.
         </t>
         <t>
           <list style="hanging">
@@ -250,20 +243,11 @@
         need to change its respective authentication data directly with the authorization server.
       </t>
       <section anchor="metadata_auth_value_self_signed" title="Self-Signed Certificate Authentication Method Metadata Value">
-
         <t>
-          The "OAuth Token Endpoint Authentication Methods" registry
-          <xref target="IANA.OAuth.Parameters"/> contains values, each of which specify a
-          method of authenticating a client to the authorization server.  The values are
-          used to indicate supported and utilized client authentication methods
-          in authorization server metadata, such as
-          <xref target="OpenID.Discovery">OpenID Connect Discovery</xref> and
-          <xref target="I-D.ietf-oauth-discovery">OAuth 2.0 Authorization Server Metadata</xref>,
-          and in the
-          <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref>.
-          For the Self-Signed Certificate method of binding a certificate to a client using mutual
-          TLS client authentication, this specification
-          defines and registers the following authentication method metadata value.
+          For the Self-Signed Certificate method of mutual TLS client authentication, this specification
+          defines and registers the following authentication method metadata
+          value into the "OAuth Token Endpoint Authentication Methods" registry
+          <xref target="IANA.OAuth.Parameters"/>.
         </t>
         <t>
           <list style="hanging">
@@ -796,8 +780,6 @@
       <?rfc include='reference.RFC.7591'?> <!-- Dynamic Client Registration -->
       <?rfc include='reference.RFC.7662'?> <!-- introspection -->
       <?rfc include='reference.RFC.8174'?>
-
-      <?rfc include='http://openid.net/bibxml/reference.OpenID.Discovery.xml'?>
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-token-binding-06.xml'?>
 
