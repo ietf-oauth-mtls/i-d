@@ -821,7 +821,8 @@
       <t>
         Scott "not Tomlinson" Tomilson and Matt Peterson were involved in
         design and development work on a mutual TLS OAuth client authentication
-        implementation that informed some of the content of this document.
+        implementation, which predates this document. Experience and learning from that work
+        informed some of the content of this document.
       </t>
 
       <t>
