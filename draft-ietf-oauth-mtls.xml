@@ -578,6 +578,26 @@
           certificate spoofing attacks.
         </t>
       </section>
+      <section title="X.509 Certificate Parsing and Validation Complexity">
+        <t>
+          Parsing and validation of X.509 certificates and certificate chains is complex and implementation
+          mistakes have previously exposed security vulnerabilities.
+          Complexities of validation include (but are not limited to)
+          <xref target="X509Pitfalls"/> <xref target="DangerousCode"/> <xref target="RFC5280"/>:
+        </t>
+        <t>
+          <list style="symbols">
+          <t>checking of Basic Constraints, basic and extended Key Usage constraints, validity periods, and critical extensions;</t>
+          <t>handling of null-terminator bytes and non-canonical string representations in subject names;</t>
+          <t>handling of wildcard patterns in subject names;</t>
+          <t>recursive verification of certificate chains and checking certificate revocation.</t>
+          </list>
+        </t><t>
+          For these reasons, implementors SHOULD use an established and well-tested X.509 library
+          (such as one used by an established TLS library) for validation of X.509 certificate chains
+          and SHOULD NOT attempt to write their own X.509 certificate validation procedures.
+        </t>
+      </section>
     </section>
 
     <section anchor="IANA" title="IANA Considerations">
@@ -801,6 +821,28 @@
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-token-binding-06.xml'?>
 
+      <reference anchor="X509Pitfalls" target="https://www.cryptologie.net/article/374/common-x509-certificate-validationcreation-pitfalls">
+        <front>
+          <title>Common x509 certificate validation/creation pitfalls</title>
+          <author fullname="David Wong" initials="D." surname="Wong"><organization/></author>
+          <date month="September" year="2016"/>
+        </front>
+      </reference>
+
+      <reference anchor="DangerousCode" target="http://www.cs.utexas.edu/~shmat/shmat_ccs12.pdf">
+        <front>
+          <title>The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software</title>
+          <author fullname="Martin Georgiev" initials="M." surname="Georgiev"><organization/></author>
+          <author fullname="Subodh Iyengar" initials="S." surname="Iyengar"><organization/></author>
+          <author fullname="Suman Jana" initials="S." surname="Jana"><organization/></author>
+          <author fullname="Rishita Anubhai" initials="R." surname="Anubhai"><organization/></author>
+          <author fullname="Dan Boneh" initials="D." surname="Boneh"><organization/></author>
+          <author fullname="Vitaly Shmatikov" initials="V." surname="Shmatikov"><organization/></author>
+          <date/>
+        </front>
+      </reference>
+
+
     </references>
 
     <section anchor="relation" title="Relationship to Token Binding">
@@ -881,6 +923,8 @@
           <t>Drop the use of the "sender constrained" terminology per WGLC feedback from Neil Madden (including changing
           the metadata parameters from mutual_tls_sender_constrained_access_tokens
             to tls_client_certificate_bound_access_tokens)</t>
+          <t>Add a new security considerations section on X.509 parsing and validation
+            per WGLC feedback from Neil Madden and Benjamin Kaduk</t>
           <t>Note that a server can terminate TLS at a load balancer, reverse proxy, etc. but how the
             client certificate metadata is securely communicated to the backend is out of scope per WGLC feedback</t>
           <t>Editorial updates and clarifications</t>
