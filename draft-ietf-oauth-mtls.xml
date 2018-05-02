@@ -59,15 +59,19 @@
     <keyword>Mutual TLS</keyword>
     <keyword>proof-of-possession</keyword>
     <keyword>proof-of-possession access token</keyword>
-    <keyword>sender constrained access token</keyword>
+    <keyword>key confirmed access token</keyword>
     <keyword>certificate bound access token</keyword>
-    <keyword>sender constrained</keyword>
+    <keyword>client certificate</keyword>
+    <keyword>X.509 Client Certificate Authentication</keyword>
+    <keyword>key confirmation</keyword>
+    <keyword>confirmation method</keyword>
+    <keyword>holder-of-key</keyword>
     <keyword>OAuth</keyword>
 
 
     <abstract>
 <t>
-  This document describes OAuth client authentication and sender-constrained tokens using
+  This document describes OAuth client authentication and certificate bound access tokens using
   mutual Transport Layer Security (TLS) authentication with X.509 certificates.
   OAuth clients are provided a mechanism for authentication to the authorization
   sever using mutual TLS, based on either single certificates or public key infrastructure (PKI).
@@ -82,10 +86,15 @@
   <middle>
     <section anchor="Introduction" title="Introduction">
 <t>
-  This document describes mutual Transport Layer Security (TLS) authentication
-  using X.509 certificates as a mechanism for OAuth client authentication
-  to the authorization sever as well as for sender constrained access to
-  OAuth protected resources.
+
+  This document describes OAuth client authentication and certificate bound access tokens using
+  mutual <xref target="RFC5246">TLS</xref> authentication with X.509 certificates.
+  OAuth clients are provided a mechanism for authentication to the authorization
+  sever using mutual TLS.
+  OAuth authorization servers are provided a mechanism for binding access tokens to a client's
+  mutual TLS certificate, and OAuth protected resources are provided a method for ensuring
+  that such an access token presented to it was issued to the client presenting the token.
+
 </t>
 <t>
   The OAuth 2.0 Authorization Framework <xref target="RFC6749"/>
@@ -93,7 +102,7 @@
   allows for the definition and use of additional client authentication mechanisms
   when interacting directly with the authorization server.
   This document describes an additional mechanism of client authentication utilizing
-  mutual TLS <xref target="RFC5246"/> certificate-based authentication, which provides
+  mutual TLS certificate-based authentication, which provides
   better security characteristics than shared secrets.
   While <xref target="RFC6749"/> documents client authentication for requests to the token endpoint,
   extensions to OAuth 2.0 (such as <xref target="RFC7662">Introspection</xref> and
@@ -102,18 +111,20 @@
 </t>
 
 <t>
-  Mutual TLS sender constrained access to protected resources ensures that
+  Mutual TLS certificate bound access tokens ensure that
   only the party in possession of the
-  private key corresponding to the certificate can utilize the access token to get
-  access to the associated resources. Such a constraint is unlike the case of the
+  private key corresponding to the certificate can utilize the token to
+  access the associated resources. Such a constraint is
+  sometimes referred to as key confirmation, proof-of-possession, or holder-of-key
+  and is unlike the case of the
   bearer token described in <xref target="RFC6750"/>, where any party in
   possession of the access token can use it to access the associated resources.
-  Mutual TLS sender constrained access binds the access token to the client's certificate
-  thus preventing the use of stolen access tokens or replay of access tokens
+  Binding an access token to the client's certificate
+  prevents the use of stolen access tokens or replay of access tokens
   by unauthorized parties.
 </t>
 <t>
-  Mutual TLS sender constrained access tokens and mutual TLS client authentication
+  Mutual TLS certificate bound access tokens and mutual TLS client authentication
   are distinct mechanisms, which are complementary but don't necessarily need to be deployed together.
 </t>
     <section anchor="RNC" title="Requirements Notation and Conventions">
@@ -277,13 +288,13 @@
 
     </section>
 
-    <section anchor="SenderConstrainedAccess" title="Mutual TLS Sender Constrained Resources Access">
+    <section anchor="CertificateBoundAccessTokens" title="Mutual TLS Client Certificate Bound Access Tokens">
 <t>
   When mutual TLS is used by the client on the connection to the token endpoint,
   the authorization server is able to bind the issued access token to the client certificate.
   Such a binding is accomplished by associating the certificate with the token in
   a way that can be accessed by the protected resource, such as embedding the certificate
-  hash in the issued access token directly, using the syntax described in <xref target="x5t256"/>,
+  hash in the issued access token directly, using the syntax described in <xref target="x5t"/>,
   or through token introspection as described in <xref target="introspect"/>.
   Binding the access token to the client certificate in that fashion has the benefit of
   decoupling that binding from the client's authentication with the
@@ -307,11 +318,11 @@
   using an HTTP 401 status code and the <spanx style="verb">invalid_token</spanx> error code.
 </t>
 <t>
-  Metadata to convey server and client capabilities for mutual TLS sender constrained access tokens
+  Metadata to convey server and client capabilities for mutual TLS client certificate bound access tokens
   is defined in <xref target="server_metadata_at"/> and <xref target="client_metadata_at"/> respectively.
 </t>
 
-      <section anchor="x5t256" title="X.509 Certificate Thumbprint Confirmation Method for JWT">
+      <section anchor="x5t" title="X.509 Certificate Thumbprint Confirmation Method for JWT">
   <t>
     When access tokens are represented as JSON Web Tokens (JWT)<xref target="RFC7519"/>,
     the certificate hash information SHOULD be represented using
@@ -332,7 +343,7 @@
     confirmation method.
   </t>
 
-  <figure anchor="eg_x5ts256jwt" title="Example claims of a Certificate Thumbprint Constrained JWT">
+  <figure anchor="eg_x5ts256jwt" title="Example JWT Claims Set with an X.509 Certificate Thumbprint Confirmation Method">
     <artwork><![CDATA[
   {
     "iss": "https://server.example.com",
@@ -367,12 +378,12 @@
           access token as well as to determine meta-information about the token.
         </t>
         <t>
-          For a mutual TLS sender constrained access token, the hash of the
+          For a mutual TLS client certificate bound access token, the hash of the
           certificate to which the token is bound
           is conveyed to the protected resource as meta-information
           in a token introspection response. The hash is conveyed using the same structure as the
           certificate SHA-256 thumbprint confirmation method, described in
-          <xref target="x5t256"/>, as a top-level member of the introspection response JSON.
+          <xref target="x5t"/>, as a top-level member of the introspection response JSON.
           The protected resource compares
           that certificate hash to a hash of the client certificate used for
           mutual TLS authentication
@@ -392,8 +403,8 @@
           has the same semantics and format as the claim of the same name defined in <xref target="RFC7800"/>.
           While this specification only explicitly uses the <spanx style="verb">x5t#S256</spanx>
           confirmation method member, it needed to define and register the higher level <spanx style="verb">cnf</spanx>
-          structure as an introspection response member in order to define and use its more specific
-          <spanx style="verb">x5t#S256</spanx> confirmation method.
+          structure as an introspection response member in order to define and use the more specific
+          certificate thumbprint confirmation method.
         </t>
 
         <t>
@@ -402,7 +413,7 @@
           confirmation method.
         </t>
 
-        <figure anchor="eg_x5ts256intro" title="Example Introspection Response for a Certificate Constrained Access Token">
+        <figure anchor="eg_x5ts256intro" title="Example Introspection Response for a Certificate Bound Access Token">
           <artwork><![CDATA[
 
   HTTP/1.1 200 OK
@@ -429,9 +440,9 @@
             bound access tokens:
 
             <list style="hanging">
-              <t hangText="mutual_tls_sender_constrained_access_tokens"><vspace/>
+              <t hangText="tls_client_certificate_bound_access_tokens"><vspace/>
                 OPTIONAL.  Boolean value indicating server support for
-                mutual TLS sender constrained access tokens. If omitted, the
+                mutual TLS client certificate bound access tokens. If omitted, the
                 default value is <spanx style="verb">false</spanx>.
               </t>
             </list>
@@ -444,9 +455,9 @@
           bound access tokens:
 
           <list style="hanging">
-            <t hangText="mutual_tls_sender_constrained_access_tokens"><vspace/>
+            <t hangText="tls_client_certificate_bound_access_tokens"><vspace/>
               OPTIONAL. Boolean value used to indicate the client's intention
-              to use mutual TLS sender constrained access tokens.
+              to use mutual TLS client certificate bound access tokens.
               If omitted, the default value is <spanx style="verb">false</spanx>.
             </t>
           </list>
@@ -486,28 +497,28 @@
       during the handshake is signed by a trusted CA certificate.
     </t>
     </section>
-    <section anchor="ImplPubClient" title="Sender Constrained Access Tokens Without Client Authentication">
+    <section anchor="ImplPubClient" title="Certificate Bound Access Tokens Without Client Authentication">
     <t>
-    Mutual TLS OAuth client authentication and mutual TLS sender constrained access tokens
+    Mutual TLS OAuth client authentication and mutual TLS client certificate bound access tokens
     can be used independently of each other.
-    Use of mutual TLS sender constrained access tokens without mutual TLS OAuth client authentication, for example,
+    Use of certificate bound access tokens without mutual TLS OAuth client authentication, for example,
     is possible in support of binding access tokens to a TLS client certificate for public clients or clients
     utilizing other methods of authentication to the authorization server.
     The authorization server would configure the TLS stack in the same manner as for the Self-Signed Certificate method
     such that it does not verify that the certificate presented by the client during the handshake is
-    signed by a trusted CA. Individual instances of a client would then create a self-signed
+    signed by a trusted CA. Individual instances of a client would create a self-signed
     certificate for mutual TLS with both the authorization server and resource server. The authorization
     server would not use the mutual TLS certificate to authenticate the client at the OAuth layer
     but would bind issued access tokens
     to that certificate, which the client has proven possession of the corresponding private key.
-    The access token is then mutual TLS sender constrained and can only be used by the client
+    The access token is then bound to the certificate and can only be used by the client
     possessing the certificate and corresponding private key and utilizing them to negotiate mutual TLS on
     connections to the resource server.
     </t>
     </section>
     <section anchor="ImplExp" title="Certificate Bound Access Tokens">
       <t>
-        As described in <xref target="SenderConstrainedAccess"/>,
+        As described in <xref target="CertificateBoundAccessTokens"/>,
         an access token is bound to a specific client certificate, which means that
         the same certificate must be used for mutual TLS on protected resource access.
         It also implies that access tokens are invalidated when a client updates the certificate,
@@ -521,13 +532,13 @@
       This document describes binding an access token to the
       client certificate presented on the TLS connection from the client to the
       authorization server's token endpoint,
-      however, certificate binding of access tokens issued directly from the authorization
+      however, such binding of access tokens issued directly from the authorization
       endpoint via the implicit grant flow is explicitly out of scope.
       End users interact directly with the authorization endpoint using a web browser
       and the use of client certificates in user's browsers bring operational and
       usability issues, which make it undesirable to support certificate bound access
       tokens issued in the implicit grant flow. Implementations wanting to employ
-      certificate bound sender constrained access tokens should utilize grant types
+      certificate bound access tokens should utilize grant types
       that involve the client making an access token request directly to the token endpoint
       (e.g. the authorization code and refresh token grant types).
     </t>
@@ -578,7 +589,7 @@
             <t>Confirmation Method Value: <spanx style="verb">x5t#S256</spanx></t>
             <t>Confirmation Method Description: X.509 Certificate SHA-256 Thumbprint</t>
             <t>Change Controller: IESG</t>
-            <t>Specification Document(s): <xref target="x5t256"/> of [[ this specification ]]</t>
+            <t>Specification Document(s): <xref target="x5t"/> of [[ this specification ]]</t>
           </list>
           <?rfc subcompact="no"?>
         </t>
@@ -593,8 +604,8 @@
         <t>
           <?rfc subcompact="yes"?>
           <list style='symbols'>
-            <t>Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx></t>
-            <t>Metadata Description: Indicates authorization server support for mutual TLS sender constrained
+            <t>Metadata Name: <spanx style="verb">tls_client_certificate_bound_access_tokens</spanx></t>
+            <t>Metadata Description: Indicates authorization server support for mutual TLS client certificate bound
               access tokens.</t>
             <t>Change Controller: IESG</t>
             <t>Specification Document(s): <xref target="server_metadata_at"/> of [[ this specification ]]</t>
@@ -661,11 +672,11 @@
           <?rfc subcompact="yes"?>
           <list style="symbols">
             <t>
-              Client Metadata Name: <spanx style="verb">mutual_tls_sender_constrained_access_tokens</spanx>
+              Client Metadata Name: <spanx style="verb">tls_client_certificate_bound_access_tokens</spanx>
             </t>
             <t>
               Client Metadata Description:
-              Indicates the client's intention to use mutual TLS sender constrained
+              Indicates the client's intention to use mutual TLS client certificate bound
               access tokens.
             </t>
             <t>
@@ -790,7 +801,7 @@
         <xref target="I-D.ietf-oauth-token-binding">OAuth 2.0 Token Binding</xref>
         enables the application of Token Binding to the various artifacts and tokens employed throughout OAuth.
         That includes binding of an access token to a Token Binding key, which bears some similarities in motivation
-        and design to the mutual TLS sender constrained resources access defined in this document.
+        and design to the mutual TLS client certificate bound access tokens defined in this document.
         Both documents define what is often called a proof-of-possession security mechanism
         for access tokens, whereby a client must demonstrate possession of cryptographic keying
         material when accessing a protected resource. The details differ somewhat between the two documents but both
@@ -860,6 +871,9 @@
         draft-ietf-oauth-mtls-08
         <list style='symbols'>
           <t>Incorporate clarifications and editorial improvements from Justin Richer's WGLC review</t>
+          <t>Drop the use of the "sender constrained" terminology per WGLC feedback from Neil Madden (including changing
+          the metadata parameters from mutual_tls_sender_constrained_access_tokens
+            to tls_client_certificate_bound_access_tokens)  </t>
           <t>Update draft-ietf-oauth-discovery reference to -10</t>
           <t>Update draft-ietf-oauth-token-binding reference to -06</t>
           <t>Editorial updates and clarifications</t>
@@ -942,7 +956,7 @@
           <t>Added an IANA OAuth Token Introspection Response Registration request for "cnf".</t>
           <t>Specify that tls_client_auth_subject_dn and tls_client_auth_root_dn are RFC 4514 String Representation of Distinguished Names.</t>
           <t>Changed tls_client_auth_issuer_dn to tls_client_auth_root_dn.</t>
-          <t>Changed the text in the <xref target="SenderConstrainedAccess"/> to not be specific about using a hash of the cert.</t>
+          <t>Changed the text in the <xref target="CertificateBoundAccessTokens"/> to not be specific about using a hash of the cert.</t>
           <t>Changed the abbreviated title to 'OAuth Mutual TLS' (previously was the acronym MTLSPOC).</t>
         </list>
       </t>
