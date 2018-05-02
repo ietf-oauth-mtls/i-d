@@ -543,6 +543,13 @@
       (e.g. the authorization code and refresh token grant types).
     </t>
     </section>
+    <section anchor="TTRP" title="TLS Termination">
+    <t>
+      An authorization server or resource server MAY choose to terminate TLS connections at a load balancer,
+      reverse proxy, or other network intermediary. How the client certificate metadata is securely
+      communicated between the intermediary and the application server in this case is out of scope of this specification.
+    </t>
+    </section>
     </section>
 
     <section anchor="Security" title="Security Considerations">
@@ -873,10 +880,12 @@
           <t>Incorporate clarifications and editorial improvements from Justin Richer's WGLC review</t>
           <t>Drop the use of the "sender constrained" terminology per WGLC feedback from Neil Madden (including changing
           the metadata parameters from mutual_tls_sender_constrained_access_tokens
-            to tls_client_certificate_bound_access_tokens)  </t>
+            to tls_client_certificate_bound_access_tokens)</t>
+          <t>Note that a server can terminate TLS at a load balancer, reverse proxy, etc. but how the
+            client certificate metadata is securely communicated to the backend is out of scope per WGLC feedback</t>
+          <t>Editorial updates and clarifications</t>
           <t>Update draft-ietf-oauth-discovery reference to -10</t>
           <t>Update draft-ietf-oauth-token-binding reference to -06</t>
-          <t>Editorial updates and clarifications</t>
         </list>
       </t>
       <t>
