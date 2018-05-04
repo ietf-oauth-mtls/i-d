@@ -192,6 +192,7 @@
         (note that a predictable treatment of DN values, such as the distinguishedNameMatch
         rule from <xref target="RFC4517"/>, is needed in comparing the
         certificate's subject DN to the client's registered DN).
+        If and how to check a certificate's revocation status is a deployment decision at the discretion of the authorization server.
         The PKI method facilitates the way X.509 certificates are traditionally being used
         for authentication. It also allows the client to rotate its X.509 certificates
         without the need to modify its respective authentication data at the authorization
@@ -927,6 +928,7 @@
             per WGLC feedback from Neil Madden and Benjamin Kaduk</t>
           <t>Note that a server can terminate TLS at a load balancer, reverse proxy, etc. but how the
             client certificate metadata is securely communicated to the backend is out of scope per WGLC feedback</t>
+          <t>Note that revocation checking is at the discretion of the AS per WGLC feedback</t>
           <t>Editorial updates and clarifications</t>
           <t>Update draft-ietf-oauth-discovery reference to -10 and draft-ietf-oauth-token-binding to -06</t>
         </list>
