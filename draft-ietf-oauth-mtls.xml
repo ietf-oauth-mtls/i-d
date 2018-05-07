@@ -89,7 +89,7 @@
 
   This document describes OAuth client authentication and certificate bound access tokens using
   mutual <xref target="RFC5246">TLS</xref> authentication with X.509 certificates.
-  OAuth clients are provided a mechanism for authentication to the authorization
+  OAuth clients are provided mechanisms for authentication to the authorization
   sever using mutual TLS.
   OAuth authorization servers are provided a mechanism for binding access tokens to a client's
   mutual TLS certificate, and OAuth protected resources are provided a method for ensuring
@@ -125,7 +125,7 @@
 </t>
 <t>
   Mutual TLS certificate bound access tokens and mutual TLS client authentication
-  are distinct mechanisms, which are complementary but don't necessarily need to be deployed together.
+  are distinct mechanisms, which are complementary but don't necessarily need to be deployed or used together.
 </t>
     <section anchor="RNC" title="Requirements Notation and Conventions">
 <t>
@@ -510,7 +510,7 @@
     signed by a trusted CA. Individual instances of a client would create a self-signed
     certificate for mutual TLS with both the authorization server and resource server. The authorization
     server would not use the mutual TLS certificate to authenticate the client at the OAuth layer
-    but would bind issued access tokens
+    but would bind the issued access token
     to that certificate, which the client has proven possession of the corresponding private key.
     The access token is then bound to the certificate and can only be used by the client
     possessing the certificate and corresponding private key and utilizing them to negotiate mutual TLS on
