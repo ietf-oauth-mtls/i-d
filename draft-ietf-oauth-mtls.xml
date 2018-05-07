@@ -931,6 +931,7 @@
           <t>Note that revocation checking is at the discretion of the AS per WGLC feedback</t>
           <t>Editorial updates and clarifications</t>
           <t>Update draft-ietf-oauth-discovery reference to -10 and draft-ietf-oauth-token-binding to -06</t>
+          <t>Add folks involved in WGLC feedback to the acknowledgements list</t>
         </list>
       </t>
       <t>
