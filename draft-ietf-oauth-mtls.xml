@@ -74,7 +74,7 @@
   This document describes OAuth client authentication and certificate bound access tokens using
   mutual Transport Layer Security (TLS) authentication with X.509 certificates.
   OAuth clients are provided a mechanism for authentication to the authorization
-  sever using mutual TLS, based on either single certificates or public key infrastructure (PKI).
+  sever using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI).
   OAuth authorization servers are provided a mechanism for binding access tokens to a client's
   mutual TLS certificate, and OAuth protected resources are provided a method for ensuring
   that such an access token presented to it was issued to the client presenting the token.
@@ -920,7 +920,7 @@
       <t>
         draft-ietf-oauth-mtls-09
         <list style='symbols'>
-          <t></t>
+          <t>Change "single certificates" to "self-signed certificates" in the Abstract</t>
         </list>
       </t>
       <t>
