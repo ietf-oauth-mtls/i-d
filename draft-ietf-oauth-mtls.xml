@@ -627,7 +627,7 @@
         <t>
           This specification requests registration of the following value
           in the IANA "OAuth Authorization Server Metadata" registry
-          <xref target="IANA.OAuth.Parameters"/> established by <xref target="I-D.ietf-oauth-discovery"/>.
+          <xref target="IANA.OAuth.Parameters"/> established by <xref target="RFC8414"/>.
         </t>
         <t>
           <?rfc subcompact="yes"?>
@@ -810,7 +810,6 @@
           <date/>
         </front>
       </reference>
-      <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-discovery-10.xml'?>
 
       <?rfc include='reference.RFC.4517'?>
       <?rfc include='reference.RFC.7009'?> <!-- revocation -->
@@ -819,6 +818,8 @@
       <?rfc include='reference.RFC.7591'?> <!-- Dynamic Client Registration -->
       <?rfc include='reference.RFC.7662'?> <!-- introspection -->
       <?rfc include='reference.RFC.8174'?>
+      <?rfc include='reference.RFC.8414'?> <!-- OAuth AS metadata -->
+
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-token-binding-06.xml'?>
 
@@ -920,7 +921,7 @@
       <t>
         draft-ietf-oauth-mtls-10
         <list style='symbols'>
-          <t></t>
+          <t>Update draft-ietf-oauth-discovery reference to RFC8414</t>
         </list>
       </t>
       <t>
