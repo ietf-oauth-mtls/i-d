@@ -559,7 +559,7 @@
           <xref target="RFC5246">TLS 1.2</xref> is cited in this document because,
           at the time of writing, it is the latest version that is widely deployed.
           However, this document is applicable with other TLS versions supporting
-          certificate-based client authentication.
+          certificate-based client authentication, including the relatively recently published <xref target="RFC8446">TLS 1.3</xref>.
           Implementation security considerations for TLS, including version recommendations,
           can be found in
           <xref target="BCP195">Recommendations for Secure Use of Transport Layer Security (TLS)
@@ -819,6 +819,8 @@
       <?rfc include='reference.RFC.7662'?> <!-- introspection -->
       <?rfc include='reference.RFC.8174'?>
       <?rfc include='reference.RFC.8414'?> <!-- OAuth AS metadata -->
+      <?rfc include='reference.RFC.8446'?> <!-- TLS 1.3 -->
+
 
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-token-binding-06.xml'?>
@@ -923,6 +925,7 @@
         draft-ietf-oauth-mtls-11
         <list style='symbols'>
           <t>Editorial updates.</t>
+          <t>Mention/reference TLS 1.3 RFC8446 in the TLS Versions and Best Practices section.</t>
         </list>
       </t>
       <t>
