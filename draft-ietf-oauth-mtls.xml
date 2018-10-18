@@ -13,8 +13,7 @@
 <?rfc compact="yes"?>
 <?rfc subcompact="no"?>
 
-<rfc category="std" docName="draft-ietf-oauth-mtls-12"
-     ipr="trust200902">
+<rfc category="std" docName="draft-ietf-oauth-mtls-12" ipr="trust200902">
   <front>
     <title abbrev="OAuth Mutual TLS">OAuth 2.0 Mutual TLS Client Authentication and Certificate Bound Access Tokens</title>
 
@@ -849,6 +848,48 @@
 
     </references>
 
+    <section title="Example Certificate, JSON Web Key, and Confirmation Method" anchor="example">
+      <t>
+        For reference, an <spanx style="verb">x5t#S256</spanx> value and the X.509 Certificate from which it was
+        calculated are provided in the following example figures. A JWK representation of the certificate's public
+        key along with the <spanx style="verb">x5c</spanx> member is also provided.
+
+        <figure title="x5t#S256 Confirmation Claim" anchor="cnf">
+          <artwork><![CDATA["cnf":{"x5t#S256":"A4DtL2JmUMhAsvJj5tKyn64SqzmuXbMrJa0n761y5v0"}
+]]></artwork>
+        </figure>
+
+        <figure title="PEM Encoded Self-Signed Certificate" anchor="pem">
+          <artwork><![CDATA[-----BEGIN CERTIFICATE-----
+MIIBBjCBrAIBAjAKBggqhkjOPQQDAjAPMQ0wCwYDVQQDDARtdGxzMB4XDTE4MTAx
+ODEyMzcwOVoXDTIyMDUwMjEyMzcwOVowDzENMAsGA1UEAwwEbXRsczBZMBMGByqG
+SM49AgEGCCqGSM49AwEHA0IABNcnyxwqV6hY8QnhxxzFQ03C7HKW9OylMbnQZjjJ
+/Au08/coZwxS7LfA4vOLS9WuneIXhbGGWvsDSb0tH6IxLm8wCgYIKoZIzj0EAwID
+SQAwRgIhAP0RC1E+vwJD/D1AGHGzuri+hlV/PpQEKTWUVeORWz83AiEA5x2eXZOV
+bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
+-----END CERTIFICATE-----]]></artwork>
+        </figure>
+
+        <figure title="JSON Web Key" anchor="jwk">
+          <artwork><![CDATA[
+{
+ "kty":"EC",
+ "x":"1yfLHCpXqFjxCeHHHMVDTcLscpb07KUxudBmOMn8C7Q",
+ "y":"8_coZwxS7LfA4vOLS9WuneIXhbGGWvsDSb0tH6IxLm8",
+ "crv":"P-256",
+ "x5c":[
+  "MIIBBjCBrAIBAjAKBggqhkjOPQQDAjAPMQ0wCwYDVQQDDARtdGxzMB4XDTE4MTA
+   xODEyMzcwOVoXDTIyMDUwMjEyMzcwOVowDzENMAsGA1UEAwwEbXRsczBZMBMGBy
+   qGSM49AgEGCCqGSM49AwEHA0IABNcnyxwqV6hY8QnhxxzFQ03C7HKW9OylMbnQZ
+   jjJ/Au08/coZwxS7LfA4vOLS9WuneIXhbGGWvsDSb0tH6IxLm8wCgYIKoZIzj0E
+   AwIDSQAwRgIhAP0RC1E+vwJD/D1AGHGzuri+hlV/PpQEKTWUVeORWz83AiEA5x2
+   eXZOVbUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY="
+   ]
+ }]]></artwork>
+        </figure>
+      </t>
+    </section>
+
     <section anchor="relation" title="Relationship to Token Binding">
       <t>
         <xref target="I-D.ietf-oauth-token-binding">OAuth 2.0 Token Binding</xref>
@@ -890,8 +931,12 @@
       </t>
 
       <t>
-        Additionally, the authors would like to thank the following people for
-        their input and contributions to the specification:
+        This specification was developed within the OAuth Working Group
+        under the chairmanship of Hannes Tschofenig
+        and Rifaat Shekh-Yusef with Eric Rescorla and Benjamin Kaduk
+        serving as Security Area Directors.  Additionally, the following
+        individuals contributed ideas, feedback, and wording
+        that helped shape this specification:
         Sergey Beryozkin,
         Sophie Bremer,
         Vladimir Dzhuvinov,
@@ -909,6 +954,7 @@
         Nov Matake,
         Sascha Preibisch,
         Justin Richer,
+        Filip Skokan,
         Dave Tonge,
         and
         Hannes Tschofenig.
@@ -924,7 +970,8 @@
       <t>
         draft-ietf-oauth-mtls-12
         <list style='symbols'>
-          <t></t>
+          <t>Add an example certificate, JWK, and confirmation method claim.</t>
+          <t>Additional Acknowledgements.</t>
         </list>
       </t>
       <t>
