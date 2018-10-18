@@ -279,9 +279,11 @@
           metadata parameters from <xref target="RFC7591"/> are used to convey the client's
           certificates and public keys, where the X.509
           certificates are represented using the <xref target="RFC7517">JSON Web Key (JWK)</xref>
-          <spanx style="verb">x5c</spanx> parameter (note that Sec 4.7 of RFC 7517
-          requires that the key in the first certificate of the <spanx style="verb">x5c</spanx> parameter
-          must match the public key represented by other members of the JWK).
+          <spanx style="verb">x5c</spanx> parameter.
+          Note that Sec 4.7 of <xref target="RFC7517"/> requires that the key
+          in the first certificate of the <spanx style="verb">x5c</spanx> parameter must match the public
+          key represented by other members of the JWK (e.g. "n" and "e" for RSA,
+          "x" and "y" for EC).
         </t>
       </section>
     </section>
@@ -332,11 +334,10 @@
     To represent the hash of a certificate in a JWT,
     this specification defines the new <xref target="RFC7800">JWT Confirmation Method</xref>
     member <spanx style="verb">x5t#S256</spanx> for the X.509 Certificate SHA-256 Thumbprint.
-    The value of the <spanx style="verb">x5t#S256</spanx> member is
-    the SHA-256<xref target="SHS"/> hash (a.k.a. thumbprint, fingerprint or digest)
-    of the DER encoding of the X.509 certificate <xref target="RFC5280"/>
-    <xref target="RFC4648">base64url-encoded</xref> with with all trailing pad '=' characters omitted and without
-    the inclusion of any line breaks, whitespace, or other additional characters.
+    The value of the <spanx style="verb">x5t#S256</spanx> member is a base64url-encoded <xref target="RFC4648"/>
+    SHA-256 <xref target="SHS"/> hash (a.k.a. thumbprint, fingerprint or digest) of the DER encoding of the X.509 certificate
+    <xref target="RFC5280"/>. The base64url-encoded value MUST omit all trailing pad '=' characters
+    and MUST NOT include any line breaks, whitespace, or other additional characters.
   </t>
   <t>
     The following is an example of a JWT payload containing an <spanx style="verb">x5t#S256</spanx> certificate thumbprint
@@ -971,6 +972,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         draft-ietf-oauth-mtls-12
         <list style='symbols'>
           <t>Add an example certificate, JWK, and confirmation method claim.</t>
+          <t>Minor editorial updates based on implementer feedback.</t>
           <t>Additional Acknowledgements.</t>
         </list>
       </t>
