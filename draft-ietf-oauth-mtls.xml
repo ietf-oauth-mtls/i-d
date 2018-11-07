@@ -464,10 +464,48 @@
           </list>
         </t>
         </section>
-
       </section>
 
+<section title="Mutual TLS Client Certificate Bound Refresh Tokens">
+<t>When mutual TLS is used by the client on the connection to the token endpoint and
+the authorization server issues refresh tokens, it MAY also bind this refresh token
+to the respective certificate. This is especially useful for public clients
+since it allows for refresh token replay detection without the need
+to rotate the refresh tokens.</t>
+<t>The implementation details of the binding are at the discretion of the authorization
+server. This specification defines metadata parameters allowing the server to
+announce support for refresh token binding and the client to request this feature.</t>
 
+<section anchor="server_metadata_rt" title="Authorization Server Metadata">
+<t>This document introduces the following new authorization server
+metadata parameter to signal the server's capability to issue certificate
+bound refresh tokens:
+
+<list style="hanging">
+<t hangText="tls_client_certificate_bound_refresh_tokens"><vspace/>
+OPTIONAL.  Boolean value indicating server support for
+mutual TLS client certificate bound refresh tokens. If omitted, the
+default value is <spanx style="verb">false</spanx>.
+</t>
+</list>
+</t>
+</section>
+
+<section anchor="client_metadata_rt" title="Client Registration Metadata">
+<t>The following new client
+metadata parameter is introduced to convey the client's intention to use certificate
+bound refresh tokens:
+
+<list style="hanging">
+<t hangText="tls_client_certificate_bound_refresh_tokens"><vspace/>
+OPTIONAL. Boolean value used to indicate the client's intention
+to use mutual TLS client certificate bound refresh tokens.
+If omitted, the default value is <spanx style="verb">false</spanx>.
+</t>
+</list>
+</t>
+</section>
+</section>
     
     <section anchor="Impl" title="Implementation Considerations">
     <section anchor="ImplAS" title="Authorization Server">
@@ -640,6 +678,16 @@
           </list>
           <?rfc subcompact="no"?>
         </t>
+        <t>
+        <?rfc subcompact="yes"?>
+        <list style='symbols'>
+        <t>Metadata Name: <spanx style="verb">tls_client_certificate_bound_refresh_tokens</spanx></t>
+        <t>Metadata Description: Indicates authorization server support for mutual TLS client certificate bound refresh tokens.</t>
+        <t>Change Controller: IESG</t>
+        <t>Specification Document(s): <xref target="server_metadata_rt"/> of [[ this specification ]]</t>
+        </list>
+        <?rfc subcompact="no"?>
+        </t>
       </section>
 
       <section anchor="tls_client_authIANA" title="Token Endpoint Authentication Method Registration">
@@ -714,6 +762,25 @@
               Specification Document(s): <xref target="client_metadata_at"/> of [[ this specification ]]
             </t>
           </list>
+        </t>
+        <t>
+        <?rfc subcompact="yes"?>
+        <list style="symbols">
+            <t>
+                Client Metadata Name: <spanx style="verb">tls_client_certificate_bound_refresh_tokens</spanx>
+            </t>
+            <t>
+                Client Metadata Description:
+                Indicates the client's intention to use mutual TLS client certificate bound
+                refresh tokens.
+            </t>
+            <t>
+                Change Controller: IESG
+            </t>
+            <t>
+                Specification Document(s): <xref target="client_metadata_rt"/> of [[ this specification ]]
+            </t>
+        </list>
         </t>
         <t>
           <list style="symbols">
