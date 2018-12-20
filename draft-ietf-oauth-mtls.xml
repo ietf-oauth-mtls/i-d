@@ -1029,7 +1029,10 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
       <t>
         draft-ietf-oauth-mtls-13
         <list style='symbols'>
-          <t></t>
+          <t>Add an abstract protocol flow and diagram to serve as an overview of OAuth in general and
+            baseline to describe the various ways
+            in which the mechanisms defined herein are  intended to be used.</t>
+          <t>A little bit less of that German influence.</t>
         </list>
       </t>
       <t>
