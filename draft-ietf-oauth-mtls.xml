@@ -85,18 +85,76 @@
   <middle>
     <section anchor="Introduction" title="Introduction">
 <t>
-
-  This document describes OAuth client authentication and certificate bound access tokens using
-  mutual <xref target="RFC5246">TLS</xref> authentication with X.509 certificates.
-  OAuth clients are provided mechanisms for authentication to the authorization
-  server using mutual TLS.
-  OAuth authorization servers are provided a mechanism for binding access tokens to a client's
-  mutual TLS certificate, and OAuth protected resources are provided a method for ensuring
-  that such an access token presented to it was issued to the client presenting the token.
-
+  The OAuth 2.0 Authorization Framework <xref target="RFC6749"/> enables third-party
+  client applications to obtain delegated access to protected resources.
+  In the prototypical abstract OAuth flow, illustrated in <xref target="protocol-flow-figure"/>,
+  the client obtains an access token from an entity known as an
+  authorization server and then uses that token when accessing protected resources,
+  such as HTTPS APIs.
 </t>
 <t>
-  The OAuth 2.0 Authorization Framework <xref target="RFC6749"/>
+  <figure title='Abstract OAuth 2.0 Protocol Flow' anchor='protocol-flow-figure'>
+    <artwork><![CDATA[
+  +--------+                                 +---------------+
+  |        |                                 |               |
+  |        |<--(A)-- Get an access token --->| Authorization |
+  |        |                                 |     Server    |
+  |        |                                 |               |
+  |        |                                 +---------------+
+  |        |                                         ^
+  |        |                                         |
+  |        |
+  |        |                               (C)       |
+  | Client |                           Validate the
+  |        |                           access token  |
+  |        |
+  |        |                                         |
+  |        |                                         v
+  |        |                                 +---------------+
+  |        |                                 |      (C)      |
+  |        |                                 |               |
+  |        |<--(B)-- Use the access token -->|   Protected   |
+  |        |                                 |    Resource   |
+  |        |                                 |               |
+  +--------+                                 +---------------+
+]]></artwork>
+        </figure>
+      </t>
+<t>
+  The flow illustrated in <xref target="protocol-flow-figure"/> includes the following steps:
+  <list style='format (%C)'>
+    <t>
+      The client makes an HTTPS <spanx style='verb'>POST</spanx> request to
+      the authorization server and presents
+      a credential representing the authorization grant. For
+      certain types of clients (those that have been issued or otherwise established
+      a set of client credentials) the request must be authenticated.
+      In the response, the authorization server issues an access token to the client.
+    </t>
+    <t>
+      The client includes the access token when making a request to access a protected resource.
+    </t>
+    <t>
+      The protected resource validates the access token in order to authorize the request.
+      In some cases, such as when the token is self-contained and cryptographically secured,
+      the validation can be done locally by the protected resource.  While other cases require
+      that the protected resource call out to the authorization server to determine the state
+      of the token and obtain meta-information about it.
+    </t>
+  </list>
+</t>
+<t>
+  Layering on the abstract flow above,
+  this document standardizes enhanced security options for OAuth 2.0 utilizing client certificate based mutual TLS.
+  <xref target="mtlsca"/> provides options for authenticating the request in step (A). While step (C) is supported
+  with semantics to express the binding of the token to the client certificate for both local and remote processing
+  in <xref target="x5t"/> and <xref target="introspect"/> respectively. This ensures that, as
+  described in <xref target="CertificateBoundAccessTokens"/>, protected resource
+  access in step (B) is only possible by the legitimate client bearing the access token and
+  holding the private key corresponding to the certificate.
+</t>
+<t>
+  OAuth 2.0
   defines a shared secret method of client authentication but also
   allows for definition and use of additional client authentication mechanisms
   when interacting directly with the authorization server.
