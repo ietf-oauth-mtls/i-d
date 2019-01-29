@@ -415,17 +415,6 @@
     </artwork>
   </figure>
 
-   <t>
-     If, in the future, certificate thumbprints need to be computed using
-     hash functions other than SHA-256, it is suggested that additional
-     related JWT confirmation methods members be defined for that purpose.
-     For example, a new <spanx style="verb">x5t#S512</spanx> (X.509 Certificate Thumbprint
-     using SHA-512) confirmation method member could be defined by registering it in
-     the the IANA "JWT Confirmation Methods" registry
-     <xref target="IANA.JWT.Claims"/>
-     for JWT <spanx style="verb">cnf</spanx> member values
-     established by <xref target="RFC7800"/>.
-   </t>
       </section>
 
       <section anchor="introspect" title="Confirmation Method for Token Introspection">
@@ -439,30 +428,14 @@
           For a mutual TLS client certificate bound access token, the hash of the
           certificate to which the token is bound
           is conveyed to the protected resource as meta-information
-          in a token introspection response. The hash is conveyed using the same structure as the
+          in a token introspection response. The hash is conveyed using the same
+          <spanx style="verb">cnf</spanx> with <spanx style="verb">x5t#S256</spanx> member structure as the
           certificate SHA-256 thumbprint confirmation method, described in
           <xref target="x5t"/>, as a top-level member of the introspection response JSON.
           The protected resource compares
           that certificate hash to a hash of the client certificate used for
           mutual TLS authentication
           and rejects the request, if they do not match.
-        </t>
-        <t>
-          <xref target="RFC7800">Proof-of-Possession Key Semantics for JSON Web Tokens</xref> defined the
-          <spanx style="verb">cnf</spanx> (confirmation) claim, which enables
-          confirmation key information to be carried in a JWT.
-          However, the same proof-of-possession semantics are also useful for introspected access tokens
-          whereby the protected resource obtains the confirmation key data as meta-information
-          of a token introspection response and uses that information in verifying proof-of-possession.
-          Therefore this specification defines and registers proof-of-possession semantics for
-          <xref target="RFC7662">OAuth 2.0 Token Introspection</xref> using the <spanx style="verb">cnf</spanx>
-          structure.
-          When included as a top-level member of an OAuth token introspection response, <spanx style="verb">cnf</spanx>
-          has the same semantics and format as the claim of the same name defined in <xref target="RFC7800"/>.
-          While this specification only explicitly uses the <spanx style="verb">x5t#S256</spanx>
-          confirmation method member, it needed to define and register the higher level <spanx style="verb">cnf</spanx>
-          structure as an introspection response member in order to define and use the more specific
-          certificate thumbprint confirmation method.
         </t>
 
         <t>
@@ -675,6 +648,14 @@
           </list>
           <?rfc subcompact="no"?>
         </t>
+        <t>
+          If, in the future, certificate thumbprints need to be computed using
+          hash functions other than SHA-256, it is suggested that additional
+          related JWT confirmation methods members be defined for that purpose.
+          For example, a new <spanx style="verb">x5t#S512</spanx> (X.509 Certificate Thumbprint
+          using SHA-512) confirmation method member could be defined by registering it in
+          the the IANA "JWT Confirmation Methods" registry.
+        </t>
       </section>
       
       <section anchor="ietf-oauth-discoveryIANA" title="OAuth Authorization Server Metadata Registration">
@@ -723,9 +704,26 @@
       </section>
 
       <section anchor="intorspectIANA" title="OAuth Token Introspection Response Registration">
-
         <t>
-          This specification requests registration of the following value
+          <xref target="RFC7800">Proof-of-Possession Key Semantics for JSON Web Tokens</xref> defined the
+          <spanx style="verb">cnf</spanx> (confirmation) claim, which enables
+          confirmation key information to be carried in a JWT.
+          However, the same proof-of-possession semantics are also useful for introspected access tokens
+          whereby the protected resource obtains the confirmation key data as meta-information
+          of a token introspection response and uses that information in verifying proof-of-possession.
+          Therefore this specification defines and registers proof-of-possession semantics for
+          <xref target="RFC7662">OAuth 2.0 Token Introspection</xref> using the <spanx style="verb">cnf</spanx>
+          structure.
+          When included as a top-level member of an OAuth token introspection response, <spanx style="verb">cnf</spanx>
+          has the same semantics and format as the claim of the same name defined in <xref target="RFC7800"/>.
+          While this specification only explicitly uses the <spanx style="verb">x5t#S256</spanx>
+          confirmation method member (see <xref target="introspect"/>), it needs to define and register
+          the higher level <spanx style="verb">cnf</spanx>
+          structure as an introspection response member in order to define and use the more specific
+          certificate thumbprint confirmation method.
+        </t>
+        <t>
+          As such, this specification requests registration of the following value
           in the IANA "OAuth Token Introspection Response" registry
           <xref target="IANA.OAuth.Parameters"/>
           established by <xref target="RFC7662"/>.
@@ -736,7 +734,7 @@
             <t>Claim Name: <spanx style="verb">cnf</spanx></t>
             <t>Claim Description: Confirmation</t>
             <t>Change Controller: IESG</t>
-            <t>Specification Document(s): <xref target="introspect"/> of [[ this specification ]]</t>
+            <t>Specification Document(s): <xref target="RFC7800"/> and [[ this specification ]]</t>
           </list>
           <?rfc subcompact="no"?>
         </t>
@@ -1029,10 +1027,12 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         <list style='symbols'>
           <t>Add an abstract protocol flow and diagram to serve as an overview of OAuth in general and
             baseline to describe the various ways
-            in which the mechanisms defined herein are  intended to be used.</t>
+            in which the mechanisms defined herein are intended to be used.</t>
           <t>A little bit less of that German influence.</t>
           <t>Rework the TLS references a bit and, in the Terminology section, clean up the description
             of what messages are sent and verified in the handshake to do 'mutual TLS'.</t>
+          <t>Move the explanation about "cnf" introspection registration and the hash algorithm agility recommendation
+            into the IANA Considerations.</t>
         </list>
       </t>
       <t>
