@@ -162,8 +162,9 @@
   mutual TLS certificate-based authentication, which provides
   better security characteristics than shared secrets.
   While <xref target="RFC6749"/> documents client authentication for requests to the token endpoint,
-  extensions to OAuth 2.0 (such as <xref target="RFC7662">Introspection</xref> and
-  <xref target="RFC7009">Revocation</xref>) define endpoints that also utilize client authentication
+  extensions to OAuth 2.0 (such as <xref target="RFC7662">Introspection</xref>,
+  <xref target="RFC7009">Revocation</xref>, and the Backchannel Authentication Endpoint
+  in <xref target="OpenID.CIBA"/>) define endpoints that also utilize client authentication
   and the mutual TLS methods defined herein are applicable to those endpoints as well.
 </t>
 
@@ -900,6 +901,43 @@
         </front>
       </reference>
 
+      <reference anchor="OpenID.CIBA"
+           target="https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0.html">
+        <front>
+          <title abbrev="CIBA">OpenID Connect Client Initiated Backchannel Authentication Flow - Core 1.0</title>
+          <author fullname="Gonzalo Fernandez Rodriguez" initials="G." surname="Fernandez">
+            <organization abbrev="Telefonica">Telefonica I+D</organization>
+            <address>
+              <email>gonzalo.fernandezrodriguez@telefonica.com</email>
+            </address>
+          </author>
+          <author fullname="Florian Walter" initials="F." surname="Walter">
+            <organization abbrev="">Deutsche Telekom AG</organization>
+            <address>
+              <email>F.Walter@telekom.de</email>
+            </address>
+          </author>
+          <author fullname="Axel Nennker" initials="A." surname="Nennker">
+            <organization abbrev="">Deutsche Telekom AG</organization>
+            <address>
+              <email>axel.nennker@telekom.de</email>
+            </address>
+          </author>
+          <author fullname="Dave Tonge" initials="D." surname="Tonge">
+            <organization abbrev="Moneyhub">Moneyhub</organization>
+            <address>
+              <email>dave.tonge@moneyhub.com</email>
+            </address>
+          </author>
+          <author fullname="Brian Campbell" initials="B." surname="Campbell">
+            <organization abbrev="Ping Identity">Ping Identity</organization>
+            <address>
+              <email>bcampbell@pingidentity.com</email>
+            </address>
+          </author>
+          <date day="16" month="January" year="2019"/>
+        </front>
+      </reference>
 
     </references>
 
@@ -1033,6 +1071,8 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
             of what messages are sent and verified in the handshake to do 'mutual TLS'.</t>
           <t>Move the explanation about "cnf" introspection registration and the hash algorithm agility recommendation
             into the IANA Considerations.</t>
+          <t>Add CIBA as an informational reference and additional example of an OAuth extension that
+            defines an endpoint that utilizes client authentication.</t>
         </list>
       </t>
       <t>
