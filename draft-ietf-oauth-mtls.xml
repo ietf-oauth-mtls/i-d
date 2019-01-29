@@ -237,7 +237,7 @@
   <xref target="self_signed_method"/> below.
 </t>
 
-    <section anchor="pki_method" title="PKI Mutual TLS OAuth Client Authentication Method">
+    <section anchor="pki_method" title="PKI Mutual TLS Method">
       <t>
         The PKI (public key infrastructure) method of mutual TLS OAuth client authentication uses
         a subject distinguished name (DN) and validated certificate chain to identify
@@ -256,7 +256,7 @@
         server by obtaining a new certificate with the same subject DN from a trusted certificate authority (CA).
       </t>
 
-      <section anchor="metadata_auth_value_pki" title="PKI Authentication Method Metadata Value">
+      <section anchor="metadata_auth_value_pki" title="PKI Method Metadata Value">
         <t>
           For the PKI method of mutual TLS client authentication, this specification
           defines and registers the following authentication method metadata
@@ -291,7 +291,7 @@
 
     </section>
 
-    <section anchor="self_signed_method" title="Self-Signed Certificate Mutual TLS OAuth Client Authentication Method">
+    <section anchor="self_signed_method" title="Self-Signed Certificate Mutual TLS Method">
       <t>
         This method of mutual TLS OAuth client authentication
         is intended to support client authentication using self-signed certificates.
@@ -311,7 +311,7 @@
         client, it also allows the client to rotate its X.509 certificates without the
         need to change its respective authentication data directly with the authorization server.
       </t>
-      <section anchor="metadata_auth_value_self_signed" title="Self-Signed Certificate Authentication Method Metadata Value">
+      <section anchor="metadata_auth_value_self_signed" title="Self-Signed Method Metadata Value">
         <t>
           For the Self-Signed Certificate method of mutual TLS client authentication, this specification
           defines and registers the following authentication method metadata
@@ -382,7 +382,7 @@
   is defined in <xref target="server_metadata_at"/> and <xref target="client_metadata_at"/> respectively.
 </t>
 
-      <section anchor="x5t" title="X.509 Certificate Thumbprint Confirmation Method for JWT">
+      <section anchor="x5t" title="JWT Certificate Thumbprint Confirmation Method">
   <t>
     When access tokens are represented as JSON Web Tokens (JWT)<xref target="RFC7519"/>,
     the certificate hash information SHOULD be represented using
@@ -659,7 +659,7 @@
         </t>
       </section>
       
-      <section anchor="ietf-oauth-discoveryIANA" title="OAuth Authorization Server Metadata Registration">
+      <section anchor="ietf-oauth-discoveryIANA" title="Authorization Server Metadata Registration">
         <t>
           This specification requests registration of the following value
           in the IANA "OAuth Authorization Server Metadata" registry
@@ -704,7 +704,7 @@
         </t>
       </section>
 
-      <section anchor="intorspectIANA" title="OAuth Token Introspection Response Registration">
+      <section anchor="intorspectIANA" title="Token Introspection Response Registration">
         <t>
           <xref target="RFC7800">Proof-of-Possession Key Semantics for JSON Web Tokens</xref> defined the
           <spanx style="verb">cnf</spanx> (confirmation) claim, which enables
@@ -742,7 +742,7 @@
       </section>
 
 
-      <section anchor="DynRegReg" title="OAuth Dynamic Client Registration Metadata Registration">
+      <section anchor="DynRegReg" title="Dynamic Client Registration Metadata Registration">
         <t>
           This specification requests registration of the following client metadata definitions
           in the IANA "OAuth Dynamic Client Registration Metadata" registry
@@ -941,7 +941,7 @@
 
     </references>
 
-    <section title="Example Certificate, JSON Web Key, and Confirmation Method" anchor="example">
+    <section title='Example "cnf" Claim, Certificate and JWK' anchor="example">
       <t>
         For reference, an <spanx style="verb">x5t#S256</spanx> value and the X.509 Certificate from which it was
         calculated are provided in the following example figures. A JWK representation of the certificate's public
@@ -1031,6 +1031,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         individuals contributed ideas, feedback, and wording
         that helped shape this specification:
         Sergey Beryozkin,
+        Ralph Bragg,
         Sophie Bremer,
         Vladimir Dzhuvinov,
         Samuel Erdtman,
@@ -1073,6 +1074,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
             into the IANA Considerations.</t>
           <t>Add CIBA as an informational reference and additional example of an OAuth extension that
             defines an endpoint that utilizes client authentication.</t>
+          <t>Shorten a few of the section titles.</t>
         </list>
       </t>
       <t>
