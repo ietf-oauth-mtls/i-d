@@ -240,7 +240,7 @@
     <section anchor="pki_method" title="PKI Mutual TLS Method">
       <t>
         The PKI (public key infrastructure) method of mutual TLS OAuth client authentication uses
-        a subject distinguished name (DN) and validated certificate chain to identify
+        a subject distinguished name (DN) and validated certificate chain to authenticate
         the client. The TLS handshake is utilized to validate the client's possession
         of the private key corresponding to the public key in the certificate and to
         validate the corresponding certificate chain. The client is successfully authenticated
