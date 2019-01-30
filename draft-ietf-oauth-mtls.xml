@@ -233,7 +233,7 @@
   can locate the client configuration using the client identifier and check the certificate
   presented in the TLS Handshake against the expected credentials for that client.
   The authorization server MUST enforce the
-  binding of a certificate to a specific client as described in either <xref target="pki_method"/> or
+  binding between client and certificate as described in either <xref target="pki_method"/> or
   <xref target="self_signed_method"/> below.
 </t>
 
