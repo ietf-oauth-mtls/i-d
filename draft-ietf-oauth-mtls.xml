@@ -658,6 +658,18 @@
       </section>
     </section>
 
+    <section anchor="Privacy" title="Privacy Considerations">
+      <t>
+        In TLS versions prior to 1.3, the client's certificate is sent unencrypted in the initial handshake and
+        can potentially be used by third parties to monitor, track, and correlate client activity.
+        This is likely of little concern for clients that act on behalf of a significant number of end-users because
+        individual user activity will not be discernible amidst the client activity as a whole.
+        However, clients that act on behalf of a single end-user, such as a native application on a mobile device,
+        should use TLS version 1.3 whenever possible or consider the potential privacy implications of using mutual TLS on
+        earlier versions.
+      </t>
+    </section>
+
     <section anchor="IANA" title="IANA Considerations">
 
       <section anchor="cnfIANA" title="JWT Confirmation Methods Registration">
@@ -1174,6 +1186,8 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
             defines an endpoint that utilizes client authentication.</t>
           <t>Shorten a few of the section titles.</t>
           <t>Add new client metadata values to allow for the use of a SAN in the PKI MTLS client authentication method.</t>
+          <t>Add privacy considerations attempting to discuss the implications of the client cert being sent in
+            the clear in TLS 1.2.</t>
         </list>
       </t>
       <t>
