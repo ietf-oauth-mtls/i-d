@@ -240,11 +240,12 @@
     <section anchor="pki_method" title="PKI Mutual TLS Method">
       <t>
         The PKI (public key infrastructure) method of mutual TLS OAuth client authentication uses
-        a subject distinguished name (DN) and validated certificate chain to authenticate
+        a subject distinguished name (DN) or a subject alternative name (SAN)
+        and validated certificate chain <xref target="RFC5280"/> to authenticate
         the client. The TLS handshake is utilized to validate the client's possession
         of the private key corresponding to the public key in the certificate and to
         validate the corresponding certificate chain. The client is successfully authenticated
-        if the subject information in the certificate matches the expected DN configured or
+        if the subject information in the certificate matches the expected subject configured or
         registered for that particular client
         (note that a predictable treatment of DN values, such as the distinguishedNameMatch
         rule from <xref target="RFC4517"/>, is needed in comparing the
@@ -277,13 +278,41 @@
       <section anchor="client_metadata_pki" title="Client Registration Metadata">
         <t>
           The following metadata
-          parameter is introduced for the
+          parameters are introduced for the
           <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref> in support of
-          the PKI method of binding a certificate to a client:
+          the PKI method of binding a certificate to a client.
+          One of the below metadata parameters is used to indicate the certificate subject value that
+          the authorization server is to expect when authenticating the respective client.
           <list style="hanging">
             <t hangText="tls_client_auth_subject_dn"><vspace/>
               An <xref target="RFC4514"/> string representation of the expected subject distinguished
               name of the certificate, which the OAuth client will use in mutual TLS authentication.
+            </t>
+
+            <t hangText="tls_client_auth_san_dns"><vspace/>
+              A string containing the value of an expected dNSName SAN entry
+              in the certificate, which the OAuth client will use in mutual TLS
+              authentication.
+            </t>
+
+            <t hangText="tls_client_auth_san_uri"><vspace/>
+              A string containing the value of an expected
+              uniformResourceIdentifier SAN entry in the certificate, which
+              the OAuth client will use in mutual TLS authentication.
+            </t>
+
+            <t hangText="tls_client_auth_san_ip"><vspace/>
+              A string representation of an IP address in either dotted decimal
+              notation (for IPv4) or colon-delimited hexadecimal (for IPv6, as
+              defined in <xref target="RFC4291"/> section 2.2) that is expected to be present
+              as an iPAddress SAN entry in the certificate, which the OAuth
+              client will use in mutual TLS authentication.
+            </t>
+
+            <t hangText="tls_client_auth_san_email"><vspace/>
+              A string containing the value of an expected rfc822Name SAN
+              entry in the certificate, which the OAuth client will use in
+              mutual TLS authentication.
             </t>
           </list>
         </t>
@@ -597,12 +626,12 @@
       <section anchor="certspoofing" title="X.509 Certificate Spoofing">
         <t>
           If the PKI method of client authentication is used, an attacker could try to impersonate a client using
-          a certificate with the same subject DN but issued by a different CA, which the authorization server trusts.
+          a certificate with the same subject (DN or SAN) but issued by a different CA, which the authorization server trusts.
           To cope with that threat, the authorization server should only accept as trust anchors
           a limited number of CAs whose certificate issuance policy meets its security requirements.
           There is an assumption then that the client and server agree on the set
           of trust anchors that the server uses to create and validate the
-          certificate chain. Without this assumption the use of a Subject DN
+          certificate chain. Without this assumption the use of a subject
           to identify the client certificate would open the server up to
           certificate spoofing attacks.
         </t>
@@ -775,8 +804,75 @@
             </t>
             <t>
               Client Metadata Description:
-              String value specifying the expected subject distinguished name of the
-              client certificate.
+              String value specifying the expected subject DN of the client certificate.
+            </t>
+            <t>
+              Change Controller: IESG
+            </t>
+            <t>
+              Specification Document(s): <xref target="client_metadata_pki"/> of [[ this specification ]]
+            </t>
+          </list>
+        </t>
+        <t>
+          <list style="symbols">
+            <t>
+              Client Metadata Name: <spanx style="verb">tls_client_auth_san_dns</spanx>
+            </t>
+            <t>
+              Client Metadata Description:
+              String value specifying the expected dNSName SAN entry in the client certificate.
+            </t>
+            <t>
+              Change Controller: IESG
+            </t>
+            <t>
+              Specification Document(s): <xref target="client_metadata_pki"/> of [[ this specification ]]
+            </t>
+          </list>
+        </t>
+        <t>
+          <list style="symbols">
+            <t>
+              Client Metadata Name: <spanx style="verb">tls_client_auth_san_uri</spanx>
+            </t>
+            <t>
+              Client Metadata Description:
+              String value specifying the expected uniformResourceIdentifier SAN entry in the client certificate.
+            </t>
+            <t>
+              Change Controller: IESG
+            </t>
+            <t>
+              Specification Document(s): <xref target="client_metadata_pki"/> of [[ this specification ]]
+            </t>
+          </list>
+        </t>
+        <t>
+          <list style="symbols">
+            <t>
+              Client Metadata Name: <spanx style="verb">tls_client_auth_san_ip</spanx>
+            </t>
+            <t>
+              Client Metadata Description:
+              String value specifying the expected iPAddress SAN entry in the client certificate.
+            </t>
+            <t>
+              Change Controller: IESG
+            </t>
+            <t>
+              Specification Document(s): <xref target="client_metadata_pki"/> of [[ this specification ]]
+            </t>
+          </list>
+        </t>
+        <t>
+          <list style="symbols">
+            <t>
+              Client Metadata Name: <spanx style="verb">tls_client_auth_san_email</spanx>
+            </t>
+            <t>
+              Client Metadata Description:
+              String value specifying the expected rfc822Name SAN entry in the client certificate.
             </t>
             <t>
               Change Controller: IESG
@@ -867,6 +963,7 @@
         </front>
       </reference>
 
+      <?rfc include='reference.RFC.4291'?> <!-- IPv6 -->
       <?rfc include='reference.RFC.4517'?>
       <?rfc include='reference.RFC.7009'?> <!-- revocation -->
       <?rfc include='reference.RFC.7517'?> <!-- JWK -->
@@ -1035,6 +1132,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         Sophie Bremer,
         Vladimir Dzhuvinov,
         Samuel Erdtman,
+        Evan Gilman,
         Leif Johansson,
         Michael Jones,
         Phil Hunt,
@@ -1075,6 +1173,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
           <t>Add CIBA as an informational reference and additional example of an OAuth extension that
             defines an endpoint that utilizes client authentication.</t>
           <t>Shorten a few of the section titles.</t>
+          <t>Add new client metadata values to allow for the use of a SAN in the PKI MTLS client authentication method.</t>
         </list>
       </t>
       <t>
