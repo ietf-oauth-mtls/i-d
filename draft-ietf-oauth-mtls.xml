@@ -527,7 +527,30 @@
 
       </section>
 
-
+    <section anchor="ImplPubClient" title="Public Clients and Certificate Bound Tokens">
+      <t>
+        Mutual TLS OAuth client authentication and certificate bound access tokens
+        can be used independently of each other.
+        Use of certificate bound access tokens without mutual TLS OAuth client authentication, for example,
+        is possible in support of binding access tokens to a TLS client certificate for public clients (those without
+        authentication credentials associated with the <spanx style="verb">client_id</spanx>).
+        The authorization server would configure the TLS stack in the same manner as for the Self-Signed Certificate method
+        such that it does not verify that the certificate presented by the client during the handshake is
+        signed by a trusted CA. Individual instances of a client would create a self-signed
+        certificate for mutual TLS with both the authorization server and resource server. The authorization
+        server would not use the mutual TLS certificate to authenticate the client at the OAuth layer
+        but would bind the issued access token
+        to that certificate, for which the client has proven possession of the corresponding private key.
+        The access token is then bound to the certificate and can only be used by the client
+        possessing the certificate and corresponding private key and utilizing them to negotiate mutual TLS on
+        connections to the resource server.
+        When the authorization server issues a refresh token to such a client, it SHOULD also bind the refresh token
+        to the respective certificate. And check the binding when the refresh token is presented to get new
+        access tokens.
+        The implementation details of the binding the refresh token are at the discretion of the authorization
+        server.
+      </t>
+    </section>
     
     <section anchor="Impl" title="Implementation Considerations">
     <section anchor="ImplAS" title="Authorization Server">
@@ -556,25 +579,6 @@
       The resource server should therefore configure the TLS stack
       in a way that it does not verify whether the certificate presented by the client
       during the handshake is signed by a trusted CA certificate.
-    </t>
-    </section>
-    <section anchor="ImplPubClient" title="Certificate Bound Access Tokens Without Client Authentication">
-    <t>
-    Mutual TLS OAuth client authentication and mutual TLS client certificate bound access tokens
-    can be used independently of each other.
-    Use of certificate bound access tokens without mutual TLS OAuth client authentication, for example,
-    is possible in support of binding access tokens to a TLS client certificate for public clients or clients
-    utilizing other methods of authentication to the authorization server.
-    The authorization server would configure the TLS stack in the same manner as for the Self-Signed Certificate method
-    such that it does not verify that the certificate presented by the client during the handshake is
-    signed by a trusted CA. Individual instances of a client would create a self-signed
-    certificate for mutual TLS with both the authorization server and resource server. The authorization
-    server would not use the mutual TLS certificate to authenticate the client at the OAuth layer
-    but would bind the issued access token
-    to that certificate, which the client has proven possession of the corresponding private key.
-    The access token is then bound to the certificate and can only be used by the client
-    possessing the certificate and corresponding private key and utilizing them to negotiate mutual TLS on
-    connections to the resource server.
     </t>
     </section>
     <section anchor="ImplExp" title="Certificate Bound Access Tokens">
@@ -1188,6 +1192,9 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
           <t>Add new client metadata values to allow for the use of a SAN in the PKI MTLS client authentication method.</t>
           <t>Add privacy considerations attempting to discuss the implications of the client cert being sent in
             the clear in TLS 1.2.</t>
+          <t>Changed the 'Certificate Bound Access Tokens Without Client Authentication' section to
+            'Public Clients and Certificate Bound Tokens' and moved it up to be a top level section
+            while adding discussion of binding refresh tokens for public clients.</t>
         </list>
       </t>
       <t>
