@@ -239,8 +239,9 @@
 
     <section anchor="pki_method" title="PKI Mutual TLS Method">
       <t>
-        The PKI (public key infrastructure) method of mutual TLS OAuth client authentication uses
-        a subject distinguished name (DN) or a subject alternative name (SAN)
+        The PKI (public key infrastructure) method of mutual TLS OAuth client authentication
+        adheres to the way in which X.509 certificates are traditionally used
+        for authentication. It relies on a subject distinguished name (DN) or a subject alternative name (SAN)
         and validated certificate chain <xref target="RFC5280"/> to authenticate
         the client. The TLS handshake is utilized to validate the client's possession
         of the private key corresponding to the public key in the certificate and to
@@ -250,11 +251,11 @@
         (note that a predictable treatment of DN values, such as the distinguishedNameMatch
         rule from <xref target="RFC4517"/>, is needed in comparing the
         certificate's subject DN to the client's registered DN).
-        If and how to check a certificate's revocation status is a deployment decision at the discretion of the authorization server.
-        The PKI method facilitates the way X.509 certificates are traditionally being used
-        for authentication. It also allows the client to rotate its X.509 certificates
-        without the need to modify its respective authentication data at the authorization
-        server by obtaining a new certificate with the same subject DN from a trusted certificate authority (CA).
+        Revocation checking is possible with the PKI method but if and how to check a certificate's
+        revocation status is a deployment decision at the discretion of the authorization server.
+        Clients can rotate their X.509 certificates
+        without the need to modify the respective authentication data at the authorization
+        server by obtaining a new certificate with the same subject from a trusted certificate authority (CA).
       </t>
 
       <section anchor="metadata_auth_value_pki" title="PKI Method Metadata Value">
@@ -1196,6 +1197,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
           <t>Changed the 'Certificate Bound Access Tokens Without Client Authentication' section to
             'Public Clients and Certificate Bound Tokens' and moved it up to be a top level section
             while adding discussion of binding refresh tokens for public clients.</t>
+          <t>Reword/restructure the main PKI method section somewhat to (hopefully) improve readability.</t>
         </list>
       </t>
       <t>
