@@ -325,16 +325,15 @@
       <t>
         This method of mutual TLS OAuth client authentication
         is intended to support client authentication using self-signed certificates.
-        As pre-requisite, the client registers an X.509 certificate or a trusted source
-        for its X.509 certificates (such as the <spanx style="verb">jwks_uri</spanx> defined in <xref target="RFC7591"/>
-        that references a <xref target="RFC7517">JSON Web Key</xref> Set
-        containing the client's certificates and public keys) with
-        the authorization server. During authentication,
+        As pre-requisite, the client registers its X.509 certificates
+        (using <spanx style="verb">jwks</spanx> defined in <xref target="RFC7591"/>) or a trusted source
+        for its X.509 certificates (using <spanx style="verb">jwks_uri</spanx> from <xref target="RFC7591"/>)
+        with the authorization server. During authentication,
         TLS is utilized to validate the client's possession of the private key
         corresponding to the public key presented within the certificate in the respective TLS handshake. In
         contrast to the PKI method, the client's certificate chain is not validated by the server in this case.
-        The client is successfully authenticated if the subject public key info of the
-        certificate matches the subject public key info of one of the certificates
+        The client is successfully authenticated if the
+        certificate that it presented during the handshake matches one of the certificates
         configured or registered for that particular client.
         The Self-Signed Certificate method allows the use of mutual TLS to authenticate clients without
         the need to maintain a PKI. When used in conjunction with a <spanx style="verb">jwks_uri</spanx> for the
@@ -361,17 +360,22 @@
 
       <section anchor="client_metadata_self_signed" title="Client Registration Metadata">
         <t>
-          For the Self-Signed Certificate method of binding a certificate to a client using mutual
+          For the Self-Signed Certificate method of binding a certificate with a client using mutual
           TLS client authentication, the existing
           <spanx style="verb">jwks_uri</spanx> or <spanx style="verb">jwks</spanx>
           metadata parameters from <xref target="RFC7591"/> are used to convey the client's
-          certificates and public keys, where the X.509
-          certificates are represented using the <xref target="RFC7517">JSON Web Key (JWK)</xref>
-          <spanx style="verb">x5c</spanx> parameter.
-          Note that Sec 4.7 of <xref target="RFC7517"/> requires that the key
-          in the first certificate of the <spanx style="verb">x5c</spanx> parameter must match the public
-          key represented by other members of the JWK (e.g. "n" and "e" for RSA,
-          "x" and "y" for EC).
+          certificates via JSON Web Key (JWK) in a JWK Set (JWKS) <xref target="RFC7517"/>.
+          The <spanx style="verb">jwks</spanx> metadata parameter is a
+          JWK Set containing the client's public keys as an array of JWKs while
+          the <spanx style="verb">jwks_uri</spanx> parameter is a URL that references a client's JWK Set.
+          A certificate is represented with the <spanx style="verb">x5c</spanx> parameter of an individual JWK within
+          the set.
+          Note that the members of the JWK representing the public key (e.g. "n" and "e" for RSA,
+          "x" and "y" for EC) are required parameters per <xref target="RFC7518"/> so will be present
+          even though they are not utilized in this context. Also note that
+          that sec 4.7 of <xref target="RFC7517"/> requires that the key
+          in the first certificate of the <spanx style="verb">x5c</spanx> parameter match the public
+          key represented by those other members of the JWK.
         </t>
       </section>
     </section>
@@ -984,6 +988,7 @@
       <?rfc include='reference.RFC.4517'?>
       <?rfc include='reference.RFC.7009'?> <!-- revocation -->
       <?rfc include='reference.RFC.7517'?> <!-- JWK -->
+      <?rfc include='reference.RFC.7518'?> <!-- JWA -->
       <?rfc include='reference.RFC.7519'?> <!-- JWT -->
       <?rfc include='reference.RFC.7591'?> <!-- Dynamic Client Registration -->
       <?rfc include='reference.RFC.7662'?> <!-- introspection -->
@@ -1198,6 +1203,8 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
             'Public Clients and Certificate Bound Tokens' and moved it up to be a top level section
             while adding discussion of binding refresh tokens for public clients.</t>
           <t>Reword/restructure the main PKI method section somewhat to (hopefully) improve readability.</t>
+          <t>Reword/restructure the Self-Signed method section a bit to (hopefully) make it more comprehensible.</t>
+
         </list>
       </t>
       <t>
