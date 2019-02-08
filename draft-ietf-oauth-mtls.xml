@@ -632,6 +632,21 @@
     </section>
 
     <section anchor="Security" title="Security Considerations">
+      <section title="Certificate Thumbprint Binding">
+        <t>
+          The binding between the certificate and access token specified in <xref target="x5t"/> uses
+          a cryptographic hash of the certificate. It relies on the hash function having sufficient
+          preimage and second-preimage resistance so as to make it computationally infeasible to
+          find or create another certificate that produces to the same hash output value.
+          The SHA-256 hash function was used because it meets the aforementioned requirement while being widely available.
+          If, in the future, certificate thumbprints need to be computed using
+          hash function(s) other than SHA-256, it is suggested that additional
+          related JWT confirmation methods members be defined for that purpose
+          and registered in the the IANA "JWT Confirmation Methods" registry
+          <xref target="IANA.JWT.Claims"/>
+          for JWT <spanx style="verb">cnf</spanx> member values.
+        </t>
+      </section>
       <section anchor="TLSV" title="TLS Versions and Best Practices">
         <t>
           In the abstract this document is applicable with any TLS version supporting certificate-based client authentication.
@@ -707,14 +722,6 @@
             <t>Specification Document(s): <xref target="x5t"/> of [[ this specification ]]</t>
           </list>
           <?rfc subcompact="no"?>
-        </t>
-        <t>
-          If, in the future, certificate thumbprints need to be computed using
-          hash functions other than SHA-256, it is suggested that additional
-          related JWT confirmation methods members be defined for that purpose.
-          For example, a new <spanx style="verb">x5t#S512</spanx> (X.509 Certificate Thumbprint
-          using SHA-512) confirmation method member could be defined by registering it in
-          the the IANA "JWT Confirmation Methods" registry.
         </t>
       </section>
       
@@ -1200,7 +1207,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
           <t>A little bit less of that German influence.</t>
           <t>Rework the TLS references a bit and, in the Terminology section, clean up the description
             of what messages are sent and verified in the handshake to do 'mutual TLS'.</t>
-          <t>Move the explanation about "cnf" introspection registration and the hash algorithm agility recommendation
+          <t>Move the explanation about "cnf" introspection registration
             into the IANA Considerations.</t>
           <t>Add CIBA as an informational reference and additional example of an OAuth extension that
             defines an endpoint that utilizes client authentication.</t>
@@ -1215,6 +1222,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
           <t>Reword/restructure the Self-Signed method section a bit to (hopefully) make it more comprehensible.</t>
           <t>Reword the AS and RS Implementation Considerations somewhat to (hopefully) improve readability.</t>
           <t>Clarify that the protected protected resource obtains the client certificate used for mutual TLS from its TLS implementation layer.</t>
+          <t>Add Security Considerations section about the certificate thumbprint binding that includes the hash algorithm agility recommendation.</t>
           <t>Minor editorial updates.</t>
         </list>
       </t>
