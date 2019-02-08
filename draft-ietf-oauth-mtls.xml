@@ -532,7 +532,7 @@
 
       </section>
 
-    <section anchor="ImplPubClient" title="Public Clients and Certificate Bound Tokens">
+    <section anchor="PubClient" title="Public Clients and Certificate Bound Tokens">
       <t>
         Mutual TLS OAuth client authentication and certificate bound access tokens
         can be used independently of each other.
@@ -560,7 +560,7 @@
     <section anchor="Impl" title="Implementation Considerations">
     <section anchor="ImplAS" title="Authorization Server">
     <t>The authorization server needs to set up its TLS configuration appropriately
-    for the binding methods it supports.</t>
+    for the OAuth client authentication methods it supports.</t>
     <t>An authorization server that supports mutual TLS client authentication
     and other client authentication methods in parallel would make mutual TLS
     optional.</t>
@@ -568,6 +568,10 @@
     would configure the TLS stack in such a way that it does not verify whether the
     certificate presented by the client during the handshake is signed by a trusted CA 
     certificate.</t>
+    <t>As described in <xref target="CertificateBoundAccessTokens"/>, the authorization server
+    binds the issued access token to the TLS client certificate, which means that it
+    will only issue certificate-bound tokens for a
+    certificate which the client has proven possession of the corresponding private key.</t>
     <t>The authorization server may also consider hosting the token endpoint,
     and other endpoints requiring client authentication, on
     a separate host name or port in order to prevent unintended impact on the TLS behavior of
@@ -575,18 +579,23 @@
     </section>
     <section anchor="ImplRS" title="Resource Server">
     <t>
-      Since the resource server relies on the authorization server to
-      perform client authentication, there is no need for the resource server to validate
+      OAuth divides the roles and responsibilities such that the resource server relies
+      on the authorization server to perform client authentication and obtain resource owner (end-user)
+      authorization. The resource server makes authorization decisions based on the access token
+      presented by the client but does not directly authenticate the client per se.
+      The the manner in which an access token is bound to the client certificate
+      decouples it from the specific method that the client used to authenticate with the
+      authorization server. Mutual TLS during protected resource access can therefore
+      serve purely as a proof-of-possession mechanism.
+      As such, it is not necessary for the resource server to validate
       the trust chain of the client's certificate in any of the methods
       defined in this document.
-      Mutual TLS is used only as a proof-of-possession mechanism during protected
-      resource access.
       The resource server would therefore configure the TLS stack
       in a way that it does not verify whether the certificate presented by the client
       during the handshake is signed by a trusted CA certificate.
     </t>
     </section>
-    <section anchor="ImplExp" title="Certificate Bound Access Tokens">
+    <section anchor="ImplExp" title="Certificate Expiration and Bound Access Tokens">
       <t>
         As described in <xref target="CertificateBoundAccessTokens"/>,
         an access token is bound to a specific client certificate, which means that
@@ -1204,6 +1213,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
             while adding discussion of binding refresh tokens for public clients.</t>
           <t>Reword/restructure the main PKI method section somewhat to (hopefully) improve readability.</t>
           <t>Reword/restructure the Self-Signed method section a bit to (hopefully) make it more comprehensible.</t>
+          <t>Reword the AS and RS Implementation Considerations somewhat to (hopefully) improve readability.</t>
           <t>Minor editorial updates.</t>
         </list>
       </t>
