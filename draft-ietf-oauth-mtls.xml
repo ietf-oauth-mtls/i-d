@@ -278,11 +278,13 @@
 
       <section anchor="client_metadata_pki" title="Client Registration Metadata">
         <t>
-          The following metadata
+          In order to convey the expected subject of the certificate,
+          the following metadata
           parameters are introduced for the
           <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref> in support of
-          the PKI method of binding a certificate to a client.
-          One of the below metadata parameters is used to indicate the certificate subject value that
+          the PKI method of mutual TLS client authentication.
+          A client using the <spanx style="verb">tls_client_auth</spanx> authentication method MUST use
+          exactly one of the below metadata parameters to indicate the certificate subject value that
           the authorization server is to expect when authenticating the respective client.
           <list style="hanging">
             <t hangText="tls_client_auth_subject_dn"><vspace/>
