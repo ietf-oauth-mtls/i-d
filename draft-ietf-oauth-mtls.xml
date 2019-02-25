@@ -15,7 +15,7 @@
 
 <rfc category="std" docName="draft-ietf-oauth-mtls-13" ipr="trust200902">
   <front>
-    <title abbrev="OAuth Mutual TLS">OAuth 2.0 Mutual TLS Client Authentication and Certificate Bound Access Tokens</title>
+    <title abbrev="OAuth Mutual TLS">OAuth 2.0 Mutual TLS Client Authentication and Certificate-Bound Access&nbsp;Tokens</title>
 
     <author fullname="Brian Campbell" initials="B." surname="Campbell">
       <organization>Ping Identity</organization>
@@ -59,7 +59,7 @@
     <keyword>proof-of-possession</keyword>
     <keyword>proof-of-possession access token</keyword>
     <keyword>key confirmed access token</keyword>
-    <keyword>certificate bound access token</keyword>
+    <keyword>certificate-bound access token</keyword>
     <keyword>client certificate</keyword>
     <keyword>X.509 Client Certificate Authentication</keyword>
     <keyword>key confirmation</keyword>
@@ -70,7 +70,7 @@
 
     <abstract>
 <t>
-  This document describes OAuth client authentication and certificate bound access tokens using
+  This document describes OAuth client authentication and certificate-bound access tokens using
   mutual Transport Layer Security (TLS) authentication with X.509 certificates.
   OAuth clients are provided a mechanism for authentication to the authorization
   server using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI).
@@ -169,7 +169,7 @@
 </t>
 
 <t>
-  Mutual TLS certificate bound access tokens ensure that
+  Mutual TLS certificate-bound access tokens ensure that
   only the party in possession of the
   private key corresponding to the certificate can utilize the token to
   access the associated resources. Such a constraint is
@@ -182,7 +182,7 @@
   by unauthorized parties.
 </t>
 <t>
-  Mutual TLS certificate bound access tokens and mutual TLS client authentication
+  Mutual TLS certificate-bound access tokens and mutual TLS client authentication
   are distinct mechanisms, which are complementary but don't necessarily need to be deployed or used together.
 </t>
     <section anchor="RNC" title="Requirements Notation and Conventions">
@@ -414,7 +414,7 @@
   using an HTTP 401 status code and the <spanx style="verb">invalid_token</spanx> error code.
 </t>
 <t>
-  Metadata to convey server and client capabilities for mutual TLS client certificate bound access tokens
+  Metadata to convey server and client capabilities for mutual TLS client certificate-bound access tokens
   is defined in <xref target="server_metadata_at"/> and <xref target="client_metadata_at"/> respectively.
 </t>
 
@@ -462,7 +462,7 @@
           access token as well as to determine meta-information about the token.
         </t>
         <t>
-          For a mutual TLS client certificate bound access token, the hash of the
+          For a mutual TLS client certificate-bound access token, the hash of the
           certificate to which the token is bound
           is conveyed to the protected resource as meta-information
           in a token introspection response. The hash is conveyed using the same
@@ -510,7 +510,7 @@
             <list style="hanging">
               <t hangText="tls_client_certificate_bound_access_tokens"><vspace/>
                 OPTIONAL.  Boolean value indicating server support for
-                mutual TLS client certificate bound access tokens. If omitted, the
+                mutual TLS client certificate-bound access tokens. If omitted, the
                 default value is <spanx style="verb">false</spanx>.
               </t>
             </list>
@@ -525,7 +525,7 @@
           <list style="hanging">
             <t hangText="tls_client_certificate_bound_access_tokens"><vspace/>
               OPTIONAL. Boolean value used to indicate the client's intention
-              to use mutual TLS client certificate bound access tokens.
+              to use mutual TLS client certificate-bound access tokens.
               If omitted, the default value is <spanx style="verb">false</spanx>.
             </t>
           </list>
@@ -536,9 +536,9 @@
 
     <section anchor="PubClient" title="Public Clients and Certificate Bound Tokens">
       <t>
-        Mutual TLS OAuth client authentication and certificate bound access tokens
+        Mutual TLS OAuth client authentication and certificate-bound access tokens
         can be used independently of each other.
-        Use of certificate bound access tokens without mutual TLS OAuth client authentication, for example,
+        Use of certificate-bound access tokens without mutual TLS OAuth client authentication, for example,
         is possible in support of binding access tokens to a TLS client certificate for public clients (those without
         authentication credentials associated with the <spanx style="verb">client_id</spanx>).
         The authorization server would configure the TLS stack in the same manner as for the Self-Signed Certificate method
@@ -558,14 +558,94 @@
         server.
       </t>
     </section>
-    
+
+    <section anchor="endpointAliases" title="Metadata for Mutual TLS Endpoint Aliases">
+      <t>
+        The process of negotiating client certificate-based mutual TLS involves a TLS server requesting a certificate
+        from the TLS client (the client does not provide one unsolicited). Although a server can be configured
+        such that client certificates are optional, meaning that the connection is allowed to continue when the client
+        does not provide a certificate, the act of a server requesting a certificate can result in undesirable
+        behavior from some clients. This is particularly true of web browsers as TLS clients, which will typically
+        present the end-user with an intrusive certificate selection interface when the server requests a certificate.
+      </t>
+      <t>
+        Authorization servers supporting both clients using mutual TLS and conventional clients MAY chose to
+        isolate the server side mutual TLS behaviour to only clients intending to do mutual TLS, thus
+        avoiding any undesirable effects it might have on conventional clients. The following authorization server
+        metadata parameter is introduced to facilitate such separation:
+      </t>
+      <t>
+        <list style="hanging">
+          <t hangText="mtls_endpoint_aliases">
+            <vspace/>OPTIONAL.
+            A JSON object containing alternative authorization server endpoints that,
+            when present, an OAuth client intending to do mutual TLS
+            uses in preference to the conventional endpoints.
+            The parameter value itself consists of one or more endpoint parameters,
+            such as <spanx style="verb">token_endpoint</spanx>,
+            <spanx style="verb">revocation_endpoint</spanx>,
+            <spanx style="verb">introspection_endpoint</spanx>, etc., conventionally defined for the
+            top-level of authorization server metadata.
+            An OAuth client intending to do mutual TLS
+            (for OAuth client authentication and/or to acquire or use certificate-bound tokens)
+            when making a request directly to the authorization server MUST
+            use the alias URL of the endpoint within the <spanx style="verb">mtls_endpoint_aliases</spanx>, when present,
+            in preference to the endpoint URL of the same name at top-level of metadata.
+            When an endpoint is not present in
+            <spanx style="verb">mtls_endpoint_aliases</spanx>, then the client uses the conventional endpoint URL
+            defined at the top-level of the authorization server metadata. Metadata parameters within
+            <spanx style="verb">mtls_endpoint_aliases</spanx> that do not define
+            endpoints to which an OAuth client makes a direct request have no meaning and SHOULD be ignored.
+          </t>
+        </list>
+
+      </t>
+      <t>
+        Below is an example of an authorization server metatdata document with the
+        <spanx style="verb">mtls_endpoint_aliases</spanx> parameter, which indicates aliases for the
+        token, revocation, and introspection endpoints that an OAuth client intending to do mutual TLS
+        would in preference to the conventional token, revocation, and introspection endpoints.
+        Note that the endpoints in <spanx style="verb">mtls_endpoint_aliases</spanx> use a different
+        host than their conventional counterparts, which allows the authorization server
+        (via SNI or actual distinct hosts) to differentiate its TLS behavior as appropriate.
+
+        <figure title='Example Authorization Server Metadata with Mutual TLS Endpoint Aliases' anchor='as-meta'>
+          <artwork><![CDATA[
+{
+  "issuer": "https://server.example.com",
+  "authorization_endpoint": "https://server.example.com/authz",
+  "token_endpoint": "https://server.example.com/token",
+  "introspection_endpoint": "https://server.example.com/introspect",
+  "revocation_endpoint": "https://server.example.com/revo",
+  "jwks_uri": "https://server.example.com/jwks",
+  "response_types_supported": ["code"],
+  "response_modes_supported": ["fragment","query","form_post"],
+  "grant_types_supported": ["authorization_code", "refresh_token"],
+  "token_endpoint_auth_methods_supported":
+                  ["tls_client_auth","client_secret_basic","none"],
+  "tls_client_certificate_bound_access_tokens": true
+  "mtls_endpoint_aliases": {
+    "token_endpoint": "https://mtls.example.com/token",
+    "revocation_endpoint": "https://mtls.example.com/revo",
+    "introspection_endpoint": "https://mtls.example.com/introspect"
+  }
+}
+]]></artwork>
+        </figure>
+
+
+
+      </t>
+    </section>
+
     <section anchor="Impl" title="Implementation Considerations">
     <section anchor="ImplAS" title="Authorization Server">
     <t>The authorization server needs to set up its TLS configuration appropriately
     for the OAuth client authentication methods it supports.</t>
     <t>An authorization server that supports mutual TLS client authentication
-    and other client authentication methods in parallel would make mutual TLS
-    optional.</t>
+    and other client authentication methods or public clients in parallel would make mutual TLS
+    optional (i.e. allowing a handshake to continue after the server requests a client certificate
+    but the client does not send one).</t>
     <t>In order to support the Self-Signed Certificate method, the authorization server
     would configure the TLS stack in such a way that it does not verify whether the
     certificate presented by the client during the handshake is signed by a trusted CA 
@@ -577,7 +657,10 @@
     <t>The authorization server may also consider hosting the token endpoint,
     and other endpoints requiring client authentication, on
     a separate host name or port in order to prevent unintended impact on the TLS behavior of
-    its other endpoints, e.g. the authorization endpoint.</t>
+    its other endpoints, e.g. the authorization endpoint. As described in <xref target="endpointAliases"/>,
+    it may further isolate any potential impact of the server requesting client certificates by
+    offering a distinct set of endpoints on a separate host or port, which are aliases for
+    the originals that a client intending to do mutual TLS will use in preference to the conventional endpoints.</t>
     </section>
     <section anchor="ImplRS" title="Resource Server">
     <t>
@@ -617,9 +700,9 @@
       endpoint via the implicit grant flow is explicitly out of scope.
       End users interact directly with the authorization endpoint using a web browser
       and the use of client certificates in user's browsers bring operational and
-      usability issues, which make it undesirable to support certificate bound access
+      usability issues, which make it undesirable to support certificate-bound access
       tokens issued in the implicit grant flow. Implementations wanting to employ
-      certificate bound access tokens should utilize grant types
+      certificate-bound access tokens should utilize grant types
       that involve the client making an access token request directly to the token endpoint
       (e.g. the authorization code and refresh token grant types).
     </t>
@@ -676,7 +759,7 @@
           Parsing and validation of X.509 certificates and certificate chains is complex and implementation
           mistakes have previously exposed security vulnerabilities.
           Complexities of validation include (but are not limited to)
-          <xref target="X509Pitfalls"/> <xref target="DangerousCode"/> <xref target="RFC5280"/>:
+          <xref target="CX5P"/> <xref target="DCW"/> <xref target="RFC5280"/>:
         </t>
         <t>
           <list style="symbols">
@@ -707,7 +790,7 @@
 
     <section anchor="IANA" title="IANA Considerations">
 
-      <section anchor="cnfIANA" title="JWT Confirmation Methods Registration">
+      <section title="JWT Confirmation Methods Registration">
         <t>
           This specification requests registration of the following value
           in the IANA "JWT Confirmation Methods" registry
@@ -727,7 +810,7 @@
         </t>
       </section>
       
-      <section anchor="ietf-oauth-discoveryIANA" title="Authorization Server Metadata Registration">
+      <section title="Authorization Server Metadata Registration">
         <t>
           This specification requests registration of the following value
           in the IANA "OAuth Authorization Server Metadata" registry
@@ -737,16 +820,27 @@
           <?rfc subcompact="yes"?>
           <list style='symbols'>
             <t>Metadata Name: <spanx style="verb">tls_client_certificate_bound_access_tokens</spanx></t>
-            <t>Metadata Description: Indicates authorization server support for mutual TLS client certificate bound
+            <t>Metadata Description: Indicates authorization server support for mutual TLS client certificate-bound
               access tokens.</t>
             <t>Change Controller: IESG</t>
             <t>Specification Document(s): <xref target="server_metadata_at"/> of [[ this specification ]]</t>
           </list>
           <?rfc subcompact="no"?>
         </t>
+        <t>
+          <?rfc subcompact="yes"?>
+          <list style='symbols'>
+            <t>Metadata Name: <spanx style="verb">mtls_endpoint_aliases</spanx></t>
+            <t>Metadata Description: JSON object containing alternative authorization server endpoints, which a client
+              intending to do mutual TLS will use in preference to the conventional endpoints.</t>
+            <t>Change Controller: IESG</t>
+            <t>Specification Document(s): <xref target="endpointAliases"/> of [[ this specification ]]</t>
+          </list>
+          <?rfc subcompact="no"?>
+        </t>
       </section>
 
-      <section anchor="tls_client_authIANA" title="Token Endpoint Authentication Method Registration">
+      <section title="Token Endpoint Authentication Method Registration">
         <t>
           This specification requests registration of the following value
           in the IANA "OAuth Token Endpoint Authentication Methods" registry
@@ -772,7 +866,7 @@
         </t>
       </section>
 
-      <section anchor="intorspectIANA" title="Token Introspection Response Registration">
+      <section title="Token Introspection Response Registration">
         <t>
           <xref target="RFC7800">Proof-of-Possession Key Semantics for JSON Web Tokens</xref> defined the
           <spanx style="verb">cnf</spanx> (confirmation) claim, which enables
@@ -810,7 +904,7 @@
       </section>
 
 
-      <section anchor="DynRegReg" title="Dynamic Client Registration Metadata Registration">
+      <section title="Dynamic Client Registration Metadata Registration">
         <t>
           This specification requests registration of the following client metadata definitions
           in the IANA "OAuth Dynamic Client Registration Metadata" registry
@@ -825,7 +919,7 @@
             </t>
             <t>
               Client Metadata Description:
-              Indicates the client's intention to use mutual TLS client certificate bound
+              Indicates the client's intention to use mutual TLS client certificate-bound
               access tokens.
             </t>
             <t>
@@ -1017,7 +1111,7 @@
 
       <?rfc include='http://xml2rfc.tools.ietf.org/public/rfc/bibxml3/reference.I-D.draft-ietf-oauth-token-binding-06.xml'?>
 
-      <reference anchor="X509Pitfalls" target="https://www.cryptologie.net/article/374/common-x509-certificate-validationcreation-pitfalls">
+      <reference anchor="CX5P" target="https://www.cryptologie.net/article/374/common-x509-certificate-validationcreation-pitfalls">
         <front>
           <title>Common x509 certificate validation/creation pitfalls</title>
           <author fullname="David Wong" initials="D." surname="Wong"><organization/></author>
@@ -1025,7 +1119,7 @@
         </front>
       </reference>
 
-      <reference anchor="DangerousCode" target="http://www.cs.utexas.edu/~shmat/shmat_ccs12.pdf">
+      <reference anchor="DCW" target="http://www.cs.utexas.edu/~shmat/shmat_ccs12.pdf">
         <front>
           <title>The Most Dangerous Code in the World: Validating SSL Certificates in Non-Browser Software</title>
           <author fullname="Martin Georgiev" initials="M." surname="Georgiev"><organization/></author>
@@ -1125,7 +1219,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         <xref target="I-D.ietf-oauth-token-binding">OAuth 2.0 Token Binding</xref>
         enables the application of Token Binding to the various artifacts and tokens employed throughout OAuth.
         That includes binding of an access token to a Token Binding key, which bears some similarities in motivation
-        and design to the mutual TLS client certificate bound access tokens defined in this document.
+        and design to the mutual TLS client certificate-bound access tokens defined in this document.
         Both documents define what is often called a proof-of-possession security mechanism
         for access tokens, whereby a client must demonstrate possession of cryptographic keying
         material when accessing a protected resource. The details differ somewhat between the two documents but both
@@ -1225,6 +1319,8 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
           <t>Reword the AS and RS Implementation Considerations somewhat to (hopefully) improve readability.</t>
           <t>Clarify that the protected protected resource obtains the client certificate used for mutual TLS from its TLS implementation layer.</t>
           <t>Add Security Considerations section about the certificate thumbprint binding that includes the hash algorithm agility recommendation.</t>
+          <t>Add an "mtls_endpoint_aliases" AS metadata parameter that is a JSON object containing alternative authorization
+            server endpoints, which a client intending to do mutual TLS will use in preference to the conventional endpoints.</t>
           <t>Minor editorial updates.</t>
         </list>
       </t>
@@ -1291,7 +1387,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
             suggested https://mailarchive.ietf.org/arch/msg/oauth/V26070X-6OtbVSeUz_7W2k94vCo</t>
           <t>Changed the title to be more descriptive</t>
           <t>Move the Security Considerations section to before the IANA Considerations</t>
-          <t>Elaborated on certificate bound access tokens a bit more in the Abstract</t>
+          <t>Elaborated on certificate-bound access tokens a bit more in the Abstract</t>
           <t>Update draft-ietf-oauth-discovery reference to -08</t>
         </list>
       </t>
@@ -1314,7 +1410,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
             that utilize client authentication as discussed in
             https://mailarchive.ietf.org/arch/msg/oauth/bZ6mft0G7D3ccebhOxnEYUv4puI</t>
           <t>Reorganize the document somewhat in an attempt to more clearly make a distinction between
-            mTLS client authentication and certificate bound access tokens as well as a more clear
+            mTLS client authentication and certificate-bound access tokens as well as a more clear
             delineation between the two (PKI/Public key) methods for client authentication</t>
           <t>Editorial fixes and clarifications</t>
         </list>
@@ -1329,7 +1425,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
             introduced "pub_key_tls_client_auth" for the Public Key method</t>
           <t>Added implementation considerations, mainly regarding TLS stack configuration
           and trust chain validation, as well as how to to do binding of access tokens to a TLS client
-          certificate for public clients, and considerations around certificate bound access tokens</t>
+          certificate for public clients, and considerations around certificate-bound access tokens</t>
           <t>Added new section to security considerations on cert spoofing</t>
           <t>Add text suggesting that a new cnf member be defined in the future,
             if hash function(s) other than SHA-256 need to be used for certificate thumbprints</t>
