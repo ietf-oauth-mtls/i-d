@@ -1323,7 +1323,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
           <t>Reword/restructure the main PKI method section somewhat to (hopefully) improve readability.</t>
           <t>Reword/restructure the Self-Signed method section a bit to (hopefully) make it more comprehensible.</t>
           <t>Reword the AS and RS Implementation Considerations somewhat to (hopefully) improve readability.</t>
-          <t>Clarify that the protected protected resource obtains the client certificate used for mutual TLS from its TLS implementation layer.</t>
+          <t>Clarify that the protected resource obtains the client certificate used for mutual TLS from its TLS implementation layer.</t>
           <t>Add Security Considerations section about the certificate thumbprint binding that includes the hash algorithm agility recommendation.</t>
           <t>Add an "mtls_endpoint_aliases" AS metadata parameter that is a JSON object containing alternative authorization
             server endpoints, which a client intending to do mutual TLS will use in preference to the conventional endpoints.</t>
