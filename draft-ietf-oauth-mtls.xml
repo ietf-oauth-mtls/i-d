@@ -241,12 +241,14 @@
       <t>
         The PKI (public key infrastructure) method of mutual TLS OAuth client authentication
         adheres to the way in which X.509 certificates are traditionally used
-        for authentication. It relies on a subject distinguished name (DN) or a subject alternative name (SAN)
-        and validated certificate chain <xref target="RFC5280"/> to authenticate
-        the client. The TLS handshake is utilized to validate the client's possession
+        for authentication. It relies on a validated certificate chain <xref target="RFC5280"/>
+        and a single subject distinguished name (DN) or a single
+        subject alternative name (SAN) to authenticate the client.
+        Only one subject name value of any type is used for each client.
+        The TLS handshake is utilized to validate the client's possession
         of the private key corresponding to the public key in the certificate and to
         validate the corresponding certificate chain. The client is successfully authenticated
-        if the subject information in the certificate matches the expected subject configured or
+        if the subject information in the certificate matches the single expected subject configured or
         registered for that particular client
         (note that a predictable treatment of DN values, such as the distinguishedNameMatch
         rule from <xref target="RFC4517"/>, is needed in comparing the
@@ -1297,7 +1299,8 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
       <t>
         draft-ietf-oauth-mtls-14
         <list style='symbols'>
-          <t></t>
+          <t>Editorial clarifications around there being only a single subject registered/configured per client
+            for the tls_client_auth method.</t>
         </list>
       </t>
       <t>
