@@ -70,7 +70,7 @@
 
     <abstract>
 <t>
-  This document describes OAuth client authentication and certificate-bound access tokens using
+  This document describes OAuth client authentication and certificate-bound access and refresh tokens using
   mutual Transport Layer Security (TLS) authentication with X.509 certificates.
   OAuth clients are provided a mechanism for authentication to the authorization
   server using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI).
@@ -386,7 +386,7 @@
 
     </section>
 
-    <section anchor="CertificateBoundAccessTokens" title="Mutual TLS Client Certificate Bound Access Tokens">
+    <section anchor="CertificateBoundAccessTokens" title="Mutual TLS Client Certificate-Bound Access Tokens">
 <t>
   When mutual TLS is used by the client on the connection to the token endpoint,
   the authorization server is able to bind the issued access token to the client certificate.
@@ -483,7 +483,7 @@
           confirmation method.
         </t>
 
-        <figure anchor="eg_x5ts256intro" title="Example Introspection Response for a Certificate Bound Access Token">
+        <figure anchor="eg_x5ts256intro" title="Example Introspection Response for a Certificate-Bound Access Token">
           <artwork><![CDATA[
 
   HTTP/1.1 200 OK
@@ -536,7 +536,7 @@
 
       </section>
 
-    <section anchor="PubClient" title="Public Clients and Certificate Bound Tokens">
+    <section anchor="PubClient" title="Public Clients and Certificate-Bound Tokens">
       <t>
         Mutual TLS OAuth client authentication and certificate-bound access tokens
         can be used independently of each other.
@@ -719,6 +719,17 @@
     </section>
 
     <section anchor="Security" title="Security Considerations">
+      <section title="Certificate-Bound Refresh Tokens">
+        <t>The OAuth 2.0 Authorization Framework <xref target="RFC6749"/> requires that an authorization server
+          bind refresh tokens to the client to which they where issued and that confidential clients
+          (those having established authentication credentials with the authorization server) authenticate to
+          the AS when presenting a refresh token. As a result, refresh tokens are indirectly certificate-bound when
+          issued to clients utilizing the <spanx style="verb">tls_client_auth</spanx> or
+          <spanx style="verb">self_signed_tls_client_auth</spanx> methods of client authentication.
+          <xref target="PubClient"/> describes certificate-bound refresh tokens issued to public clients (those without
+          authentication credentials associated with the <spanx style="verb">client_id</spanx>).
+        </t>
+      </section>
       <section title="Certificate Thumbprint Binding">
         <t>
           The binding between the certificate and access token specified in <xref target="x5t"/> uses
@@ -1239,7 +1250,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         are infeasible. 
         Mutual TLS, on the other hand, has been around for some time and enjoys
         widespread support in web servers and development platforms.  As a consequence, OAuth 2.0 Mutual TLS
-        Client Authentication and Certificate Bound Access Tokens can be
+        Client Authentication and Certificate-Bound Access Tokens can be
         built and deployed now using existing platforms and tools.
         In the future, the two specifications are likely to be
         deployed in parallel for solving similar problems in different environments.
@@ -1263,6 +1274,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         serving as Security Area Directors.  Additionally, the following
         individuals contributed ideas, feedback, and wording
         that helped shape this specification:
+        Vittorio Bertocci,
         Sergey Beryozkin,
         Ralph Bragg,
         Sophie Bremer,
@@ -1301,6 +1313,9 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         <list style='symbols'>
           <t>Editorial clarifications around there being only a single subject registered/configured per client
             for the tls_client_auth method.</t>
+          <t>Add a brief explanation about how, with tls_client_auth and self_signed_tls_client_auth,
+            refresh tokens are certificate-bound indirectly via the client authentication.</t>
+          <t>Add mention of refresh tokens in the abstract.</t>
         </list>
       </t>
       <t>
@@ -1321,7 +1336,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
           <t>Add privacy considerations attempting to discuss the implications of the client cert being sent in
             the clear in TLS 1.2.</t>
           <t>Changed the 'Certificate Bound Access Tokens Without Client Authentication' section to
-            'Public Clients and Certificate Bound Tokens' and moved it up to be a top level section
+            'Public Clients and Certificate-Bound Tokens' and moved it up to be a top level section
             while adding discussion of binding refresh tokens for public clients.</t>
           <t>Reword/restructure the main PKI method section somewhat to (hopefully) improve readability.</t>
           <t>Reword/restructure the Self-Signed method section a bit to (hopefully) make it more comprehensible.</t>
