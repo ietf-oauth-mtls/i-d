@@ -440,7 +440,10 @@
   </t>
   <t>
     The following is an example of a JWT payload containing an <spanx style="verb">x5t#S256</spanx> certificate thumbprint
-    confirmation method.
+    confirmation method. The new JWT content introduced by this specification is the <spanx style="verb">cnf</spanx>
+    confirmation method claim at the bottom of the example that has
+    the <spanx style="verb">x5t#S256</spanx> confirmation method member containing the value that is the hash
+    of the client certificate to which the access token is bound.
   </t>
 
   <figure anchor="eg_x5ts256jwt" title="Example JWT Claims Set with an X.509 Certificate Thumbprint Confirmation Method">
@@ -483,7 +486,10 @@
         <t>
           The following is an example of an introspection response for an active token with
           an <spanx style="verb">x5t#S256</spanx> certificate thumbprint
-          confirmation method.
+          confirmation method. The new introspection response content introduced by this specification is the <spanx style="verb">cnf</spanx>
+          confirmation method at the bottom of the example that has
+          the <spanx style="verb">x5t#S256</spanx> confirmation method member containing the value that is the hash
+          of the client certificate to which the access token is bound.
         </t>
 
         <figure anchor="eg_x5ts256intro" title="Example Introspection Response for a Certificate-Bound Access Token">
