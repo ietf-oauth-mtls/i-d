@@ -329,8 +329,8 @@
       <t>
         This method of mutual TLS OAuth client authentication
         is intended to support client authentication using self-signed certificates.
-        As pre-requisite, the client registers its X.509 certificates
-        (using <spanx style="verb">jwks</spanx> defined in <xref target="RFC7591"/>) or a trusted source
+        As a prerequisite, the client registers its X.509 certificates
+        (using <spanx style="verb">jwks</spanx> defined in <xref target="RFC7591"/>) or a reference to a trusted source
         for its X.509 certificates (using <spanx style="verb">jwks_uri</spanx> from <xref target="RFC7591"/>)
         with the authorization server. During authentication,
         TLS is utilized to validate the client's possession of the private key
@@ -377,7 +377,7 @@
           Note that the members of the JWK representing the public key (e.g. "n" and "e" for RSA,
           "x" and "y" for EC) are required parameters per <xref target="RFC7518"/> so will be present
           even though they are not utilized in this context. Also note that
-          that sec 4.7 of <xref target="RFC7517"/> requires that the key
+          that Section 4.7 of <xref target="RFC7517"/> requires that the key
           in the first certificate of the <spanx style="verb">x5c</spanx> parameter match the public
           key represented by those other members of the JWK.
         </t>
@@ -431,7 +431,7 @@
     this specification defines the new <xref target="RFC7800">JWT Confirmation Method</xref>
     member <spanx style="verb">x5t#S256</spanx> for the X.509 Certificate SHA-256 Thumbprint.
     The value of the <spanx style="verb">x5t#S256</spanx> member is a base64url-encoded <xref target="RFC4648"/>
-    SHA-256 <xref target="SHS"/> hash (a.k.a. thumbprint, fingerprint or digest) of the DER encoding of the X.509 certificate
+    SHA-256 <xref target="SHS"/> hash (a.k.a. thumbprint, fingerprint or digest) of the DER encoding <xref target="X690"/> of the X.509 certificate
     <xref target="RFC5280"/>. The base64url-encoded value MUST omit all trailing pad '=' characters
     and MUST NOT include any line breaks, whitespace, or other additional characters.
   </t>
@@ -603,7 +603,7 @@
 
       </t>
       <t>
-        Below is an example of an authorization server metatdata document with the
+        Below is an example of an authorization server metadata document with the
         <spanx style="verb">mtls_endpoint_aliases</spanx> parameter, which indicates aliases for the
         token, revocation, and introspection endpoints that an OAuth client intending to do mutual TLS
         would in preference to the conventional token, revocation, and introspection endpoints.
@@ -670,7 +670,7 @@
       on the authorization server to perform client authentication and obtain resource owner (end-user)
       authorization. The resource server makes authorization decisions based on the access token
       presented by the client but does not directly authenticate the client per se.
-      The the manner in which an access token is bound to the client certificate
+      The manner in which an access token is bound to the client certificate
       decouples it from the specific method that the client used to authenticate with the
       authorization server. Mutual TLS during protected resource access can therefore
       serve purely as a proof-of-possession mechanism.
@@ -740,7 +740,7 @@
           If, in the future, certificate thumbprints need to be computed using
           hash function(s) other than SHA-256, it is suggested that additional
           related JWT confirmation methods members be defined for that purpose
-          and registered in the the IANA "JWT Confirmation Methods" registry
+          and registered in the IANA "JWT Confirmation Methods" registry
           <xref target="IANA.JWT.Claims"/>
           for JWT <spanx style="verb">cnf</spanx> member values.
         </t>
@@ -1087,6 +1087,23 @@
         <seriesInfo name="FIPS" value="PUB 180-4" />
         <format target="http://csrc.nist.gov/publications/fips/fips180-4/fips-180-4.pdf" type="PDF" />
       </reference>
+
+      <reference anchor="X690">
+        <front>
+            <title>
+                ASN.1 encoding rules: Specification of basic encoding Rules (BER),
+                Canonical encoding rules (CER) and Distinguished encoding rules (DER)
+            </title>
+            <author>
+                <organization>
+                    International Telephone and Telegraph Consultative Committee
+                </organization>
+            </author>
+            <date month="July" year="2015"/>
+        </front>
+        <seriesInfo name="CCITT" value="Recommendation X.690"/>
+      </reference>
+
     </references>
 
     <references title="Informative References">
@@ -1188,8 +1205,9 @@
     <section title='Example "cnf" Claim, Certificate and JWK' anchor="example">
       <t>
         For reference, an <spanx style="verb">x5t#S256</spanx> value and the X.509 Certificate from which it was
-        calculated are provided in the following example figures. A JWK representation of the certificate's public
-        key along with the <spanx style="verb">x5c</spanx> member is also provided.
+        calculated are provided in the following examples, <xref target="cnf"/> and <xref target="pem"/> respectively.
+        A JWK representation of the certificate's public
+        key along with the <spanx style="verb">x5c</spanx> member is also provided in <xref target="jwk"/>.
 
         <figure title="x5t#S256 Confirmation Claim" anchor="cnf">
           <artwork><![CDATA["cnf":{"x5t#S256":"A4DtL2JmUMhAsvJj5tKyn64SqzmuXbMrJa0n761y5v0"}
@@ -1270,7 +1288,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
       <t>
         This specification was developed within the OAuth Working Group
         under the chairmanship of Hannes Tschofenig
-        and Rifaat Shekh-Yusef with Eric Rescorla and Benjamin Kaduk
+        and Rifaat Shekh-Yusef with Eric Rescorla, Benjamin Kaduk, and Roman Danyliw
         serving as Security Area Directors.  Additionally, the following
         individuals contributed ideas, feedback, and wording
         that helped shape this specification:
@@ -1278,6 +1296,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         Sergey Beryozkin,
         Ralph Bragg,
         Sophie Bremer,
+        Roman Danyliw,
         Vladimir Dzhuvinov,
         Samuel Erdtman,
         Evan Gilman,
@@ -1311,7 +1330,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
       <t>
         draft-ietf-oauth-mtls-15
         <list style='symbols'>
-          <t></t>
+          <t>Editorial updates from second AD review.</t>
         </list>
       </t>
       <t>
@@ -1408,7 +1427,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         draft-ietf-oauth-mtls-06
         <list style='symbols'>
           <t>Add an appendix section describing the relationship of this document to OAuth Token Binding as
-            requested during the the Singapore meeting
+            requested during the Singapore meeting
             https://datatracker.ietf.org/doc/minutes-100-oauth/</t>
           <t>Add an explicit note that the implicit flow is not supported for obtaining certificate
             bound access tokens as discussed at the Singapore meeting
