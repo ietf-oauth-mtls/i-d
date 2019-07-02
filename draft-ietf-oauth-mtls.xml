@@ -235,6 +235,9 @@
   The authorization server MUST enforce the
   binding between client and certificate as described in either <xref target="pki_method"/> or
   <xref target="self_signed_method"/> below.
+  If the presented certificate doesn't match that which is expected for the given <spanx style='verb'>client_id</spanx>,
+  the authorization server returns a normal OAuth 2.0 error response per <xref target="RFC6749"> Section 5.2 of RFC6749</xref>
+  with the <spanx style='verb'>invalid_client</spanx> error code to indicate failed client authentication.
 </t>
 
     <section anchor="pki_method" title="PKI Mutual TLS Method">
