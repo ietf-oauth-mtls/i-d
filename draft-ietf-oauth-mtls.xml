@@ -185,6 +185,19 @@
   Mutual TLS certificate-bound access tokens and mutual TLS client authentication
   are distinct mechanisms, which are complementary but don't necessarily need to be deployed or used together.
 </t>
+<t>
+  Additional client metadata parameters are introduced by this document in support of
+  certificate-bound access tokens and mutual TLS client authentication.
+  The authorization server can obtain client metadata via the
+  <xref target="RFC7591">Dynamic Client Registration Protocol</xref>,
+  which defines mechanisms for dynamically registering
+  OAuth 2.0 client metadata with authorization servers.
+  Also the metadata defined by RFC7591, and registered extensions to
+  it, imply a general data model for clients that is useful for
+  authorization server implementations even when the Dynamic Client
+  Registration Protocol isn't in play. Such implementations will typically have
+  some sort of user interface available for managing client configuration.
+</t>
     <section anchor="RNC" title="Requirements Notation and Conventions">
 <t>
   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
