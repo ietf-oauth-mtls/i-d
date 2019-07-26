@@ -743,7 +743,7 @@
     <section anchor="Security" title="Security Considerations">
       <section title="Certificate-Bound Refresh Tokens">
         <t>The OAuth 2.0 Authorization Framework <xref target="RFC6749"/> requires that an authorization server
-          bind refresh tokens to the client to which they where issued and that confidential clients
+          bind refresh tokens to the client to which they were issued and that confidential clients
           (those having established authentication credentials with the authorization server) authenticate to
           the AS when presenting a refresh token. As a result, refresh tokens are indirectly certificate-bound when
           issued to clients utilizing the <spanx style="verb">tls_client_auth</spanx> or
@@ -1336,6 +1336,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         Sascha Preibisch,
         Eric Rescorla,
         Justin Richer,
+        Vincent Roca,
         Filip Skokan,
         Dave Tonge,
         and
@@ -1352,7 +1353,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
       <t>
         draft-ietf-oauth-mtls-16
         <list style='symbols'>
-          <t></t>
+          <t>Editorial updates from last call review.</t>
         </list>
       </t>
       <t>
