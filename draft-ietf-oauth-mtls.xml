@@ -137,7 +137,7 @@
     <t>
       The protected resource validates the access token in order to authorize the request.
       In some cases, such as when the token is self-contained and cryptographically secured,
-      the validation can be done locally by the protected resource.  While other cases require
+      the validation can be done locally by the protected resource.  Other cases require
       that the protected resource call out to the authorization server to determine the state
       of the token and obtain meta-information about it.
     </t>
@@ -145,8 +145,8 @@
 </t>
 <t>
   Layering on the abstract flow above,
-  this document standardizes enhanced security options for OAuth 2.0 utilizing client certificate based mutual TLS.
-  <xref target="mtlsca"/> provides options for authenticating the request in step (A). While step (C) is supported
+  this document standardizes enhanced security options for OAuth 2.0 utilizing client-certificate-based mutual TLS.
+  <xref target="mtlsca"/> provides options for authenticating the request in step (A). Step (C) is supported
   with semantics to express the binding of the token to the client certificate for both local and remote processing
   in <xref target="x5t"/> and <xref target="introspect"/> respectively. This ensures that, as
   described in <xref target="CertificateBoundAccessTokens"/>, protected resource
@@ -210,7 +210,8 @@
 
     <section anchor="Terminology" title="Terminology">
 <t>
-  Throughout this document the term "mutual TLS" refers to the process whereby a client presents its X.509 certificate
+  Throughout this document the term "mutual TLS" refers to the process whereby, in addition to the normal TLS
+  server authentication with a certificate, a client presents its X.509 certificate
   and proves possession of the corresponding private key to a server when negotiating a TLS session.
 
   In contemporary versions of TLS <xref target="RFC8446"/> <xref target="RFC5246"/> this requires that the client send
@@ -528,7 +529,7 @@
 
       <section anchor="server_metadata_at" title="Authorization Server Metadata">
           <t>This document introduces the following new authorization server
-            metadata parameter to signal the server's capability to issue certificate
+            metadata <xref target="RFC8414"/> parameter to signal the server's capability to issue certificate
             bound access tokens:
 
             <list style="hanging">
@@ -631,7 +632,7 @@
         would in preference to the conventional token, revocation, and introspection endpoints.
         Note that the endpoints in <spanx style="verb">mtls_endpoint_aliases</spanx> use a different
         host than their conventional counterparts, which allows the authorization server
-        (via SNI or actual distinct hosts) to differentiate its TLS behavior as appropriate.
+        (via TLS <spanx style="verb">server_name</spanx> extension <xref target="RFC6066"/> or actual distinct hosts) to differentiate its TLS behavior as appropriate.
 
         <figure title='Example Authorization Server Metadata with Mutual TLS Endpoint Aliases' anchor='as-meta'>
           <artwork><![CDATA[
@@ -782,7 +783,7 @@
           a certificate with the same subject (DN or SAN) but issued by a different CA, which the authorization server trusts.
           To cope with that threat, the authorization server SHOULD only accept as trust anchors
           a limited number of CAs whose certificate issuance policy meets its security requirements.
-          There is an assumption then that the client and server agree on the set
+          There is an assumption then that the client and server agree out of band on the set
           of trust anchors that the server uses to create and validate the
           certificate chain. Without this assumption the use of a subject
           to identify the client certificate would open the server up to
@@ -847,7 +848,7 @@
       
       <section title="Authorization Server Metadata Registration">
         <t>
-          This specification requests registration of the following value
+          This specification requests registration of the following values
           in the IANA "OAuth Authorization Server Metadata" registry
           <xref target="IANA.OAuth.Parameters"/> established by <xref target="RFC8414"/>.
         </t>
@@ -877,7 +878,7 @@
 
       <section title="Token Endpoint Authentication Method Registration">
         <t>
-          This specification requests registration of the following value
+          This specification requests registration of the following values
           in the IANA "OAuth Token Endpoint Authentication Methods" registry
           <xref target="IANA.OAuth.Parameters"/> established by <xref target="RFC7591"/>.
         </t>
@@ -1065,8 +1066,14 @@
       <?rfc include='reference.RFC.5280'?> <!-- X.509 Public Key Infrastructure Certificate ... -->
       <?rfc include='reference.RFC.6749'?> <!-- OAuth 2.0 Authorization Framework -->
       <?rfc include='reference.RFC.6750'?> <!-- OAuth 2.0 Authorization Framework: Bearer Token Usage -->
-
+      <?rfc include='reference.RFC.7517'?> <!-- JWK -->
+      <?rfc include='reference.RFC.7519'?> <!-- JWT -->
+      <?rfc include='reference.RFC.7591'?> <!-- Dynamic Client Registration -->
+      <?rfc include='reference.RFC.7662'?> <!-- introspection -->
       <?rfc include='reference.RFC.7800'?>
+      <?rfc include='reference.RFC.8174'?>
+
+      <?rfc include='reference.RFC.8414'?> <!-- OAuth AS metadata -->
 
       <?rfc include='reference.RFC.8446'?> <!-- TLS 1.3 -->
 
@@ -1150,14 +1157,9 @@
 
       <?rfc include='reference.RFC.4291'?> <!-- IPv6 -->
       <?rfc include='reference.RFC.4517'?>
+      <?rfc include='reference.RFC.6066'?>
       <?rfc include='reference.RFC.7009'?> <!-- revocation -->
-      <?rfc include='reference.RFC.7517'?> <!-- JWK -->
       <?rfc include='reference.RFC.7518'?> <!-- JWA -->
-      <?rfc include='reference.RFC.7519'?> <!-- JWT -->
-      <?rfc include='reference.RFC.7591'?> <!-- Dynamic Client Registration -->
-      <?rfc include='reference.RFC.7662'?> <!-- introspection -->
-      <?rfc include='reference.RFC.8174'?>
-      <?rfc include='reference.RFC.8414'?> <!-- OAuth AS metadata -->
 
 
 
@@ -1353,7 +1355,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
       <t>
         draft-ietf-oauth-mtls-17
         <list style='symbols'>
-          <t></t>
+          <t>Editorial updates from IESG ballot position comments.</t>
         </list>
       </t>
       <t>
