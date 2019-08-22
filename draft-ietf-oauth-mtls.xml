@@ -757,7 +757,7 @@
         <t>
           The binding between the certificate and access token specified in <xref target="x5t"/> uses
           a cryptographic hash of the certificate. It relies on the hash function having sufficient
-          preimage and second-preimage resistance so as to make it computationally infeasible to
+          second-preimage resistance so as to make it computationally infeasible to
           find or create another certificate that produces to the same hash output value.
           The SHA-256 hash function was used because it meets the aforementioned requirement while being widely available.
           If, in the future, certificate thumbprints need to be computed using
