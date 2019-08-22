@@ -15,7 +15,7 @@
 
 <rfc category="std" docName="draft-ietf-oauth-mtls-17" ipr="trust200902">
   <front>
-    <title abbrev="OAuth Mutual TLS">OAuth 2.0 Mutual TLS Client Authentication and Certificate-Bound Access&nbsp;Tokens</title>
+    <title abbrev="OAuth Mutual TLS">OAuth 2.0 Mutual-TLS Client Authentication and Certificate-Bound Access&nbsp;Tokens</title>
 
     <author fullname="Brian Campbell" initials="B." surname="Campbell">
       <organization>Ping Identity</organization>
@@ -75,7 +75,7 @@
   OAuth clients are provided a mechanism for authentication to the authorization
   server using mutual TLS, based on either self-signed certificates or public key infrastructure (PKI).
   OAuth authorization servers are provided a mechanism for binding access tokens to a client's
-  mutual TLS certificate, and OAuth protected resources are provided a method for ensuring
+  mutual-TLS certificate, and OAuth protected resources are provided a method for ensuring
   that such an access token presented to it was issued to the client presenting the token.
 </t>
     </abstract>
@@ -159,7 +159,7 @@
   allows for definition and use of additional client authentication mechanisms
   when interacting directly with the authorization server.
   This document describes an additional mechanism of client authentication utilizing
-  mutual TLS certificate-based authentication, which provides
+  mutual-TLS certificate-based authentication, which provides
   better security characteristics than shared secrets.
   While <xref target="RFC6749"/> documents client authentication for requests to the token endpoint,
   extensions to OAuth 2.0 (such as <xref target="RFC7662">Introspection</xref>,
@@ -169,7 +169,7 @@
 </t>
 
 <t>
-  Mutual TLS certificate-bound access tokens ensure that
+  Mutual-TLS certificate-bound access tokens ensure that
   only the party in possession of the
   private key corresponding to the certificate can utilize the token to
   access the associated resources. Such a constraint is
@@ -182,12 +182,12 @@
   by unauthorized parties.
 </t>
 <t>
-  Mutual TLS certificate-bound access tokens and mutual TLS client authentication
+  Mutual-TLS certificate-bound access tokens and mutual-TLS client authentication
   are distinct mechanisms, which are complementary but don't necessarily need to be deployed or used together.
 </t>
 <t>
   Additional client metadata parameters are introduced by this document in support of
-  certificate-bound access tokens and mutual TLS client authentication.
+  certificate-bound access tokens and mutual-TLS client authentication.
   The authorization server can obtain client metadata via the
   <xref target="RFC7591">Dynamic Client Registration Protocol</xref>,
   which defines mechanisms for dynamically registering
@@ -225,7 +225,7 @@
 <t>
   This section defines, as an extension of
   <xref target="RFC6749">OAuth 2.0, Section 2.3</xref>, two distinct methods of using
-  mutual TLS X.509 client certificates as client credentials.
+  mutual-TLS X.509 client certificates as client credentials.
 
   The requirement of mutual TLS for client authentication is determined by the authorization server
   based on policy or configuration for the given client (regardless of whether the client was dynamically
@@ -234,11 +234,11 @@
 <t>
   In order to utilize TLS for OAuth client authentication, the TLS
   connection between the client and the authorization server MUST have been established or reestablished
-  with mutual TLS X.509 certificate authentication
+  with mutual-TLS X.509 certificate authentication
   (i.e. the Client Certificate and Certificate Verify messages are sent during the TLS Handshake).
 </t>
 <t>
-  For all requests to the authorization server utilizing mutual TLS client authentication,
+  For all requests to the authorization server utilizing mutual-TLS client authentication,
   the client MUST include the <spanx style='verb'>client_id</spanx> parameter,
   described in <xref target="RFC6749">OAuth 2.0, Section 2.2</xref>.
   The presence of the <spanx style='verb'>client_id</spanx>
@@ -254,9 +254,9 @@
   with the <spanx style='verb'>invalid_client</spanx> error code to indicate failed client authentication.
 </t>
 
-    <section anchor="pki_method" title="PKI Mutual TLS Method">
+    <section anchor="pki_method" title="PKI Mutual-TLS Method">
       <t>
-        The PKI (public key infrastructure) method of mutual TLS OAuth client authentication
+        The PKI (public key infrastructure) method of mutual-TLS OAuth client authentication
         adheres to the way in which X.509 certificates are traditionally used
         for authentication. It relies on a validated certificate chain <xref target="RFC5280"/>
         and a single subject distinguished name (DN) or a single
@@ -279,7 +279,7 @@
 
       <section anchor="metadata_auth_value_pki" title="PKI Method Metadata Value">
         <t>
-          For the PKI method of mutual TLS client authentication, this specification
+          For the PKI method of mutual-TLS client authentication, this specification
           defines and registers the following authentication method metadata
           value into the "OAuth Token Endpoint Authentication Methods" registry
           <xref target="IANA.OAuth.Parameters"/>.
@@ -301,26 +301,26 @@
           the following metadata
           parameters are introduced for the
           <xref target="RFC7591">OAuth 2.0 Dynamic Client Registration Protocol</xref> in support of
-          the PKI method of mutual TLS client authentication.
+          the PKI method of mutual-TLS client authentication.
           A client using the <spanx style="verb">tls_client_auth</spanx> authentication method MUST use
           exactly one of the below metadata parameters to indicate the certificate subject value that
           the authorization server is to expect when authenticating the respective client.
           <list style="hanging">
             <t hangText="tls_client_auth_subject_dn"><vspace/>
               An <xref target="RFC4514"/> string representation of the expected subject distinguished
-              name of the certificate, which the OAuth client will use in mutual TLS authentication.
+              name of the certificate, which the OAuth client will use in mutual-TLS authentication.
             </t>
 
             <t hangText="tls_client_auth_san_dns"><vspace/>
               A string containing the value of an expected dNSName SAN entry
-              in the certificate, which the OAuth client will use in mutual TLS
+              in the certificate, which the OAuth client will use in mutual-TLS
               authentication.
             </t>
 
             <t hangText="tls_client_auth_san_uri"><vspace/>
               A string containing the value of an expected
               uniformResourceIdentifier SAN entry in the certificate, which
-              the OAuth client will use in mutual TLS authentication.
+              the OAuth client will use in mutual-TLS authentication.
             </t>
 
             <t hangText="tls_client_auth_san_ip"><vspace/>
@@ -328,13 +328,13 @@
               notation (for IPv4) or colon-delimited hexadecimal (for IPv6, as
               defined in <xref target="RFC4291"/> section 2.2) that is expected to be present
               as an iPAddress SAN entry in the certificate, which the OAuth
-              client will use in mutual TLS authentication.
+              client will use in mutual-TLS authentication.
             </t>
 
             <t hangText="tls_client_auth_san_email"><vspace/>
               A string containing the value of an expected rfc822Name SAN
               entry in the certificate, which the OAuth client will use in
-              mutual TLS authentication.
+              mutual-TLS authentication.
             </t>
           </list>
         </t>
@@ -342,9 +342,9 @@
 
     </section>
 
-    <section anchor="self_signed_method" title="Self-Signed Certificate Mutual TLS Method">
+    <section anchor="self_signed_method" title="Self-Signed Certificate Mutual-TLS Method">
       <t>
-        This method of mutual TLS OAuth client authentication
+        This method of mutual-TLS OAuth client authentication
         is intended to support client authentication using self-signed certificates.
         As a prerequisite, the client registers its X.509 certificates
         (using <spanx style="verb">jwks</spanx> defined in <xref target="RFC7591"/>) or a reference to a trusted source
@@ -363,7 +363,7 @@
       </t>
       <section anchor="metadata_auth_value_self_signed" title="Self-Signed Method Metadata Value">
         <t>
-          For the Self-Signed Certificate method of mutual TLS client authentication, this specification
+          For the Self-Signed Certificate method of mutual-TLS client authentication, this specification
           defines and registers the following authentication method metadata
           value into the "OAuth Token Endpoint Authentication Methods" registry
           <xref target="IANA.OAuth.Parameters"/>.
@@ -403,7 +403,7 @@
 
     </section>
 
-    <section anchor="CertificateBoundAccessTokens" title="Mutual TLS Client Certificate-Bound Access Tokens">
+    <section anchor="CertificateBoundAccessTokens" title="Mutual-TLS Client Certificate-Bound Access Tokens">
 <t>
   When mutual TLS is used by the client on the connection to the token endpoint,
   the authorization server is able to bind the issued access token to the client certificate.
@@ -433,7 +433,7 @@
   using an HTTP 401 status code and the <spanx style="verb">invalid_token</spanx> error code.
 </t>
 <t>
-  Metadata to convey server and client capabilities for mutual TLS client certificate-bound access tokens
+  Metadata to convey server and client capabilities for mutual-TLS client certificate-bound access tokens
   is defined in <xref target="server_metadata_at"/> and <xref target="client_metadata_at"/> respectively.
 </t>
 
@@ -484,7 +484,7 @@
           access token as well as to determine meta-information about the token.
         </t>
         <t>
-          For a mutual TLS client certificate-bound access token, the hash of the
+          For a mutual-TLS client certificate-bound access token, the hash of the
           certificate to which the token is bound
           is conveyed to the protected resource as meta-information
           in a token introspection response. The hash is conveyed using the same
@@ -493,7 +493,7 @@
           <xref target="x5t"/>, as a top-level member of the introspection response JSON.
           The protected resource compares
           that certificate hash to a hash of the client certificate used for
-          mutual TLS authentication
+          mutual-TLS authentication
           and rejects the request, if they do not match.
         </t>
 
@@ -535,7 +535,7 @@
             <list style="hanging">
               <t hangText="tls_client_certificate_bound_access_tokens"><vspace/>
                 OPTIONAL.  Boolean value indicating server support for
-                mutual TLS client certificate-bound access tokens. If omitted, the
+                mutual-TLS client certificate-bound access tokens. If omitted, the
                 default value is <spanx style="verb">false</spanx>.
               </t>
             </list>
@@ -550,7 +550,7 @@
           <list style="hanging">
             <t hangText="tls_client_certificate_bound_access_tokens"><vspace/>
               OPTIONAL. Boolean value used to indicate the client's intention
-              to use mutual TLS client certificate-bound access tokens.
+              to use mutual-TLS client certificate-bound access tokens.
               If omitted, the default value is <spanx style="verb">false</spanx>.
             </t>
           </list>
@@ -561,16 +561,16 @@
 
     <section anchor="PubClient" title="Public Clients and Certificate-Bound Tokens">
       <t>
-        Mutual TLS OAuth client authentication and certificate-bound access tokens
+        Mutual-TLS OAuth client authentication and certificate-bound access tokens
         can be used independently of each other.
-        Use of certificate-bound access tokens without mutual TLS OAuth client authentication, for example,
+        Use of certificate-bound access tokens without mutual-TLS OAuth client authentication, for example,
         is possible in support of binding access tokens to a TLS client certificate for public clients (those without
         authentication credentials associated with the <spanx style="verb">client_id</spanx>).
         The authorization server would configure the TLS stack in the same manner as for the Self-Signed Certificate method
         such that it does not verify that the certificate presented by the client during the handshake is
         signed by a trusted CA. Individual instances of a client would create a self-signed
         certificate for mutual TLS with both the authorization server and resource server. The authorization
-        server would not use the mutual TLS certificate to authenticate the client at the OAuth layer
+        server would not use the mutual-TLS certificate to authenticate the client at the OAuth layer
         but would bind the issued access token
         to that certificate, for which the client has proven possession of the corresponding private key.
         The access token is then bound to the certificate and can only be used by the client
@@ -584,7 +584,7 @@
       </t>
     </section>
 
-    <section anchor="endpointAliases" title="Metadata for Mutual TLS Endpoint Aliases">
+    <section anchor="endpointAliases" title="Metadata for Mutual-TLS Endpoint Aliases">
       <t>
         The process of negotiating client certificate-based mutual TLS involves a TLS server requesting a certificate
         from the TLS client (the client does not provide one unsolicited). Although a server can be configured
@@ -595,7 +595,7 @@
       </t>
       <t>
         Authorization servers supporting both clients using mutual TLS and conventional clients MAY chose to
-        isolate the server side mutual TLS behavior to only clients intending to do mutual TLS, thus
+        isolate the server side mutual-TLS behavior to only clients intending to do mutual TLS, thus
         avoiding any undesirable effects it might have on conventional clients. The following authorization server
         metadata parameter is introduced to facilitate such separation:
       </t>
@@ -634,7 +634,7 @@
         host than their conventional counterparts, which allows the authorization server
         (via TLS <spanx style="verb">server_name</spanx> extension <xref target="RFC6066"/> or actual distinct hosts) to differentiate its TLS behavior as appropriate.
 
-        <figure title='Example Authorization Server Metadata with Mutual TLS Endpoint Aliases' anchor='as-meta'>
+        <figure title='Example Authorization Server Metadata with Mutual-TLS Endpoint Aliases' anchor='as-meta'>
           <artwork><![CDATA[
 {
   "issuer": "https://server.example.com",
@@ -667,7 +667,7 @@
     <section anchor="ImplAS" title="Authorization Server">
     <t>The authorization server needs to set up its TLS configuration appropriately
     for the OAuth client authentication methods it supports.</t>
-    <t>An authorization server that supports mutual TLS client authentication
+    <t>An authorization server that supports mutual-TLS client authentication
     and other client authentication methods or public clients in parallel would make mutual TLS
     optional (i.e. allowing a handshake to continue after the server requests a client certificate
     but the client does not send one).</t>
@@ -856,7 +856,7 @@
           <?rfc subcompact="yes"?>
           <list style='symbols'>
             <t>Metadata Name: <spanx style="verb">tls_client_certificate_bound_access_tokens</spanx></t>
-            <t>Metadata Description: Indicates authorization server support for mutual TLS client certificate-bound
+            <t>Metadata Description: Indicates authorization server support for mutual-TLS client certificate-bound
               access tokens.</t>
             <t>Change Controller: IESG</t>
             <t>Specification Document(s): <xref target="server_metadata_at"/> of [[ this specification ]]</t>
@@ -955,7 +955,7 @@
             </t>
             <t>
               Client Metadata Description:
-              Indicates the client's intention to use mutual TLS client certificate-bound
+              Indicates the client's intention to use mutual-TLS client certificate-bound
               access tokens.
             </t>
             <t>
@@ -1274,7 +1274,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         <xref target="I-D.ietf-oauth-token-binding">OAuth 2.0 Token Binding</xref>
         enables the application of Token Binding to the various artifacts and tokens employed throughout OAuth.
         That includes binding of an access token to a Token Binding key, which bears some similarities in motivation
-        and design to the mutual TLS client certificate-bound access tokens defined in this document.
+        and design to the mutual-TLS client certificate-bound access tokens defined in this document.
         Both documents define what is often called a proof-of-possession security mechanism
         for access tokens, whereby a client must demonstrate possession of cryptographic keying
         material when accessing a protected resource. The details differ somewhat between the two documents but both
@@ -1291,7 +1291,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
         core Token Binding specifications exists, practical implementations of OAuth 2.0 Token Binding
         are infeasible. 
         Mutual TLS, on the other hand, has been around for some time and enjoys
-        widespread support in web servers and development platforms.  As a consequence, OAuth 2.0 Mutual TLS
+        widespread support in web servers and development platforms.  As a consequence, OAuth 2.0 Mutual-TLS
         Client Authentication and Certificate-Bound Access Tokens can be
         built and deployed now using existing platforms and tools.
         In the future, the two specifications are likely to be
@@ -1304,7 +1304,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
     <section anchor="Acknowledgements" title="Acknowledgements">
       <t>
         Scott "not Tomlinson" Tomilson and Matt Peterson were involved in
-        design and development work on a mutual TLS OAuth client authentication
+        design and development work on a mutual-TLS OAuth client authentication
         implementation, which predates this document. Experience and learning from that work
         informed some of the content of this document.
       </t>
