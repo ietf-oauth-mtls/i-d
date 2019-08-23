@@ -791,6 +791,13 @@
           <xref target="IANA.JWT.Claims"/>
           for JWT <spanx style="verb">cnf</spanx> member values.
         </t>
+        <t>
+          Community knowledge about the strength of various algorithms and
+          feasible attacks can change suddenly, and experience shows that a
+          document about security is a point-in-time
+          statement. Readers are advised to seek out any errata or updates
+          that apply to this document.
+        </t>
       </section>
       <section anchor="TLSV" title="TLS Versions and Best Practices">
         <t>
@@ -1386,7 +1393,7 @@ bUlJSGQgjwD5vaUaKlLR50Q2DmFfQj1L+SY=
       <t>
         draft-ietf-oauth-mtls-17
         <list style='symbols'>
-          <t>Editorial updates from IESG ballot position comments.</t>
+          <t>Updates from IESG ballot position comments.</t>
         </list>
       </t>
       <t>
