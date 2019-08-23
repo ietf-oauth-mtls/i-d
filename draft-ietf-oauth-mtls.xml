@@ -326,9 +326,11 @@
             <t hangText="tls_client_auth_san_ip"><vspace/>
               A string representation of an IP address in either dotted decimal
               notation (for IPv4) or colon-delimited hexadecimal (for IPv6, as
-              defined in <xref target="RFC4291"/> section 2.2) that is expected to be present
+              defined in <xref target="RFC5952"/>) that is expected to be present
               as an iPAddress SAN entry in the certificate, which the OAuth
-              client will use in mutual-TLS authentication.
+              client will use in mutual-TLS authentication. Per section 8 of <xref target="RFC5952"/>
+              the IP address comparison of the value in this parameter and the SAN entry in the
+              certificate is to be done in binary format.
             </t>
 
             <t hangText="tls_client_auth_san_email"><vspace/>
@@ -1193,8 +1195,8 @@
         </front>
       </reference>
 
-      <?rfc include='reference.RFC.4291'?> <!-- IPv6 -->
       <?rfc include='reference.RFC.4517'?>
+      <?rfc include='reference.RFC.5952'?> <!-- IPv6 text rep  -->
       <?rfc include='reference.RFC.6066'?>
       <?rfc include='reference.RFC.7009'?> <!-- revocation -->
       <?rfc include='reference.RFC.7518'?> <!-- JWA -->
