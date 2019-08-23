@@ -150,7 +150,7 @@
   with semantics to express the binding of the token to the client certificate for both local and remote processing
   in <xref target="x5t"/> and <xref target="introspect"/> respectively. This ensures that, as
   described in <xref target="CertificateBoundAccessTokens"/>, protected resource
-  access in step (B) is only possible by the legitimate client bearing the access token and
+  access in step (B) is only possible by the legitimate client using a certificate-bound token and
   holding the private key corresponding to the certificate.
 </t>
 <t>
@@ -249,7 +249,7 @@
   The authorization server MUST enforce the
   binding between client and certificate as described in either <xref target="pki_method"/> or
   <xref target="self_signed_method"/> below.
-  If the presented certificate doesn't match that which is expected for the given <spanx style='verb'>client_id</spanx>,
+  If no certificate is presented or that which is presented doesn't match that which is expected for the given <spanx style='verb'>client_id</spanx>,
   the authorization server returns a normal OAuth 2.0 error response per <xref target="RFC6749"> Section 5.2 of RFC6749</xref>
   with the <spanx style='verb'>invalid_client</spanx> error code to indicate failed client authentication.
 </t>
@@ -420,7 +420,26 @@
   beyond the scope of this specification.
 </t>
 <t>
-  The client makes protected resource requests as described in <xref target="RFC6750"/>,
+  In order for a resource server to use certificate-bound access tokens, it
+  must have advance knowledge that mutual TLS is to be used for some or all
+  resource accesses.  In particular, the access token itself
+  cannot be used as input to the decision of whether or not to request mutual TLS,
+  since from the TLS perspective those are "Application Data", only exchanged
+  after the TLS handshake has been completed, and the initial
+  CertificateRequest occurs during the handshake, before the Application Data
+  is available.  Although subsequent opportunities for a TLS client to
+  present a certificate may be available, e.g., via TLS 1.2 renegotiation
+  <xref target="RFC5246"/> or TLS 1.3 post-handshake authentication <xref target="RFC8446"/>, this document
+  makes no provision for their usage.  It is expected to be common that a
+  mutual-TLS-using resource server will require mutual TLS for all resources hosted
+  thereupon, or will serve mutual-TLS-protected and regular resources on separate
+  hostname+port combinations, though other workflows are possible.  How
+  resource server policy is synchronized with the AS is out of scope for this
+  document.
+</t>
+<t>
+  Within the scope of an mutual-TLS-protected resource-access flow,
+  the client makes protected resource requests as described in <xref target="RFC6750"/>,
   however, those requests MUST be made over a mutually authenticated TLS connection
   using the same certificate that was used for mutual TLS at the token endpoint.
 </t>
@@ -554,6 +573,10 @@
               If omitted, the default value is <spanx style="verb">false</spanx>.
             </t>
           </list>
+
+          Note that, if a client that has indicated the intention to use mutual-TLS client certificate-bound tokens
+          makes a request to the token endpoint over a non-mutual-TLS connection,
+          it is at the authorization server's discretion as to whether to return an error or issue an unbound token.
         </t>
         </section>
 
@@ -671,7 +694,7 @@
     and other client authentication methods or public clients in parallel would make mutual TLS
     optional (i.e. allowing a handshake to continue after the server requests a client certificate
     but the client does not send one).</t>
-    <t>In order to support the Self-Signed Certificate method, the authorization server
+    <t>In order to support the Self-Signed Certificate method alone, the authorization server
     would configure the TLS stack in such a way that it does not verify whether the
     certificate presented by the client during the handshake is signed by a trusted CA 
     certificate.</t>
@@ -693,8 +716,8 @@
       on the authorization server to perform client authentication and obtain resource owner (end-user)
       authorization. The resource server makes authorization decisions based on the access token
       presented by the client but does not directly authenticate the client per se.
-      The manner in which an access token is bound to the client certificate
-      decouples it from the specific method that the client used to authenticate with the
+      The manner in which an access token is bound to the client certificate and how a protected resource verifies the proof-of-possession
+      decouples that from the specific method that the client used to authenticate with the
       authorization server. Mutual TLS during protected resource access can therefore
       serve purely as a proof-of-possession mechanism.
       As such, it is not necessary for the resource server to validate
@@ -746,7 +769,8 @@
         <t>The OAuth 2.0 Authorization Framework <xref target="RFC6749"/> requires that an authorization server
           bind refresh tokens to the client to which they were issued and that confidential clients
           (those having established authentication credentials with the authorization server) authenticate to
-          the AS when presenting a refresh token. As a result, refresh tokens are indirectly certificate-bound when
+          the AS when presenting a refresh token. As a result, refresh tokens are indirectly certificate-bound by way of the
+          client ID and the associated requirement for (certificate-based) authentication to the authorization server when
           issued to clients utilizing the <spanx style="verb">tls_client_auth</spanx> or
           <spanx style="verb">self_signed_tls_client_auth</spanx> methods of client authentication.
           <xref target="PubClient"/> describes certificate-bound refresh tokens issued to public clients (those without
@@ -776,6 +800,13 @@
           General implementation and security considerations for TLS, including version recommendations,
           can be found in <xref target="BCP195"/>.
         </t>
+        <t>
+          TLS certificate validation
+          (for both client and server certificates) requires a local database of
+          trusted certificate authorities (CAs).  Decisions about what CAs to trust
+          and how to make such a determination of trust are out of scope for this
+          document.
+        </t>
       </section>
       <section anchor="certspoofing" title="X.509 Certificate Spoofing">
         <t>
@@ -800,7 +831,7 @@
         <t>
           <list style="symbols">
           <t>checking of Basic Constraints, basic and extended Key Usage constraints, validity periods, and critical extensions;</t>
-          <t>handling of null-terminator bytes and non-canonical string representations in subject names;</t>
+          <t>handling of embedded NUL bytes in ASN.1 counted-length strings, and non-canonical or non-normalized string representations in subject names;</t>
           <t>handling of wildcard patterns in subject names;</t>
           <t>recursive verification of certificate chains and checking certificate revocation.</t>
           </list>
